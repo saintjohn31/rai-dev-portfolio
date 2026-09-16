@@ -29,11 +29,16 @@ function App() {
 
   /* =========================================
      THEME
+
+     First-time visitor:
+     LIGHT MODE
+
+     Returning visitor:
+     Remember selected theme
   ========================================= */
 
   const [theme, setTheme] = useState(() => {
 
-    // Previously selected theme
     const savedTheme =
       localStorage.getItem('rai-dev-theme');
 
@@ -44,15 +49,8 @@ function App() {
       return savedTheme;
     }
 
-    // Otherwise use device preference
-    const prefersDark =
-      window.matchMedia?.(
-        '(prefers-color-scheme: dark)'
-      ).matches;
-
-    return prefersDark
-      ? 'dark'
-      : 'light';
+    // FIRST VISIT IS ALWAYS LIGHT MODE
+    return 'light';
   });
 
 
@@ -61,6 +59,7 @@ function App() {
   ========================================= */
 
   useEffect(() => {
+
     const root =
       document.documentElement;
 
@@ -74,6 +73,7 @@ function App() {
       'rai-dev-theme',
       theme
     );
+
   }, [theme]);
 
 
@@ -82,11 +82,13 @@ function App() {
   ========================================= */
 
   const toggleTheme = useCallback(() => {
+
     setTheme((current) =>
       current === 'dark'
         ? 'light'
         : 'dark'
     );
+
   }, []);
 
 
@@ -96,7 +98,9 @@ function App() {
 
   const handleLoadingComplete =
     useCallback(() => {
+
       setLoading(false);
+
     }, []);
 
 
@@ -112,9 +116,6 @@ function App() {
 
         transition-colors
         duration-300
-
-        selection:bg-black
-        selection:text-white
       "
     >
 
@@ -146,11 +147,13 @@ function App() {
       ====================================== */}
 
       <main>
+
         <About />
 
         <Projects />
 
         <Skills />
+
       </main>
 
 

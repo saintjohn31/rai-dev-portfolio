@@ -7,51 +7,91 @@ import {
 
 import profilePic from '../images/2bg.png';
 
+
 export default function InteractivePortrait() {
+
   const containerRef = useRef(null);
 
-  const [sliderPosition, setSliderPosition] = useState(60);
-  const [isDragging, setIsDragging] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('scanline');
 
-  const [mouseCoords, setMouseCoords] = useState({
-    x: 0,
-    y: 0,
-  });
+  /* =========================================
+     STATE
+  ========================================= */
 
-  const [isHovered, setIsHovered] = useState(false);
+  const [sliderPosition, setSliderPosition] =
+    useState(60);
 
-  /* =========================================================
+  const [isDragging, setIsDragging] =
+    useState(false);
+
+  const [activeFilter, setActiveFilter] =
+    useState('scanline');
+
+  const [mouseCoords, setMouseCoords] =
+    useState({
+      x: 0,
+      y: 0,
+    });
+
+  const [isHovered, setIsHovered] =
+    useState(false);
+
+
+  /* =========================================
      SLIDER POSITION
-  ========================================================= */
+  ========================================= */
 
-  const handleMove = useCallback((clientX) => {
-    if (!containerRef.current) return;
+  const handleMove = useCallback(
+    (clientX) => {
 
-    const rect = containerRef.current.getBoundingClientRect();
+      if (!containerRef.current) {
+        return;
+      }
 
-    const rawX = clientX - rect.left;
-    const percentage = (rawX / rect.width) * 100;
+      const rect =
+        containerRef.current
+          .getBoundingClientRect();
 
-    const clamped = Math.max(
-      5,
-      Math.min(95, percentage)
-    );
+      const rawX =
+        clientX - rect.left;
 
-    setSliderPosition(clamped);
-  }, []);
+      const percentage =
+        (rawX / rect.width) * 100;
 
-  /* =========================================================
+      const clamped =
+        Math.max(
+          5,
+          Math.min(
+            95,
+            percentage
+          )
+        );
+
+      setSliderPosition(clamped);
+
+    },
+    []
+  );
+
+
+  /* =========================================
      MOUSE MOVE
-  ========================================================= */
+  ========================================= */
 
   const handleMouseMove = (event) => {
-    if (!containerRef.current) return;
 
-    const rect = containerRef.current.getBoundingClientRect();
+    if (!containerRef.current) {
+      return;
+    }
 
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const rect =
+      containerRef.current
+        .getBoundingClientRect();
+
+    const x =
+      event.clientX - rect.left;
+
+    const y =
+      event.clientY - rect.top;
 
     setMouseCoords({
       x: Math.round(x),
@@ -61,31 +101,43 @@ export default function InteractivePortrait() {
     if (isDragging) {
       handleMove(event.clientX);
     }
+
   };
 
-  /* =========================================================
+
+  /* =========================================
      TOUCH MOVE
-  ========================================================= */
+  ========================================= */
 
   const handleTouchMove = (event) => {
+
     if (
       event.touches &&
       event.touches.length > 0
     ) {
-      handleMove(event.touches[0].clientX);
+
+      handleMove(
+        event.touches[0].clientX
+      );
+
     }
+
   };
 
-  /* =========================================================
+
+  /* =========================================
      STOP DRAGGING
-  ========================================================= */
+  ========================================= */
 
   useEffect(() => {
+
     const stopDragging = () => {
       setIsDragging(false);
     };
 
+
     if (isDragging) {
+
       window.addEventListener(
         'mouseup',
         stopDragging
@@ -95,9 +147,12 @@ export default function InteractivePortrait() {
         'touchend',
         stopDragging
       );
+
     }
 
+
     return () => {
+
       window.removeEventListener(
         'mouseup',
         stopDragging
@@ -107,14 +162,20 @@ export default function InteractivePortrait() {
         'touchend',
         stopDragging
       );
+
     };
+
   }, [isDragging]);
 
+
   return (
+
     <div
       ref={containerRef}
 
-      onMouseMove={handleMouseMove}
+      onMouseMove={
+        handleMouseMove
+      }
 
       onMouseEnter={() => {
         setIsHovered(true);
@@ -125,11 +186,16 @@ export default function InteractivePortrait() {
         setIsDragging(false);
       }}
 
-      onTouchMove={handleTouchMove}
+      onTouchMove={
+        handleTouchMove
+      }
 
       className="
+        portrait-theme
+
         relative
         isolate
+
         w-full
         h-full
 
@@ -140,15 +206,19 @@ export default function InteractivePortrait() {
         bg-[#f5f5f3]
 
         overflow-hidden
+
         select-none
+
         cursor-ew-resize
+
         group
       "
     >
 
-      {/* =====================================================
-          MINIMAL BACKGROUND GRID
-      ====================================================== */}
+
+      {/* =====================================
+          BACKGROUND GRID
+      ====================================== */}
 
       <div
         className="
@@ -156,8 +226,10 @@ export default function InteractivePortrait() {
           inset-0
 
           pointer-events-none
+
           opacity-[0.045]
         "
+
         style={{
           backgroundImage: `
             linear-gradient(
@@ -165,6 +237,7 @@ export default function InteractivePortrait() {
               #000 1px,
               transparent 1px
             ),
+
             linear-gradient(
               to bottom,
               #000 1px,
@@ -172,32 +245,36 @@ export default function InteractivePortrait() {
             )
           `,
 
-          backgroundSize: '24px 24px',
+          backgroundSize:
+            '24px 24px',
         }}
       />
 
 
-      {/* =====================================================
+      {/* =====================================
           TOP LEFT STATUS
-          GREEN DOT REMOVED
-      ====================================================== */}
+      ====================================== */}
 
       <div
         className="
           absolute
+
           top-4
           left-4
+
           z-40
 
           pointer-events-none
         "
       >
+
         <div
           className="
             flex
             items-center
 
             bg-white/90
+
             backdrop-blur-sm
 
             border
@@ -207,42 +284,53 @@ export default function InteractivePortrait() {
             py-1.5
           "
         >
+
           <span
             className="
               text-[8px]
               sm:text-[9px]
 
               font-mono
+
               tracking-[0.08em]
 
               text-gray-500
             "
           >
+
             {isHovered
               ? `X: ${mouseCoords.x} Y: ${mouseCoords.y}`
-              : 'INTERACTIVE PORTRAIT'}
+              : 'INTERACTIVE PORTRAIT'
+            }
+
           </span>
+
         </div>
+
       </div>
 
 
-      {/* =====================================================
-          TOP RIGHT INSTRUCTION
-      ====================================================== */}
+      {/* =====================================
+          TOP RIGHT
+      ====================================== */}
 
       <div
         className="
           absolute
+
           top-4
           right-4
+
           z-40
 
           pointer-events-none
         "
       >
+
         <div
           className="
             bg-white/90
+
             backdrop-blur-sm
 
             border
@@ -255,6 +343,7 @@ export default function InteractivePortrait() {
             sm:text-[9px]
 
             font-mono
+
             tracking-[0.08em]
 
             text-gray-400
@@ -262,23 +351,26 @@ export default function InteractivePortrait() {
         >
           DRAG SLIDER
         </div>
+
       </div>
 
 
-      {/* =====================================================
+      {/* =====================================
           CLEAN PORTRAIT
-      ====================================================== */}
+      ====================================== */}
 
       <div
         className="
           absolute
           inset-0
+
           overflow-hidden
         "
       >
 
         <img
           src={profilePic}
+
           alt="John Railey Pael"
 
           draggable="false"
@@ -288,6 +380,7 @@ export default function InteractivePortrait() {
 
             bottom-0
             left-1/2
+
             -translate-x-1/2
 
             w-auto
@@ -311,13 +404,16 @@ export default function InteractivePortrait() {
         <div
           className="
             absolute
+
             bottom-4
             right-4
+
             z-20
 
             pointer-events-none
           "
         >
+
           <span
             className="
               bg-white/90
@@ -329,6 +425,7 @@ export default function InteractivePortrait() {
               py-1
 
               text-[8px]
+
               font-mono
               tracking-[0.12em]
 
@@ -337,13 +434,15 @@ export default function InteractivePortrait() {
           >
             CLEAN
           </span>
+
         </div>
+
       </div>
 
 
-      {/* =====================================================
+      {/* =====================================
           FILTERED PORTRAIT
-      ====================================================== */}
+      ====================================== */}
 
       <div
         className="
@@ -354,6 +453,7 @@ export default function InteractivePortrait() {
 
           bg-[#ededeb]
         "
+
         style={{
           clipPath: `
             polygon(
@@ -366,13 +466,15 @@ export default function InteractivePortrait() {
         }}
       >
 
+
         {/* IMPORTANT:
-            Same exact positioning as CLEAN image.
-            This keeps both portraits aligned.
+            Same exact image positioning
+            as the clean image.
         */}
 
         <img
           src={profilePic}
+
           alt="John Railey Pael filtered"
 
           draggable="false"
@@ -382,6 +484,7 @@ export default function InteractivePortrait() {
 
             bottom-0
             left-1/2
+
             -translate-x-1/2
 
             w-auto
@@ -397,140 +500,176 @@ export default function InteractivePortrait() {
 
             filter
 
-            ${activeFilter === 'scanline'
+
+            ${activeFilter ===
+              'scanline'
+
               ? `
-                  grayscale
-                  contrast-[2.15]
-                  brightness-[0.92]
-                `
+                    grayscale
+                    contrast-[2.15]
+                    brightness-[0.92]
+                  `
+
               : ''
             }
 
-            ${activeFilter === 'contrast'
+
+            ${activeFilter ===
+              'contrast'
+
               ? `
-                  grayscale
-                  contrast-[2.8]
-                  brightness-[0.95]
-                `
+                    grayscale
+                    contrast-[2.8]
+                    brightness-[0.95]
+                  `
+
               : ''
             }
 
-            ${activeFilter === 'invert'
+
+            ${activeFilter ===
+              'invert'
+
               ? `
-                  invert
-                  grayscale
-                  contrast-[2.2]
-                `
+                    invert
+                    grayscale
+                    contrast-[2.2]
+                  `
+
               : ''
             }
           `}
         />
 
 
-        {/* =================================================
-            HORIZONTAL SCANLINES
-        ================================================== */}
+        {/* =================================
+            SCANLINES
+        ================================== */}
 
-        {activeFilter === 'scanline' && (
-          <div
-            className="
+        {activeFilter ===
+          'scanline' && (
+
+            <div
+              className="
               absolute
               inset-0
+
               z-10
 
               pointer-events-none
 
               opacity-[0.25]
             "
-            style={{
-              backgroundImage: `
+
+              style={{
+                backgroundImage: `
                 repeating-linear-gradient(
                   0deg,
+
                   #000 0px,
                   #000 1px,
+
                   transparent 1px,
                   transparent 3px
                 )
               `,
-            }}
-          />
-        )}
+              }}
+            />
+
+          )}
 
 
-        {/* =================================================
+        {/* =================================
             MICRO GRID
-        ================================================== */}
+        ================================== */}
 
-        {activeFilter === 'scanline' && (
-          <div
-            className="
+        {activeFilter ===
+          'scanline' && (
+
+            <div
+              className="
               absolute
               inset-0
+
               z-10
 
               pointer-events-none
 
               opacity-[0.08]
             "
-            style={{
-              backgroundImage: `
+
+              style={{
+                backgroundImage: `
                 repeating-linear-gradient(
                   90deg,
+
                   #000 0px,
                   #000 1px,
+
                   transparent 1px,
                   transparent 4px
                 )
               `,
-            }}
-          />
-        )}
+              }}
+            />
+
+          )}
 
 
-        {/* =================================================
+        {/* =================================
             CONTRAST TEXTURE
-        ================================================== */}
+        ================================== */}
 
-        {activeFilter === 'contrast' && (
-          <div
-            className="
+        {activeFilter ===
+          'contrast' && (
+
+            <div
+              className="
               absolute
               inset-0
+
               z-10
 
               pointer-events-none
 
               opacity-[0.12]
             "
-            style={{
-              backgroundImage: `
+
+              style={{
+                backgroundImage: `
                 repeating-linear-gradient(
                   0deg,
+
                   #000 0px,
                   #000 1px,
+
                   transparent 1px,
                   transparent 5px
                 )
               `,
-            }}
-          />
-        )}
+              }}
+            />
+
+          )}
 
 
-        {/* =================================================
+        {/* =================================
             FILTER LABEL
-        ================================================== */}
+        ================================== */}
 
         <div
           className="
             absolute
+
             bottom-4
             left-4
+
             z-20
 
             pointer-events-none
           "
         >
+
           <span
             className="
               bg-white/90
@@ -542,26 +681,31 @@ export default function InteractivePortrait() {
               py-1
 
               text-[8px]
+
               font-mono
               tracking-[0.12em]
 
               text-black
             "
           >
+
             {activeFilter.toUpperCase()}
+
           </span>
+
         </div>
 
       </div>
 
 
-      {/* =====================================================
-          SLIDER DIVIDER
-      ====================================================== */}
+      {/* =====================================
+          SLIDER
+      ====================================== */}
 
       <div
         className="
           absolute
+
           top-0
           bottom-0
 
@@ -573,25 +717,34 @@ export default function InteractivePortrait() {
 
           cursor-ew-resize
         "
+
         style={{
-          left: `${sliderPosition}%`,
+          left:
+            `${sliderPosition}%`,
         }}
 
         onMouseDown={(event) => {
+
           event.preventDefault();
+
           setIsDragging(true);
+
         }}
 
         onTouchStart={() => {
+
           setIsDragging(true);
+
         }}
       >
 
-        {/* LINE */}
+
+        {/* SLIDER LINE */}
 
         <div
           className="
             absolute
+
             top-0
             bottom-0
 
@@ -604,7 +757,7 @@ export default function InteractivePortrait() {
         />
 
 
-        {/* HANDLE */}
+        {/* SLIDER HANDLE */}
 
         <div
           className="
@@ -638,16 +791,20 @@ export default function InteractivePortrait() {
             className="
               flex
               flex-col
+
               items-center
+
               gap-1
             "
           >
+
             <span
               className="
                 w-1
                 h-1
 
                 rounded-full
+
                 bg-gray-400
               "
             />
@@ -658,6 +815,7 @@ export default function InteractivePortrait() {
                 h-1
 
                 rounded-full
+
                 bg-gray-400
               "
             />
@@ -668,18 +826,21 @@ export default function InteractivePortrait() {
                 h-1
 
                 rounded-full
+
                 bg-gray-400
               "
             />
+
           </div>
+
         </div>
 
       </div>
 
 
-      {/* =====================================================
+      {/* =====================================
           FILTER CONTROLS
-      ====================================================== */}
+      ====================================== */}
 
       <div
         className="
@@ -687,6 +848,7 @@ export default function InteractivePortrait() {
 
           bottom-4
           left-1/2
+
           -translate-x-1/2
 
           z-40
@@ -695,6 +857,7 @@ export default function InteractivePortrait() {
           items-center
 
           bg-white/95
+
           backdrop-blur-sm
 
           border
@@ -732,9 +895,13 @@ export default function InteractivePortrait() {
             }}
 
             onClick={(event) => {
+
               event.stopPropagation();
 
-              setActiveFilter(mode.id);
+              setActiveFilter(
+                mode.id
+              );
+
             }}
 
             className={`
@@ -748,27 +915,34 @@ export default function InteractivePortrait() {
               lg:text-[9px]
 
               font-mono
+
               tracking-[0.08em]
 
               transition-colors
               duration-200
 
-              ${activeFilter === mode.id
-                ? `
-                    bg-black
-                    text-white
-                  `
-                : `
-                    bg-transparent
-                    text-gray-400
 
-                    hover:text-black
-                    hover:bg-gray-100
-                  `
+              ${activeFilter ===
+                mode.id
+
+                ? `
+                      bg-black
+                      text-white
+                    `
+
+                : `
+                      bg-transparent
+                      text-gray-400
+
+                      hover:text-black
+                      hover:bg-gray-100
+                    `
               }
             `}
           >
+
             {mode.label}
+
           </button>
 
         ))}
