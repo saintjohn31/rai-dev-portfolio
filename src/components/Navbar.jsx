@@ -3,12 +3,15 @@ import {
   ArrowUpRight,
   Menu,
   X,
+  Moon,
+  Sun,
 } from 'lucide-react';
 
 
 /* =========================================
-   GITHUB ICON
+   CUSTOM ICONS
 ========================================= */
+
 function GithubIcon({ size = 16, className = '' }) {
   return (
     <svg
@@ -25,9 +28,6 @@ function GithubIcon({ size = 16, className = '' }) {
 }
 
 
-/* =========================================
-   LINKEDIN ICON
-========================================= */
 function LinkedinIcon({ size = 16, className = '' }) {
   return (
     <svg
@@ -44,15 +44,30 @@ function LinkedinIcon({ size = 16, className = '' }) {
 }
 
 
-export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('about');
-  const [scrolled, setScrolled] = useState(false);
+/* =========================================
+   NAVBAR
+========================================= */
+
+export default function Navbar({
+  theme,
+  toggleTheme,
+}) {
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false);
+
+  const [activeSection, setActiveSection] =
+    useState('about');
+
+  const [scrolled, setScrolled] =
+    useState(false);
+
+  const isDark = theme === 'dark';
 
 
   /* =========================================
-     NAVIGATION LINKS
+     NAVIGATION
   ========================================= */
+
   const navLinks = [
     {
       name: 'ABOUT',
@@ -78,8 +93,9 @@ export default function Navbar() {
 
 
   /* =========================================
-     SOCIAL LINKS
+     SOCIALS
   ========================================= */
+
   const socialLinks = [
     {
       name: 'GITHUB',
@@ -88,27 +104,32 @@ export default function Navbar() {
     },
     {
       name: 'LINKEDIN',
-      href: 'https://www.linkedin.com/in/john-railey-pael-865224437/',
+      href:
+        'https://www.linkedin.com/in/john-railey-pael-865224437/',
       icon: LinkedinIcon,
     },
   ];
 
 
   /* =========================================
-     ACTIVE SECTION + SCROLL EFFECT
+     ACTIVE SECTION + SCROLL
   ========================================= */
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
 
       const sections = navLinks
-        .map((link) => document.getElementById(link.id))
+        .map((link) =>
+          document.getElementById(link.id)
+        )
         .filter(Boolean);
 
       let current = 'about';
 
       sections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
+        const rect =
+          section.getBoundingClientRect();
 
         if (rect.top <= 180) {
           current = section.id;
@@ -120,12 +141,19 @@ export default function Navbar() {
 
     handleScroll();
 
-    window.addEventListener('scroll', handleScroll, {
-      passive: true,
-    });
+    window.addEventListener(
+      'scroll',
+      handleScroll,
+      {
+        passive: true,
+      }
+    );
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener(
+        'scroll',
+        handleScroll
+      );
     };
   }, []);
 
@@ -133,6 +161,7 @@ export default function Navbar() {
   /* =========================================
      CLOSE MOBILE MENU ON DESKTOP
   ========================================= */
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -140,20 +169,28 @@ export default function Navbar() {
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener(
+      'resize',
+      handleResize
+    );
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener(
+        'resize',
+        handleResize
+      );
     };
   }, []);
 
 
   /* =========================================
-     LOCK PAGE WHEN MOBILE MENU IS OPEN
+     BODY SCROLL LOCK
   ========================================= */
+
   useEffect(() => {
     if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow =
+        'hidden';
     } else {
       document.body.style.overflow = '';
     }
@@ -164,9 +201,6 @@ export default function Navbar() {
   }, [mobileMenuOpen]);
 
 
-  /* =========================================
-     CLOSE MENU
-  ========================================= */
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
   };
@@ -175,8 +209,9 @@ export default function Navbar() {
   return (
     <>
       {/* =====================================
-          NAVBAR HEADER
+          NAVBAR
       ====================================== */}
+
       <header
         className={`
           fixed
@@ -186,20 +221,38 @@ export default function Navbar() {
 
           z-[1000]
 
+          border-b
+
           transition-all
           duration-300
 
+          ${isDark
+            ? `
+                bg-[#0a0a0a]
+                border-[#262626]
+              `
+            : `
+                bg-white
+                border-gray-200
+              `
+          }
+
           ${scrolled
-            ? 'bg-white/95 backdrop-blur-xl border-b border-gray-200'
-            : 'bg-white'
+            ? `
+                backdrop-blur-xl
+                shadow-[0_1px_0_rgba(0,0,0,0.02)]
+              `
+            : ''
           }
         `}
       >
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
           <div
             className="
               relative
+
               h-[76px]
 
               flex
@@ -211,33 +264,44 @@ export default function Navbar() {
             {/* =================================
                 LOGO
             ================================== */}
+
             <a
               href="#about"
               onClick={closeMobileMenu}
               className="
-                relative
-                z-10
-
                 group
                 flex
                 items-center
                 shrink-0
+
+                relative
+                z-10
               "
               aria-label="Go to About section"
             >
               <span
-                className="
+                className={`
                   text-[23px]
                   sm:text-[26px]
 
                   font-semibold
                   tracking-[-0.05em]
-
-                  text-black
                   leading-none
-                "
+
+                  transition-colors
+                  duration-300
+
+                  ${isDark
+                    ? 'text-white'
+                    : 'text-black'
+                  }
+                `}
               >
-                rai<span className="text-blue-500">.</span>dev
+                rai
+                <span className="text-blue-500">
+                  .
+                </span>
+                dev
               </span>
             </a>
 
@@ -245,6 +309,7 @@ export default function Navbar() {
             {/* =================================
                 DESKTOP NAVIGATION
             ================================== */}
+
             <nav
               className="
                 hidden
@@ -266,7 +331,8 @@ export default function Navbar() {
               "
             >
               {navLinks.map((link) => {
-                const active = activeSection === link.id;
+                const active =
+                  activeSection === link.id;
 
                 return (
                   <a
@@ -288,8 +354,12 @@ export default function Navbar() {
                       duration-300
 
                       ${active
-                        ? 'text-black'
-                        : 'text-gray-400 hover:text-black'
+                        ? isDark
+                          ? 'text-white'
+                          : 'text-black'
+                        : isDark
+                          ? 'text-[#737373] hover:text-white'
+                          : 'text-gray-400 hover:text-black'
                       }
                     `}
                   >
@@ -298,14 +368,19 @@ export default function Navbar() {
                     <span
                       className={`
                         absolute
+
                         bottom-0
                         left-0
 
                         h-px
-                        bg-black
 
                         transition-all
                         duration-300
+
+                        ${isDark
+                          ? 'bg-white'
+                          : 'bg-black'
+                        }
 
                         ${active
                           ? 'w-full'
@@ -320,91 +395,110 @@ export default function Navbar() {
 
 
             {/* =================================
-                DESKTOP RIGHT SIDE
+                DESKTOP RIGHT
             ================================== */}
+
             <div
               className="
                 hidden
                 lg:flex
 
+                items-center
+
+                gap-3
+
                 relative
                 z-10
-
-                items-center
-                gap-4
               "
             >
 
-              {/* SOCIALS */}
+              {/* SOCIAL ICONS */}
+
               <div
-                className="
+                className={`
                   flex
                   items-center
                   gap-1
 
-                  pr-4
+                  pr-3
 
                   border-r
-                  border-gray-200
-                "
+
+                  ${isDark
+                    ? 'border-[#262626]'
+                    : 'border-gray-200'
+                  }
+                `}
               >
-                {socialLinks.map((social) => {
-                  const Icon = social.icon;
+                {socialLinks.map(
+                  (social) => {
+                    const Icon = social.icon;
 
-                  return (
-                    <a
-                      key={social.name}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={social.name}
-                      title={social.name}
-                      className="
-                        group/social
+                    return (
+                      <a
+                        key={social.name}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={social.name}
+                        title={social.name}
+                        className={`
+                          group/social
 
-                        w-9
-                        h-9
+                          w-9
+                          h-9
 
-                        flex
-                        items-center
-                        justify-center
+                          flex
+                          items-center
+                          justify-center
 
-                        text-gray-400
-
-                        transition-all
-                        duration-300
-
-                        hover:text-black
-                        hover:bg-gray-100
-                      "
-                    >
-                      <Icon
-                        size={16}
-                        className="
-                          transition-transform
+                          transition-all
                           duration-300
 
-                          group-hover/social:-translate-y-0.5
-                        "
-                      />
-                    </a>
-                  );
-                })}
+                          ${isDark
+                            ? `
+                                text-[#737373]
+                                hover:text-white
+                                hover:bg-[#171717]
+                              `
+                            : `
+                                text-gray-400
+                                hover:text-black
+                                hover:bg-gray-100
+                              `
+                          }
+                        `}
+                      >
+                        <Icon
+                          size={16}
+                          className="
+                            transition-transform
+                            duration-300
+
+                            group-hover/social:-translate-y-0.5
+                          "
+                        />
+                      </a>
+                    );
+                  }
+                )}
               </div>
 
 
-              {/* LET'S TALK */}
+              {/* =================================
+                  LET'S TALK
+              ================================== */}
+
               <a
                 href="#contact"
-                className="
+                className={`
                   group
 
                   inline-flex
                   items-center
-                  gap-2
+                  justify-center
 
-                  bg-black
-                  text-white
+                  gap-2
 
                   px-5
                   py-3
@@ -419,8 +513,20 @@ export default function Navbar() {
                   duration-300
 
                   hover:bg-blue-600
+                  hover:text-white
                   hover:-translate-y-[2px]
-                "
+
+                  ${isDark
+                    ? `
+                        bg-white
+                        text-black
+                      `
+                    : `
+                        bg-black
+                        text-white
+                      `
+                  }
+                `}
               >
                 LET'S TALK
 
@@ -437,97 +543,356 @@ export default function Navbar() {
                 />
               </a>
 
+
+              {/* =================================
+                  THEME TOGGLE
+                  DIRECTLY BESIDE LET'S TALK
+              ================================== */}
+
+              <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label={
+                  isDark
+                    ? 'Switch to light mode'
+                    : 'Switch to dark mode'
+                }
+                title={
+                  isDark
+                    ? 'Light Mode'
+                    : 'Dark Mode'
+                }
+                className={`
+                  group/theme
+
+                  relative
+
+                  w-[42px]
+                  h-[42px]
+
+                  flex
+                  items-center
+                  justify-center
+
+                  shrink-0
+
+                  border
+
+                  overflow-hidden
+
+                  transition-all
+                  duration-300
+
+                  active:scale-95
+
+                  ${isDark
+                    ? `
+                        bg-[#111111]
+                        border-[#2a2a2a]
+                        text-blue-500
+
+                        hover:bg-[#171717]
+                        hover:border-[#404040]
+                      `
+                    : `
+                        bg-white
+                        border-gray-200
+                        text-black
+
+                        hover:bg-gray-50
+                        hover:border-gray-400
+                      `
+                  }
+                `}
+              >
+
+                {/* BLUE TOP ACCENT */}
+
+                <span
+                  className="
+                    absolute
+                    top-0
+                    left-0
+
+                    w-full
+                    h-[2px]
+
+                    bg-blue-500
+
+                    origin-left
+                    scale-x-0
+
+                    transition-transform
+                    duration-300
+
+                    group-hover/theme:scale-x-100
+                  "
+                />
+
+                {isDark ? (
+                  <Sun
+                    size={15}
+                    strokeWidth={1.7}
+                    className="
+                      transition-all
+                      duration-300
+
+                      group-hover/theme:rotate-45
+                    "
+                  />
+                ) : (
+                  <Moon
+                    size={15}
+                    strokeWidth={1.7}
+                    className="
+                      transition-all
+                      duration-300
+
+                      group-hover/theme:-rotate-12
+                    "
+                  />
+                )}
+
+              </button>
+
             </div>
 
 
             {/* =================================
-                TABLET CONTACT BUTTON
+                TABLET CONTROLS
             ================================== */}
-            <a
-              href="#contact"
+
+            <div
               className="
                 hidden
-                md:inline-flex
+                md:flex
                 lg:hidden
+
+                items-center
+                gap-2
 
                 relative
                 z-10
-
-                items-center
-                justify-center
-
-                w-10
-                h-10
-
-                bg-black
-                text-white
-
-                transition-colors
-                duration-300
-
-                hover:bg-blue-600
               "
-              aria-label="Contact"
             >
-              <ArrowUpRight
-                size={16}
-                strokeWidth={1.8}
-              />
-            </a>
+
+              <a
+                href="#contact"
+                className={`
+                  w-10
+                  h-10
+
+                  flex
+                  items-center
+                  justify-center
+
+                  transition-colors
+                  duration-300
+
+                  hover:bg-blue-600
+                  hover:text-white
+
+                  ${isDark
+                    ? `
+                        bg-white
+                        text-black
+                      `
+                    : `
+                        bg-black
+                        text-white
+                      `
+                  }
+                `}
+                aria-label="Contact"
+              >
+                <ArrowUpRight
+                  size={16}
+                  strokeWidth={1.8}
+                />
+              </a>
+
+
+              <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label={
+                  isDark
+                    ? 'Switch to light mode'
+                    : 'Switch to dark mode'
+                }
+                className={`
+                  w-10
+                  h-10
+
+                  flex
+                  items-center
+                  justify-center
+
+                  border
+
+                  transition-all
+                  duration-300
+
+                  ${isDark
+                    ? `
+                        bg-[#111111]
+                        border-[#2a2a2a]
+                        text-blue-500
+                      `
+                    : `
+                        bg-white
+                        border-gray-200
+                        text-black
+                      `
+                  }
+                `}
+              >
+                {isDark ? (
+                  <Sun
+                    size={15}
+                    strokeWidth={1.7}
+                  />
+                ) : (
+                  <Moon
+                    size={15}
+                    strokeWidth={1.7}
+                  />
+                )}
+              </button>
+
+            </div>
 
 
             {/* =================================
-                MOBILE MENU BUTTON
+                MOBILE CONTROLS
             ================================== */}
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen((prev) => !prev);
-              }}
+
+            <div
               className="
                 md:hidden
 
-                relative
-                z-10
-
-                w-10
-                h-10
-
-                border
-                border-gray-200
-
                 flex
                 items-center
-                justify-center
+                gap-2
 
-                bg-white
-                text-black
-
-                transition-all
-                duration-300
-
-                hover:bg-gray-100
-                active:scale-95
+                relative
+                z-10
               "
-              aria-label={
-                mobileMenuOpen
-                  ? 'Close navigation'
-                  : 'Open navigation'
-              }
-              aria-expanded={mobileMenuOpen}
             >
-              {mobileMenuOpen ? (
-                <X
-                  size={19}
-                  strokeWidth={1.7}
-                />
-              ) : (
-                <Menu
-                  size={19}
-                  strokeWidth={1.7}
-                />
-              )}
-            </button>
+
+              {/* MOBILE THEME */}
+
+              <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label={
+                  isDark
+                    ? 'Switch to light mode'
+                    : 'Switch to dark mode'
+                }
+                className={`
+                  w-10
+                  h-10
+
+                  border
+
+                  flex
+                  items-center
+                  justify-center
+
+                  transition-all
+                  duration-300
+
+                  ${isDark
+                    ? `
+                        bg-[#111111]
+                        border-[#2a2a2a]
+                        text-blue-500
+                      `
+                    : `
+                        bg-white
+                        border-gray-200
+                        text-black
+                      `
+                  }
+                `}
+              >
+                {isDark ? (
+                  <Sun
+                    size={16}
+                    strokeWidth={1.7}
+                  />
+                ) : (
+                  <Moon
+                    size={16}
+                    strokeWidth={1.7}
+                  />
+                )}
+              </button>
+
+
+              {/* MENU */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  setMobileMenuOpen(
+                    (prev) => !prev
+                  )
+                }
+                className={`
+                  w-10
+                  h-10
+
+                  border
+
+                  flex
+                  items-center
+                  justify-center
+
+                  transition-colors
+                  duration-300
+
+                  ${isDark
+                    ? `
+                        bg-[#111111]
+                        border-[#2a2a2a]
+                        text-white
+
+                        hover:bg-[#171717]
+                      `
+                    : `
+                        bg-white
+                        border-gray-200
+                        text-black
+
+                        hover:bg-gray-100
+                      `
+                  }
+                `}
+                aria-label={
+                  mobileMenuOpen
+                    ? 'Close navigation'
+                    : 'Open navigation'
+                }
+                aria-expanded={
+                  mobileMenuOpen
+                }
+              >
+                {mobileMenuOpen ? (
+                  <X
+                    size={19}
+                    strokeWidth={1.7}
+                  />
+                ) : (
+                  <Menu
+                    size={19}
+                    strokeWidth={1.7}
+                  />
+                )}
+              </button>
+
+            </div>
 
           </div>
         </div>
@@ -535,16 +900,15 @@ export default function Navbar() {
 
 
       {/* =====================================
-          MOBILE MENU OVERLAY
+          MOBILE MENU
       ====================================== */}
+
       <div
         className={`
           fixed
           inset-0
 
           z-[999]
-
-          bg-white
 
           pt-[76px]
 
@@ -554,32 +918,37 @@ export default function Navbar() {
 
           transition-all
           duration-500
-          ease-out
+
+          ${isDark
+            ? 'bg-[#0a0a0a]'
+            : 'bg-white'
+          }
 
           ${mobileMenuOpen
-            ? 'opacity-100 visible translate-y-0'
-            : 'opacity-0 invisible pointer-events-none -translate-y-3'
+            ? `
+                opacity-100
+                visible
+                translate-y-0
+              `
+            : `
+                opacity-0
+                invisible
+                pointer-events-none
+                -translate-y-3
+              `
           }
         `}
-        aria-hidden={!mobileMenuOpen}
       >
 
-        {/* =====================================
-            SCROLLABLE MOBILE CONTENT
-        ====================================== */}
         <div
           className="
             h-full
-            w-full
 
             overflow-y-auto
             overscroll-contain
 
-            px-5
-            sm:px-6
-
-            py-7
-            sm:py-8
+            px-6
+            py-8
           "
         >
 
@@ -595,9 +964,8 @@ export default function Navbar() {
             "
           >
 
-            {/* =================================
-                MENU HEADER
-            ================================== */}
+            {/* MENU HEADER */}
+
             <div
               className="
                 flex
@@ -622,7 +990,6 @@ export default function Navbar() {
                 NAVIGATION
               </p>
 
-
               <p
                 className="
                   text-[9px]
@@ -638,157 +1005,338 @@ export default function Navbar() {
             </div>
 
 
-            {/* =================================
-                NAVIGATION LINKS
-            ================================== */}
+            {/* MOBILE LINKS */}
+
             <nav className="flex flex-col">
 
-              {navLinks.map((link, index) => {
-                const active = activeSection === link.id;
+              {navLinks.map(
+                (link, index) => {
+                  const active =
+                    activeSection ===
+                    link.id;
 
-                return (
-                  <a
-                    key={link.id}
-                    href={link.href}
-                    onClick={closeMobileMenu}
-                    className="
-                      group
+                  return (
+                    <a
+                      key={link.id}
+                      href={link.href}
+                      onClick={
+                        closeMobileMenu
+                      }
+                      className={`
+                        group
 
-                      relative
-
-                      border-t
-                      border-gray-200
-
-                      py-5
-                      sm:py-6
-
-                      flex
-                      items-center
-                      justify-between
-
-                      gap-4
-
-                      overflow-hidden
-                    "
-                  >
-
-                    {/* LEFT */}
-                    <div
-                      className="
                         relative
-                        z-10
+
+                        border-t
+
+                        py-5
+                        sm:py-6
 
                         flex
                         items-center
+                        justify-between
 
                         gap-4
-                        sm:gap-5
-                      "
+
+                        overflow-hidden
+
+                        ${isDark
+                          ? 'border-[#262626]'
+                          : 'border-gray-200'
+                        }
+                      `}
                     >
 
-                      {/* NUMBER */}
-                      <span
-                        className={`
-                          text-[9px]
-                          font-mono
+                      <div
+                        className="
+                          relative
+                          z-10
 
-                          transition-colors
-                          duration-300
+                          flex
+                          items-center
 
-                          ${active
-                            ? 'text-blue-500'
-                            : 'text-gray-400'
-                          }
-                        `}
+                          gap-4
+                          sm:gap-5
+                        "
                       >
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
+
+                        <span
+                          className={`
+                            text-[9px]
+                            font-mono
+
+                            ${active
+                              ? 'text-blue-500'
+                              : 'text-gray-400'
+                            }
+                          `}
+                        >
+                          {String(
+                            index + 1
+                          ).padStart(
+                            2,
+                            '0'
+                          )}
+                        </span>
 
 
-                      {/* TEXT */}
-                      <span
+                        <span
+                          className={`
+                            text-[22px]
+                            sm:text-3xl
+
+                            font-medium
+                            tracking-[-0.035em]
+
+                            transition-all
+                            duration-300
+
+                            group-hover:translate-x-1
+
+                            ${active
+                              ? isDark
+                                ? 'text-white'
+                                : 'text-black'
+                              : isDark
+                                ? 'text-[#737373] group-hover:text-white'
+                                : 'text-gray-500 group-hover:text-black'
+                            }
+                          `}
+                        >
+                          {link.name}
+                        </span>
+
+                      </div>
+
+
+                      <ArrowUpRight
+                        size={18}
+                        strokeWidth={1.4}
                         className={`
-                          text-[22px]
-                          sm:text-3xl
+                          relative
+                          z-10
 
-                          font-medium
-                          tracking-[-0.035em]
+                          shrink-0
 
                           transition-all
                           duration-300
 
                           ${active
-                            ? 'text-black'
-                            : 'text-gray-500 group-hover:text-black'
+                            ? 'text-blue-500'
+                            : isDark
+                              ? 'text-[#404040]'
+                              : 'text-gray-300'
                           }
 
                           group-hover:translate-x-1
+                          group-hover:-translate-y-1
                         `}
-                      >
-                        {link.name}
-                      </span>
-
-                    </div>
+                      />
 
 
-                    {/* ARROW */}
-                    <ArrowUpRight
-                      size={18}
-                      strokeWidth={1.4}
-                      className={`
-                        relative
-                        z-10
+                      {/* ACTIVE BACKGROUND */}
 
-                        shrink-0
+                      <span
+                        className={`
+                          absolute
+                          inset-0
 
-                        transition-all
-                        duration-300
+                          origin-left
 
-                        ${active
-                          ? 'text-blue-500'
-                          : 'text-gray-300'
-                        }
+                          transition-transform
+                          duration-500
 
-                        group-hover:text-black
-                        group-hover:translate-x-1
-                        group-hover:-translate-y-1
-                      `}
-                    />
+                          ${isDark
+                            ? 'bg-[#111111]'
+                            : 'bg-gray-50'
+                          }
 
+                          ${active
+                            ? 'scale-x-100'
+                            : 'scale-x-0 group-hover:scale-x-100'
+                          }
+                        `}
+                      />
 
-                    {/* SUBTLE ACTIVE BACKGROUND */}
-                    <span
-                      className={`
-                        absolute
-                        inset-0
+                    </a>
+                  );
+                }
+              )}
 
-                        bg-gray-50
+              <div
+                className={`
+                  border-t
 
-                        origin-left
-
-                        transition-transform
-                        duration-500
-
-                        ${active
-                          ? 'scale-x-100'
-                          : 'scale-x-0 group-hover:scale-x-100'
-                        }
-                      `}
-                    />
-
-                  </a>
-                );
-              })}
-
-
-              <div className="border-t border-gray-200" />
+                  ${isDark
+                    ? 'border-[#262626]'
+                    : 'border-gray-200'
+                  }
+                `}
+              />
 
             </nav>
 
 
             {/* =================================
+                MOBILE THEME
+            ================================== */}
+
+            <div className="mt-8">
+
+              <p
+                className="
+                  mb-3
+
+                  text-[9px]
+
+                  font-mono
+                  tracking-[0.18em]
+
+                  text-gray-400
+                "
+              >
+                APPEARANCE
+              </p>
+
+
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className={`
+                  group
+
+                  w-full
+
+                  flex
+                  items-center
+                  justify-between
+
+                  border
+
+                  px-4
+                  py-4
+
+                  transition-all
+                  duration-300
+
+                  ${isDark
+                    ? `
+                        bg-[#111111]
+                        border-[#262626]
+
+                        hover:border-[#404040]
+                      `
+                    : `
+                        bg-white
+                        border-gray-200
+
+                        hover:border-gray-400
+                      `
+                  }
+                `}
+              >
+
+                <div
+                  className="
+                    flex
+                    items-center
+                    gap-3
+                  "
+                >
+
+                  <div
+                    className={`
+                      w-9
+                      h-9
+
+                      flex
+                      items-center
+                      justify-center
+
+                      border
+
+                      ${isDark
+                        ? 'border-[#333333] text-blue-500'
+                        : 'border-gray-200 text-black'
+                      }
+                    `}
+                  >
+                    {isDark ? (
+                      <Sun
+                        size={15}
+                        strokeWidth={1.7}
+                      />
+                    ) : (
+                      <Moon
+                        size={15}
+                        strokeWidth={1.7}
+                      />
+                    )}
+                  </div>
+
+
+                  <div className="text-left">
+
+                    <p
+                      className="
+                        text-[8px]
+
+                        font-mono
+                        tracking-[0.16em]
+
+                        text-gray-400
+
+                        mb-1
+                      "
+                    >
+                      THEME
+                    </p>
+
+                    <p
+                      className={`
+                        text-[11px]
+
+                        font-mono
+                        tracking-[0.1em]
+
+                        ${isDark
+                          ? 'text-white'
+                          : 'text-black'
+                        }
+                      `}
+                    >
+                      {isDark
+                        ? 'DARK MODE'
+                        : 'LIGHT MODE'}
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                <span
+                  className="
+                    text-[9px]
+
+                    font-mono
+                    tracking-[0.12em]
+
+                    text-gray-400
+                  "
+                >
+                  SWITCH
+                </span>
+
+              </button>
+
+            </div>
+
+
+            {/* =================================
                 SOCIAL LINKS
             ================================== */}
+
             <div className="mt-8">
 
               <p
@@ -811,95 +1359,81 @@ export default function Navbar() {
                 className="
                   grid
                   grid-cols-2
-
                   gap-2
                 "
               >
 
-                {socialLinks.map((social) => {
-                  const Icon = social.icon;
+                {socialLinks.map(
+                  (social) => {
+                    const Icon =
+                      social.icon;
 
-                  return (
-                    <a
-                      key={social.name}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="
-                        group/social
+                    return (
+                      <a
+                        key={social.name}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`
+                          group/social
 
-                        min-w-0
-
-                        flex
-                        items-center
-                        justify-between
-
-                        gap-2
-
-                        border
-                        border-gray-200
-
-                        px-3
-                        sm:px-4
-
-                        py-3
-
-                        text-[8px]
-                        sm:text-[9px]
-
-                        font-mono
-                        tracking-[0.08em]
-
-                        text-gray-500
-
-                        transition-all
-                        duration-300
-
-                        hover:bg-black
-                        hover:border-black
-                        hover:text-white
-                      "
-                    >
-
-                      <span
-                        className="
                           flex
                           items-center
+                          justify-center
+
                           gap-2
 
-                          min-w-0
-                        "
-                      >
-                        <Icon
-                          size={14}
-                          className="shrink-0"
-                        />
+                          border
 
-                        <span className="truncate">
-                          {social.name}
-                        </span>
-                      </span>
+                          px-3
+                          py-3
 
-
-                      <ArrowUpRight
-                        size={11}
-                        className="
-                          shrink-0
-
-                          text-gray-300
+                          text-[9px]
+                          font-mono
+                          tracking-[0.1em]
 
                           transition-all
                           duration-300
 
-                          group-hover/social:text-white
-                          group-hover/social:translate-x-0.5
-                          group-hover/social:-translate-y-0.5
-                        "
-                      />
+                          ${isDark
+                            ? `
+                                border-[#262626]
+                                text-[#a3a3a3]
 
-                    </a>
-                  );
-                })}
+                                hover:border-[#525252]
+                                hover:text-white
+                              `
+                            : `
+                                border-gray-200
+                                text-gray-500
+
+                                hover:border-black
+                                hover:text-black
+                              `
+                          }
+                        `}
+                      >
+                        <Icon size={14} />
+
+                        {social.name}
+
+                        <ArrowUpRight
+                          size={11}
+                          className="
+                            text-gray-400
+
+                            transition-all
+                            duration-300
+
+                            group-hover/social:translate-x-0.5
+                            group-hover/social:-translate-y-0.5
+                          "
+                        />
+
+                      </a>
+                    );
+                  }
+                )}
 
               </div>
 
@@ -909,37 +1443,37 @@ export default function Navbar() {
             {/* =================================
                 MOBILE BOTTOM
             ================================== */}
-            <div
-              className="
-                mt-auto
-                pt-10
-              "
-            >
+
+            <div className="mt-auto pt-8">
 
               <div
-                className="
-                  border-t
-                  border-gray-200
-
-                  pt-5
-
+                className={`
                   flex
                   items-center
                   justify-between
 
-                  gap-4
-                "
+                  border-t
+
+                  pt-5
+
+                  ${isDark
+                    ? 'border-[#262626]'
+                    : 'border-gray-200'
+                  }
+                `}
               >
 
                 <span
-                  className="
+                  className={`
                     text-[9px]
-
                     font-mono
-                    tracking-[0.12em]
+                    tracking-[0.14em]
 
-                    text-gray-400
-                  "
+                    ${isDark
+                      ? 'text-[#a3a3a3]'
+                      : 'text-gray-500'
+                    }
+                  `}
                 >
                   RAI.DEV
                 </span>

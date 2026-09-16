@@ -5,7 +5,13 @@ import {
 
 import InteractivePortrait from './InteractivePortrait';
 
+import { projects } from '../data/projectsData';
+import { skills } from '../data/skillsData';
+
 export default function About() {
+  const projectCount = projects.length;
+  const skillCount = skills.length;
+
   return (
     <section
       id="about"
@@ -16,61 +22,61 @@ export default function About() {
         {/* TOP LABEL */}
         <div
           className="
-    flex
-    items-center
-    justify-end
-    mb-6
-    text-[10px]
-    sm:text-[11px]
-    font-mono
-    text-gray-400
-  "
+            flex
+            items-center
+            justify-end
+            mb-6
+            text-[10px]
+            sm:text-[11px]
+            font-mono
+            text-gray-400
+          "
         >
           <span className="tracking-[0.15em]">
             ABOUT / 01
           </span>
         </div>
 
-
         {/* MAIN ABOUT CARD */}
-        <div className="
-          grid
-          lg:grid-cols-2
-          border
-          border-gray-200
-          bg-white
-        ">
-
-          {/* ========================================
-              LEFT — INTERACTIVE PORTRAIT
-          ========================================= */}
-          <div className="
-            relative
-            min-h-[460px]
-            sm:min-h-[540px]
-            lg:min-h-[580px]
-            overflow-hidden
-            border-b
-            lg:border-b-0
-            lg:border-r
+        <div
+          className="
+            grid
+            lg:grid-cols-2
+            border
             border-gray-200
-          ">
+            bg-white
+          "
+        >
+
+          {/* LEFT */}
+          <div
+            className="
+              relative
+              min-h-[460px]
+              sm:min-h-[540px]
+              lg:min-h-[580px]
+              overflow-hidden
+              border-b
+              lg:border-b-0
+              lg:border-r
+              border-gray-200
+            "
+          >
             <InteractivePortrait />
           </div>
 
-
-          {/* ========================================
-              RIGHT — ABOUT INFORMATION
-          ========================================= */}
-          <div className="
-            p-6
-            sm:p-10
-            lg:p-12
-            xl:p-14
-            flex
-            flex-col
-            justify-between
-          ">
+          {/* RIGHT */}
+          <div
+            className="
+              p-6
+              sm:p-10
+              lg:p-12
+              xl:p-14
+              flex
+              flex-col
+              justify-between
+            "
+          >
 
             <div>
 
@@ -78,51 +84,55 @@ export default function About() {
               <div className="mb-9">
                 <p
                   className="
-      text-[10px]
-      sm:text-[11px]
-      font-mono
-      tracking-[0.2em]
-      text-gray-400
-    "
+                    text-[10px]
+                    sm:text-[11px]
+                    font-mono
+                    tracking-[0.2em]
+                    text-gray-400
+                  "
                 >
                   OVERVIEW
                 </p>
               </div>
 
-
               {/* I'M */}
-              <p className="
-                text-xl
-                sm:text-2xl
-                font-light
-                text-gray-400
-                mb-2
-              ">
+              <p
+                className="
+                  text-xl
+                  sm:text-2xl
+                  font-light
+                  text-gray-400
+                  mb-2
+                "
+              >
                 I'm
               </p>
 
-
               {/* NAME */}
-              <div className="
-                flex
-                items-center
-                gap-3
-                flex-wrap
-                mb-5
-              ">
-                <h1 className="
-                  text-[clamp(2.5rem,5vw,4.1rem)]
-                  leading-[0.96]
-                  font-semibold
-                  tracking-[-0.05em]
-                  text-black
-                ">
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-3
+                  flex-wrap
+                  mb-5
+                "
+              >
+                <h1
+                  className="
+                    text-[clamp(2.5rem,5vw,4.1rem)]
+                    leading-[0.96]
+                    font-semibold
+                    tracking-[-0.05em]
+                    text-black
+                  "
+                >
                   John Railey Pael
+
                   <span className="text-blue-500">
                     .
                   </span>
                 </h1>
-
 
                 {/* VERIFIED BADGE */}
                 <span
@@ -150,31 +160,29 @@ export default function About() {
                 </span>
               </div>
 
-
               {/* ROLE */}
               <p
                 className="
-    text-[10px]
-    sm:text-[11px]
-    font-mono
-    tracking-[0.12em]
-    text-black
-    mb-6
-  "
+                  text-[10px]
+                  sm:text-[11px]
+                  font-mono
+                  tracking-[0.12em]
+                  text-black
+                  mb-6
+                "
               >
                 CREATIVE FRONT-END DEVELOPER · AI-ASSISTED VIBE CODER
               </p>
 
-
               {/* BIO */}
               <p
                 className="
-                max-w-lg
-                text-sm
-                sm:text-[15px]
-                leading-7
-                text-gray-500
-              "
+    max-w-lg
+    text-sm
+    sm:text-[15px]
+    leading-7
+    text-gray-500
+  "
               >
                 Information Technology student at{' '}
 
@@ -182,7 +190,13 @@ export default function About() {
                   Bulacan State University — Bustos Campus
                 </span>
 
-                , focused on{' '}
+                , majoring in{' '}
+
+                <span className="text-black font-medium">
+                  Web & Mobile Application Development
+                </span>
+
+                , with a focus on{' '}
 
                 <span className="text-black font-medium">
                   front-end development
@@ -199,18 +213,19 @@ export default function About() {
                 visually engaging, intuitive, and thoughtfully built.
               </p>
 
-
               {/* LOCATION */}
-              <div className="
-                flex
-                items-center
-                gap-2
-                mt-5
-                text-[10px]
-                sm:text-[11px]
-                font-mono
-                text-gray-400
-              ">
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  mt-5
+                  text-[10px]
+                  sm:text-[11px]
+                  font-mono
+                  text-gray-400
+                "
+              >
                 <MapPin size={13} />
 
                 <span>
@@ -218,14 +233,15 @@ export default function About() {
                 </span>
               </div>
 
-
               {/* BUTTONS */}
-              <div className="
-                flex
-                flex-wrap
-                gap-3
-                mt-9
-              ">
+              <div
+                className="
+                  flex
+                  flex-wrap
+                  gap-3
+                  mt-9
+                "
+              >
 
                 <a
                   href="#projects"
@@ -261,7 +277,6 @@ export default function About() {
                   />
                 </a>
 
-
                 <a
                   href="#contact"
                   className="
@@ -290,32 +305,33 @@ export default function About() {
               </div>
             </div>
 
-
             {/* ========================================
-                STATS
+                REALTIME STATS
             ========================================= */}
-            <div className="
-              grid
-              grid-cols-2
-              sm:grid-cols-4
-              mt-12
-              pt-7
-              border-t
-              border-gray-200
-            ">
+            <div
+              className="
+                grid
+                grid-cols-2
+                sm:grid-cols-4
+                mt-12
+                pt-7
+                border-t
+                border-gray-200
+              "
+            >
               <Stat
                 value="4th"
                 label="YEAR"
               />
 
               <Stat
-                value="8+"
+                value={projectCount}
                 label="PROJECTS"
               />
 
               <Stat
-                value="12+"
-                label="STACK"
+                value={skillCount}
+                label="SKILLS"
               />
 
               <Stat
@@ -331,29 +347,32 @@ export default function About() {
   );
 }
 
-
 /* =========================================
    STAT
 ========================================= */
 
 function Stat({ value, label }) {
   return (
-    <div className="
-      group
-      px-4
-      first:pl-0
-      border-l
-      first:border-l-0
-      border-gray-200
-    ">
+    <div
+      className="
+        group
+        px-4
+        first:pl-0
+        border-l
+        first:border-l-0
+        border-gray-200
+      "
+    >
       <div className="flex items-center gap-1">
 
-        <span className="
-          text-xl
-          sm:text-2xl
-          font-semibold
-          tracking-[-0.04em]
-        ">
+        <span
+          className="
+            text-xl
+            sm:text-2xl
+            font-semibold
+            tracking-[-0.04em]
+          "
+        >
           {value}
         </span>
 
@@ -371,14 +390,16 @@ function Stat({ value, label }) {
 
       </div>
 
-      <p className="
-        mt-1
-        text-[8px]
-        sm:text-[9px]
-        font-mono
-        tracking-[0.15em]
-        text-gray-400
-      ">
+      <p
+        className="
+          mt-1
+          text-[8px]
+          sm:text-[9px]
+          font-mono
+          tracking-[0.15em]
+          text-gray-400
+        "
+      >
         {label}
       </p>
     </div>

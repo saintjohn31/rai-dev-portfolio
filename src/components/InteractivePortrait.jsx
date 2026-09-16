@@ -129,6 +129,7 @@ export default function InteractivePortrait() {
 
       className="
         relative
+        isolate
         w-full
         h-full
 
@@ -178,6 +179,7 @@ export default function InteractivePortrait() {
 
       {/* =====================================================
           TOP LEFT STATUS
+          GREEN DOT REMOVED
       ====================================================== */}
 
       <div
@@ -194,7 +196,6 @@ export default function InteractivePortrait() {
           className="
             flex
             items-center
-            gap-2
 
             bg-white/90
             backdrop-blur-sm
@@ -206,15 +207,6 @@ export default function InteractivePortrait() {
             py-1.5
           "
         >
-          <span
-            className="
-              w-1.5
-              h-1.5
-              rounded-full
-              bg-emerald-500
-            "
-          />
-
           <span
             className="
               text-[8px]
