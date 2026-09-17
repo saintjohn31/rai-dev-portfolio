@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+
 import {
   ArrowUpRight,
   Menu,
@@ -12,7 +13,10 @@ import {
    CUSTOM ICONS
 ========================================= */
 
-function GithubIcon({ size = 16, className = '' }) {
+function GithubIcon({
+  size = 16,
+  className = '',
+}) {
   return (
     <svg
       width={size}
@@ -28,7 +32,10 @@ function GithubIcon({ size = 16, className = '' }) {
 }
 
 
-function LinkedinIcon({ size = 16, className = '' }) {
+function LinkedinIcon({
+  size = 16,
+  className = '',
+}) {
   return (
     <svg
       width={size}
@@ -52,6 +59,7 @@ export default function Navbar({
   theme,
   toggleTheme,
 }) {
+
   const [mobileMenuOpen, setMobileMenuOpen] =
     useState(false);
 
@@ -62,10 +70,12 @@ export default function Navbar({
     useState(false);
 
   const isDark = theme === 'dark';
+  const clickedSectionRef = useRef(null);
+  const clickTimeoutRef = useRef(null);
 
 
   /* =========================================
-     NAVIGATION
+     NAVIGATION LINKS
   ========================================= */
 
   const navLinks = [
@@ -83,6 +93,11 @@ export default function Navbar({
       name: 'SKILLS',
       href: '#skills',
       id: 'skills',
+    },
+    {
+      name: 'EDUCATION',
+      href: '#education',
+      id: 'education',
     },
     {
       name: 'CONTACT',
@@ -116,7 +131,9 @@ export default function Navbar({
   ========================================= */
 
   useEffect(() => {
+
     const handleScroll = () => {
+
       setScrolled(window.scrollY > 20);
 
       const sections = navLinks
@@ -125,21 +142,62 @@ export default function Navbar({
         )
         .filter(Boolean);
 
-      let current = 'about';
+      if (!sections.length) {
+        return;
+      }
+
+
+      /*
+       * Active detection point.
+       *
+       * Navbar = 76px
+       * Extra allowance is added so the
+       * correct section becomes active
+       * shortly after entering the viewport.
+       */
+
+      const activationPoint = 120;
+
+      let current = sections[0].id;
+
 
       sections.forEach((section) => {
+
         const rect =
           section.getBoundingClientRect();
 
-        if (rect.top <= 180) {
+        if (rect.top <= activationPoint) {
           current = section.id;
         }
+
       });
 
+
+      /*
+       * When the user reaches the very
+       * bottom of the page, CONTACT
+       * should always become active.
+       */
+
+      const nearBottom =
+        window.innerHeight +
+        window.scrollY >=
+        document.documentElement.scrollHeight -
+        10;
+
+      if (nearBottom) {
+        current =
+          sections[sections.length - 1].id;
+      }
+
+
       setActiveSection(current);
+
     };
 
+
     handleScroll();
+
 
     window.addEventListener(
       'scroll',
@@ -149,12 +207,27 @@ export default function Navbar({
       }
     );
 
+
+    window.addEventListener(
+      'resize',
+      handleScroll
+    );
+
+
     return () => {
+
       window.removeEventListener(
         'scroll',
         handleScroll
       );
+
+      window.removeEventListener(
+        'resize',
+        handleScroll
+      );
+
     };
+
   }, []);
 
 
@@ -163,23 +236,31 @@ export default function Navbar({
   ========================================= */
 
   useEffect(() => {
+
     const handleResize = () => {
+
       if (window.innerWidth >= 768) {
         setMobileMenuOpen(false);
       }
+
     };
+
 
     window.addEventListener(
       'resize',
       handleResize
     );
 
+
     return () => {
+
       window.removeEventListener(
         'resize',
         handleResize
       );
+
     };
+
   }, []);
 
 
@@ -188,26 +269,51 @@ export default function Navbar({
   ========================================= */
 
   useEffect(() => {
+
     if (mobileMenuOpen) {
+
       document.body.style.overflow =
         'hidden';
+
     } else {
+
       document.body.style.overflow = '';
+
     }
 
+
     return () => {
+
       document.body.style.overflow = '';
+
     };
+
   }, [mobileMenuOpen]);
 
 
-  const closeMobileMenu = () => {
+  /* =========================================
+     NAVIGATION CLICK
+  ========================================= */
+
+  const handleNavClick = (id) => {
+
+    setActiveSection(id);
+
     setMobileMenuOpen(false);
+
+  };
+
+
+  const closeMobileMenu = () => {
+
+    setMobileMenuOpen(false);
+
   };
 
 
   return (
     <>
+
       {/* =====================================
           NAVBAR
       ====================================== */}
@@ -267,7 +373,9 @@ export default function Navbar({
 
             <a
               href="#about"
-              onClick={closeMobileMenu}
+              onClick={() =>
+                handleNavClick('about')
+              }
               className="
                 group
                 flex
@@ -279,6 +387,7 @@ export default function Navbar({
               "
               aria-label="Go to About section"
             >
+
               <span
                 className={`
                   text-[23px]
@@ -298,11 +407,14 @@ export default function Navbar({
                 `}
               >
                 rai
+
                 <span className="text-blue-500">
                   .
                 </span>
+
                 dev
               </span>
+
             </a>
 
 
@@ -330,14 +442,24 @@ export default function Navbar({
                 whitespace-nowrap
               "
             >
+
               {navLinks.map((link) => {
+
                 const active =
                   activeSection === link.id;
 
+
                 return (
+
                   <a
                     key={link.id}
+
                     href={link.href}
+
+                    onClick={() =>
+                      handleNavClick(link.id)
+                    }
+
                     className={`
                       group
                       relative
@@ -363,7 +485,11 @@ export default function Navbar({
                       }
                     `}
                   >
+
                     {link.name}
+
+
+                    {/* ACTIVE UNDERLINE */}
 
                     <span
                       className={`
@@ -388,9 +514,13 @@ export default function Navbar({
                         }
                       `}
                     />
+
                   </a>
+
                 );
+
               })}
+
             </nav>
 
 
@@ -430,18 +560,33 @@ export default function Navbar({
                   }
                 `}
               >
+
                 {socialLinks.map(
                   (social) => {
-                    const Icon = social.icon;
+
+                    const Icon =
+                      social.icon;
+
 
                     return (
+
                       <a
                         key={social.name}
+
                         href={social.href}
+
                         target="_blank"
+
                         rel="noopener noreferrer"
-                        aria-label={social.name}
-                        title={social.name}
+
+                        aria-label={
+                          social.name
+                        }
+
+                        title={
+                          social.name
+                        }
+
                         className={`
                           group/social
 
@@ -469,8 +614,10 @@ export default function Navbar({
                           }
                         `}
                       >
+
                         <Icon
                           size={16}
+
                           className="
                             transition-transform
                             duration-300
@@ -478,10 +625,14 @@ export default function Navbar({
                             group-hover/social:-translate-y-0.5
                           "
                         />
+
                       </a>
+
                     );
+
                   }
                 )}
+
               </div>
 
 
@@ -491,6 +642,11 @@ export default function Navbar({
 
               <a
                 href="#contact"
+
+                onClick={() =>
+                  handleNavClick('contact')
+                }
+
                 className={`
                   group
 
@@ -528,11 +684,15 @@ export default function Navbar({
                   }
                 `}
               >
+
                 LET'S TALK
+
 
                 <ArrowUpRight
                   size={14}
+
                   strokeWidth={1.8}
+
                   className="
                     transition-transform
                     duration-300
@@ -541,27 +701,31 @@ export default function Navbar({
                     group-hover:-translate-y-0.5
                   "
                 />
+
               </a>
 
 
               {/* =================================
                   THEME TOGGLE
-                  DIRECTLY BESIDE LET'S TALK
               ================================== */}
 
               <button
                 type="button"
+
                 onClick={toggleTheme}
+
                 aria-label={
                   isDark
                     ? 'Switch to light mode'
                     : 'Switch to dark mode'
                 }
+
                 title={
                   isDark
                     ? 'Light Mode'
                     : 'Dark Mode'
                 }
+
                 className={`
                   group/theme
 
@@ -629,10 +793,14 @@ export default function Navbar({
                   "
                 />
 
+
                 {isDark ? (
+
                   <Sun
                     size={15}
+
                     strokeWidth={1.7}
+
                     className="
                       transition-all
                       duration-300
@@ -640,10 +808,14 @@ export default function Navbar({
                       group-hover/theme:rotate-45
                     "
                   />
+
                 ) : (
+
                   <Moon
                     size={15}
+
                     strokeWidth={1.7}
+
                     className="
                       transition-all
                       duration-300
@@ -651,6 +823,7 @@ export default function Navbar({
                       group-hover/theme:-rotate-12
                     "
                   />
+
                 )}
 
               </button>
@@ -678,6 +851,11 @@ export default function Navbar({
 
               <a
                 href="#contact"
+
+                onClick={() =>
+                  handleNavClick('contact')
+                }
+
                 className={`
                   w-10
                   h-10
@@ -703,23 +881,29 @@ export default function Navbar({
                       `
                   }
                 `}
+
                 aria-label="Contact"
               >
+
                 <ArrowUpRight
                   size={16}
                   strokeWidth={1.8}
                 />
+
               </a>
 
 
               <button
                 type="button"
+
                 onClick={toggleTheme}
+
                 aria-label={
                   isDark
                     ? 'Switch to light mode'
                     : 'Switch to dark mode'
                 }
+
                 className={`
                   w-10
                   h-10
@@ -747,17 +931,23 @@ export default function Navbar({
                   }
                 `}
               >
+
                 {isDark ? (
+
                   <Sun
                     size={15}
                     strokeWidth={1.7}
                   />
+
                 ) : (
+
                   <Moon
                     size={15}
                     strokeWidth={1.7}
                   />
+
                 )}
+
               </button>
 
             </div>
@@ -784,12 +974,15 @@ export default function Navbar({
 
               <button
                 type="button"
+
                 onClick={toggleTheme}
+
                 aria-label={
                   isDark
                     ? 'Switch to light mode'
                     : 'Switch to dark mode'
                 }
+
                 className={`
                   w-10
                   h-10
@@ -817,17 +1010,23 @@ export default function Navbar({
                   }
                 `}
               >
+
                 {isDark ? (
+
                   <Sun
                     size={16}
                     strokeWidth={1.7}
                   />
+
                 ) : (
+
                   <Moon
                     size={16}
                     strokeWidth={1.7}
                   />
+
                 )}
+
               </button>
 
 
@@ -835,11 +1034,13 @@ export default function Navbar({
 
               <button
                 type="button"
+
                 onClick={() =>
                   setMobileMenuOpen(
                     (prev) => !prev
                   )
                 }
+
                 className={`
                   w-10
                   h-10
@@ -870,32 +1071,42 @@ export default function Navbar({
                       `
                   }
                 `}
+
                 aria-label={
                   mobileMenuOpen
                     ? 'Close navigation'
                     : 'Open navigation'
                 }
+
                 aria-expanded={
                   mobileMenuOpen
                 }
               >
+
                 {mobileMenuOpen ? (
+
                   <X
                     size={19}
                     strokeWidth={1.7}
                   />
+
                 ) : (
+
                   <Menu
                     size={19}
                     strokeWidth={1.7}
                   />
+
                 )}
+
               </button>
 
             </div>
 
           </div>
+
         </div>
+
       </header>
 
 
@@ -977,6 +1188,7 @@ export default function Navbar({
                 mb-7
               "
             >
+
               <p
                 className="
                   text-[9px]
@@ -990,6 +1202,7 @@ export default function Navbar({
                 NAVIGATION
               </p>
 
+
               <p
                 className="
                   text-[9px]
@@ -1002,26 +1215,37 @@ export default function Navbar({
               >
                 PORTFOLIO / 2026
               </p>
+
             </div>
 
 
-            {/* MOBILE LINKS */}
+            {/* =================================
+                MOBILE LINKS
+            ================================== */}
 
             <nav className="flex flex-col">
 
               {navLinks.map(
                 (link, index) => {
+
                   const active =
                     activeSection ===
                     link.id;
 
+
                   return (
+
                     <a
                       key={link.id}
+
                       href={link.href}
-                      onClick={
-                        closeMobileMenu
+
+                      onClick={() =>
+                        handleNavClick(
+                          link.id
+                        )
                       }
+
                       className={`
                         group
 
@@ -1071,12 +1295,14 @@ export default function Navbar({
                             }
                           `}
                         >
+
                           {String(
                             index + 1
                           ).padStart(
                             2,
                             '0'
                           )}
+
                         </span>
 
 
@@ -1111,7 +1337,9 @@ export default function Navbar({
 
                       <ArrowUpRight
                         size={18}
+
                         strokeWidth={1.4}
+
                         className={`
                           relative
                           z-10
@@ -1159,9 +1387,12 @@ export default function Navbar({
                       />
 
                     </a>
+
                   );
+
                 }
               )}
+
 
               <div
                 className={`
@@ -1201,7 +1432,9 @@ export default function Navbar({
 
               <button
                 type="button"
+
                 onClick={toggleTheme}
+
                 className={`
                   group
 
@@ -1261,17 +1494,23 @@ export default function Navbar({
                       }
                     `}
                   >
+
                     {isDark ? (
+
                       <Sun
                         size={15}
                         strokeWidth={1.7}
                       />
+
                     ) : (
+
                       <Moon
                         size={15}
                         strokeWidth={1.7}
                       />
+
                     )}
+
                   </div>
 
 
@@ -1292,6 +1531,7 @@ export default function Navbar({
                       THEME
                     </p>
 
+
                     <p
                       className={`
                         text-[11px]
@@ -1305,9 +1545,12 @@ export default function Navbar({
                         }
                       `}
                     >
+
                       {isDark
                         ? 'DARK MODE'
-                        : 'LIGHT MODE'}
+                        : 'LIGHT MODE'
+                      }
+
                     </p>
 
                   </div>
@@ -1365,15 +1608,22 @@ export default function Navbar({
 
                 {socialLinks.map(
                   (social) => {
+
                     const Icon =
                       social.icon;
 
+
                     return (
+
                       <a
                         key={social.name}
+
                         href={social.href}
+
                         target="_blank"
+
                         rel="noopener noreferrer"
+
                         className={`
                           group/social
 
@@ -1413,12 +1663,14 @@ export default function Navbar({
                           }
                         `}
                       >
+
                         <Icon size={14} />
 
                         {social.name}
 
                         <ArrowUpRight
                           size={11}
+
                           className="
                             text-gray-400
 
@@ -1431,7 +1683,9 @@ export default function Navbar({
                         />
 
                       </a>
+
                     );
+
                   }
                 )}
 
@@ -1497,8 +1751,11 @@ export default function Navbar({
             </div>
 
           </div>
+
         </div>
+
       </div>
+
     </>
   );
 }

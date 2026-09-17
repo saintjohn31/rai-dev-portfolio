@@ -171,7 +171,7 @@ export default function About() {
                   mb-6
                 "
               >
-                CREATIVE FRONT-END DEVELOPER · AI-ASSISTED VIBE CODER
+                CREATIVE FRONT-END DEVELOPER · AI-ASSISTED DEVELOPER
               </p>
 
               {/* BIO */}
@@ -202,15 +202,15 @@ export default function About() {
                   front-end development
                 </span>
 
-                . I combine creativity, modern web technologies, and an{' '}
+                . I combine creativity, modern web technologies, and{' '}
 
                 <span className="text-black font-medium">
-                  AI-assisted vibe coding approach
+                  AI-assisted development
                 </span>
 
-                {' '}to transform ideas into clean, responsive, and interactive
-                digital experiences. I focus on creating interfaces that are
-                visually engaging, intuitive, and thoughtfully built.
+                {' '}to turn ideas into clean, responsive, and interactive
+                digital experiences. I enjoy building interfaces that are
+                visually engaging, intuitive, and thoughtfully crafted.
               </p>
 
               {/* LOCATION */}
@@ -306,37 +306,47 @@ export default function About() {
             </div>
 
             {/* ========================================
-                REALTIME STATS
-            ========================================= */}
+    REALTIME STATS
+========================================= */}
+
             <div
               className="
-                grid
-                grid-cols-2
-                sm:grid-cols-4
-                mt-12
-                pt-7
-                border-t
-                border-gray-200
-              "
+    grid
+    grid-cols-2
+    sm:grid-cols-4
+
+    mt-10
+    sm:mt-12
+
+    pt-6
+    sm:pt-7
+
+    border-t
+    border-gray-200
+  "
             >
               <Stat
                 value="4th"
                 label="YEAR"
+                index={0}
               />
 
               <Stat
                 value={projectCount}
                 label="PROJECTS"
+                index={1}
               />
 
               <Stat
                 value={skillCount}
                 label="SKILLS"
+                index={2}
               />
 
               <Stat
                 value="BSIT"
                 label="PROGRAM"
+                index={3}
               />
             </div>
 
@@ -351,26 +361,58 @@ export default function About() {
    STAT
 ========================================= */
 
-function Stat({ value, label }) {
+function Stat({
+  value,
+  label,
+  index,
+}) {
   return (
     <div
-      className="
+      className={`
         group
-        px-4
-        first:pl-0
-        border-l
-        first:border-l-0
-        border-gray-200
-      "
-    >
-      <div className="flex items-center gap-1">
+        min-w-0
 
+        py-4
+        sm:py-0
+
+        ${index % 2 === 0
+          ? 'pr-4'
+          : 'pl-4 border-l border-gray-200'
+        }
+
+        ${index >= 2
+          ? 'border-t border-gray-200 mt-4 pt-4'
+          : ''
+        }
+
+        sm:mt-0
+        sm:pt-0
+        sm:border-t-0
+
+        ${index === 0
+          ? 'sm:pl-0 sm:pr-4 sm:border-l-0'
+          : 'sm:px-4 sm:border-l sm:border-gray-200'
+        }
+      `}
+    >
+      <div
+        className="
+          flex
+          items-center
+          gap-1
+          min-w-0
+        "
+      >
         <span
           className="
             text-xl
-            sm:text-2xl
+            sm:text-xl
+            lg:text-2xl
+
             font-semibold
             tracking-[-0.04em]
+
+            whitespace-nowrap
           "
         >
           {value}
@@ -379,25 +421,35 @@ function Stat({ value, label }) {
         <ArrowUpRight
           size={11}
           className="
+            shrink-0
+
             text-gray-300
+
             transition-all
             duration-300
+
             group-hover:text-blue-500
             group-hover:translate-x-0.5
             group-hover:-translate-y-0.5
           "
         />
-
       </div>
 
       <p
         className="
           mt-1
+
           text-[8px]
-          sm:text-[9px]
+          sm:text-[8px]
+          lg:text-[9px]
+
           font-mono
-          tracking-[0.15em]
+          tracking-[0.12em]
+          sm:tracking-[0.15em]
+
           text-gray-400
+
+          whitespace-nowrap
         "
       >
         {label}

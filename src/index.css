@@ -24,7 +24,11 @@
   --inverse: #111111;
   --inverse-text: #ffffff;
 
+  /* BLUE PALETTE */
   --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-soft: #60a5fa;
+  --accent-muted: #93c5fd;
 }
 
 
@@ -42,16 +46,27 @@ html.dark {
   --surface-muted: #151515;
 
   --text: #f5f5f5;
+
+  /*
+    Normal supporting text stays gray.
+  */
   --text-soft: #a3a3a3;
   --text-muted: #737373;
 
   --border: #262626;
   --border-strong: #404040;
 
-  --inverse: #f5f5f5;
-  --inverse-text: #0a0a0a;
+  /*
+    Important inverse elements become blue.
+  */
+  --inverse: #3b82f6;
+  --inverse-text: #ffffff;
 
+  /* BLUE PALETTE */
   --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-soft: #60a5fa;
+  --accent-muted: #93c5fd;
 }
 
 
@@ -127,9 +142,15 @@ button {
 }
 
 
+html.dark ::selection {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+
 /* =========================================
    DARK MODE
-   EXISTING TAILWIND OVERRIDES
+   BACKGROUND OVERRIDES
 ========================================= */
 
 html.dark .bg-white {
@@ -171,10 +192,23 @@ html.dark .bg-gray-100 {
 }
 
 
+/* =========================================
+   DARK MODE
+   PRIMARY TEXT
+========================================= */
+
 html.dark .text-black {
   color: var(--text);
 }
 
+
+/* =========================================
+   DARK MODE
+   NORMAL GRAY TEXT
+
+   IMPORTANT:
+   Regular gray text remains gray.
+========================================= */
 
 html.dark .text-gray-300 {
   color: #525252;
@@ -182,17 +216,49 @@ html.dark .text-gray-300 {
 
 
 html.dark .text-gray-400 {
-  color: var(--text-muted);
+  color: #737373;
 }
 
 
 html.dark .text-gray-500 {
-  color: var(--text-soft);
+  color: #a3a3a3;
 }
 
 
 html.dark .text-gray-600 {
-  color: #a3a3a3;
+  color: #b3b3b3;
+}
+
+
+/* =========================================
+   HEADING ACCENT
+
+   LIGHT MODE = GRAY
+   DARK MODE  = BLUE
+
+   Use:
+   className="theme-heading-accent"
+========================================= */
+
+.theme-heading-accent {
+  color: #9ca3af;
+}
+
+
+html.dark .theme-heading-accent {
+  color: var(--accent-soft);
+}
+
+
+/* =========================================
+   DARK MODE
+   BORDER OVERRIDES
+
+   Borders remain neutral.
+========================================= */
+
+html.dark .border-gray-100 {
+  border-color: #1f1f1f;
 }
 
 
@@ -213,17 +279,131 @@ html.dark .border-gray-400 {
 
 
 /* =========================================
-   INVERT IMPORTANT BLACK ELEMENTS
+   DARK MODE
+   BLACK BUTTONS → BLUE
+========================================= */
+
+html.dark .bg-black {
+  background-color: var(--accent);
+}
+
+
+html.dark .bg-black.text-white {
+  color: #ffffff;
+}
+
+
+/* =========================================
+   DARK MODE
+   BLACK BORDERS → BLUE
+
+   Used by active buttons / controls.
+========================================= */
+
+html.dark .border-black {
+  border-color: var(--accent);
+}
+
+
+/* =========================================
+   DARK MODE
+   HOVER STATES
+========================================= */
+
+html.dark .hover\:bg-gray-50:hover {
+  background-color:
+    rgb(59 130 246 / 0.08);
+}
+
+
+html.dark .hover\:bg-gray-100:hover {
+  background-color:
+    rgb(59 130 246 / 0.12);
+}
+
+
+html.dark .hover\:text-black:hover {
+  color: var(--accent-soft);
+}
+
+
+html.dark .hover\:border-black:hover {
+  border-color: var(--accent);
+}
+
+
+html.dark .hover\:border-gray-400:hover {
+  border-color: var(--accent);
+}
+
+
+html.dark .hover\:bg-blue-600:hover {
+  background-color: var(--accent-hover);
+}
+
+
+/* =========================================
+   IMPORTANT BLACK ELEMENTS
+
+   LIGHT MODE = BLACK
+   DARK MODE  = BLUE
 ========================================= */
 
 html.dark .theme-invert-black {
-  background-color:
-    var(--inverse);
+  background-color: var(--accent);
 
-  color:
-    var(--inverse-text);
+  color: #ffffff;
 }
 
+
+/* =========================================
+   BLUE UTILITIES
+========================================= */
+
+html.dark .text-blue-500 {
+  color: #3b82f6;
+}
+
+
+html.dark .text-blue-600 {
+  color: #60a5fa;
+}
+
+
+html.dark .bg-blue-500 {
+  background-color: #3b82f6;
+}
+
+
+html.dark .bg-blue-600 {
+  background-color: #2563eb;
+}
+
+
+html.dark .border-blue-500 {
+  border-color: #3b82f6;
+}
+
+
+/* =========================================
+   CONTACT EMAIL TEXT
+
+   Email card stays light/white,
+   so the email must remain black
+   in both themes.
+========================================= */
+
+.contact-email-text {
+  color: #000000;
+}
+
+html.dark .contact-email-text {
+  color: #000000 !important;
+}
+
+html.dark .contact-email-text:hover {
+  color: #2563eb !important;
+}
 
 /* =========================================
    INTERACTIVE PORTRAIT
@@ -243,7 +423,9 @@ html.dark .theme-invert-black {
 }
 
 
-/* PORTRAIT MAIN BACKGROUND */
+/* =========================================
+   PORTRAIT MAIN BACKGROUND
+========================================= */
 
 html.dark .portrait-theme {
   background-color:
@@ -254,7 +436,9 @@ html.dark .portrait-theme {
 }
 
 
-/* PORTRAIT WHITE ELEMENTS */
+/* =========================================
+   PORTRAIT WHITE ELEMENTS
+========================================= */
 
 html.dark .portrait-theme .bg-white {
   background-color:
@@ -274,7 +458,9 @@ html.dark .portrait-theme .bg-white\/95 {
 }
 
 
-/* PORTRAIT FILTER BACKGROUNDS */
+/* =========================================
+   PORTRAIT FILTER BACKGROUNDS
+========================================= */
 
 html.dark .portrait-theme .bg-\[\#f5f5f3\] {
   background-color:
@@ -288,7 +474,9 @@ html.dark .portrait-theme .bg-\[\#ededeb\] {
 }
 
 
-/* PORTRAIT GRAYS */
+/* =========================================
+   PORTRAIT GRAY BACKGROUNDS
+========================================= */
 
 html.dark .portrait-theme .bg-gray-50 {
   background-color:
@@ -302,7 +490,9 @@ html.dark .portrait-theme .bg-gray-100 {
 }
 
 
-/* PORTRAIT BLACK */
+/* =========================================
+   PORTRAIT BLACK ELEMENTS
+========================================= */
 
 html.dark .portrait-theme .bg-black {
   background-color:
@@ -310,7 +500,15 @@ html.dark .portrait-theme .bg-black {
 }
 
 
-/* PORTRAIT TEXT */
+html.dark .portrait-theme .border-black {
+  border-color:
+    #000000 !important;
+}
+
+
+/* =========================================
+   PORTRAIT TEXT
+========================================= */
 
 html.dark .portrait-theme .text-black {
   color:
@@ -342,7 +540,21 @@ html.dark .portrait-theme .text-gray-500 {
 }
 
 
-/* PORTRAIT BORDERS */
+html.dark .portrait-theme .text-gray-600 {
+  color:
+    #4b5563 !important;
+}
+
+
+/* =========================================
+   PORTRAIT BORDERS
+========================================= */
+
+html.dark .portrait-theme .border-gray-100 {
+  border-color:
+    #f3f4f6 !important;
+}
+
 
 html.dark .portrait-theme .border-gray-200 {
   border-color:
@@ -359,6 +571,34 @@ html.dark .portrait-theme .border-gray-300 {
 html.dark .portrait-theme .border-gray-400 {
   border-color:
     #9ca3af !important;
+}
+
+
+/* =========================================
+   PORTRAIT HOVER OVERRIDES
+========================================= */
+
+html.dark .portrait-theme .hover\:border-black:hover {
+  border-color:
+    #000000 !important;
+}
+
+
+html.dark .portrait-theme .hover\:text-black:hover {
+  color:
+    #000000 !important;
+}
+
+
+html.dark .portrait-theme .hover\:bg-gray-50:hover {
+  background-color:
+    #f9fafb !important;
+}
+
+
+html.dark .portrait-theme .hover\:bg-gray-100:hover {
+  background-color:
+    #f3f4f6 !important;
 }
 
 
@@ -407,6 +647,22 @@ article,
 ::-webkit-scrollbar-thumb:hover {
   background:
     var(--text-muted);
+}
+
+
+/* =========================================
+   DARK MODE SCROLLBAR
+========================================= */
+
+html.dark ::-webkit-scrollbar-thumb {
+  background:
+    rgb(59 130 246 / 0.45);
+}
+
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background:
+    var(--accent);
 }
 
 

@@ -1,29 +1,54 @@
-import { useState } from 'react';
+import {
+  useState,
+} from 'react';
+
 import {
   Mail,
   Copy,
   Check,
-  MapPin,
-  GraduationCap,
   ArrowUp,
   ArrowUpRight,
   Send,
   ExternalLink,
 } from 'lucide-react';
 
-import { GithubIcon, LinkedinIcon } from './Icons';
+import {
+  GithubIcon,
+  LinkedinIcon,
+} from './Icons';
+
+
+/* =========================================
+   FACEBOOK ICON
+========================================= */
+
+function FacebookIcon({
+  className = '',
+}) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.414c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971h-1.513c-1.49 0-1.956.931-1.956 1.887v2.262h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073Z" />
+    </svg>
+  );
+}
 
 
 export default function Contact() {
-  const [copied, setCopied] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
+  /* =========================================
+     CONTACT DETAILS
+  ========================================= */
 
-  const email = 'johnrailey550@gmail.com';
+  const email =
+    'johnrailey550@gmail.com';
+
+  const facebook =
+    'https://www.facebook.com/john.railey.129';
 
   const github =
     'https://github.com/saintjohn31';
@@ -33,298 +58,310 @@ export default function Contact() {
 
 
   /* =========================================
+     STATE
+  ========================================= */
+
+  const [copied, setCopied] =
+    useState(false);
+
+  const [formData, setFormData] =
+    useState({
+      name: '',
+      email: '',
+      message: '',
+    });
+
+
+  /* =========================================
      COPY EMAIL
   ========================================= */
-  const handleCopy = async () => {
+
+  const copyEmail = async () => {
+
     try {
-      await navigator.clipboard.writeText(email);
+
+      await navigator.clipboard.writeText(
+        email
+      );
 
       setCopied(true);
 
       setTimeout(() => {
         setCopied(false);
-      }, 2200);
+      }, 1800);
+
     } catch (error) {
-      console.error('Unable to copy email:', error);
+
+      console.error(
+        'Unable to copy email:',
+        error
+      );
+
     }
+
+  };
+
+
+  /* =========================================
+     FORM CHANGE
+  ========================================= */
+
+  const handleChange = (event) => {
+
+    const {
+      name,
+      value,
+    } = event.target;
+
+    setFormData((current) => ({
+      ...current,
+
+      [name]:
+        name === 'message'
+          ? value.slice(0, 500)
+          : value,
+    }));
+
   };
 
 
   /* =========================================
      FORM SUBMIT
-     Opens visitor's email application
   ========================================= */
-  const handleSubmit = (e) => {
-    e.preventDefault();
 
-    const subject = encodeURIComponent(
-      `Portfolio Inquiry from ${formData.name}`
-    );
+  const handleSubmit = (event) => {
 
-    const body = encodeURIComponent(
-      `Hi John Railey,
+    event.preventDefault();
 
-${formData.message}
+    const subject =
+      encodeURIComponent(
+        `Portfolio message from ${formData.name}`
+      );
 
----
-From: ${formData.name}
-Email: ${formData.email}`
-    );
+    const body =
+      encodeURIComponent(
+        `Name: ${formData.name}\n` +
+        `Email: ${formData.email}\n\n` +
+        `${formData.message}`
+      );
 
     window.location.href =
       `mailto:${email}?subject=${subject}&body=${body}`;
-  };
 
-
-  /* =========================================
-     INPUT HANDLER
-  ========================================= */
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
 
   /* =========================================
      BACK TO TOP
   ========================================= */
-  const scrollToTop = () => {
+
+  const backToTop = () => {
+
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
+
   };
 
 
   return (
+
     <footer
       id="contact"
+
       className="
         relative
-        overflow-hidden
-        bg-white
+
+        bg-[#f7f7f5]
         text-black
+
         border-t
         border-gray-200
-        pt-20
-        sm:pt-24
-        lg:pt-32
-        pb-8
-        sm:pb-10
       "
     >
 
       {/* =====================================
-          SUBTLE BACKGROUND GRID
-      ===================================== */}
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none
-          absolute
-          inset-0
-          opacity-[0.025]
-          [background-image:linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)]
-          [background-size:32px_32px]
-        "
-      />
-
+          MAIN CONTENT
+      ====================================== */}
 
       <div
         className="
           relative
           z-10
+
           max-w-7xl
           mx-auto
+
           px-4
           sm:px-6
+
+          py-20
+          sm:py-24
+          lg:py-28
         "
       >
 
         {/* =====================================
-            SECTION HEADER
-        ===================================== */}
+            SECTION LABEL
+        ====================================== */}
+
         <div
           className="
-            grid
-            grid-cols-1
-            lg:grid-cols-2
-            gap-10
-            lg:gap-20
-            mb-12
-            sm:mb-16
+            mb-10
+            sm:mb-12
           "
         >
 
-          {/* LEFT */}
-          <div>
-
-            <p
-              className="
-                text-[10px]
-                sm:text-[11px]
-                font-mono
-                tracking-[0.18em]
-                text-gray-400
-                mb-5
-              "
-            >
-              04 / GET IN TOUCH
-            </p>
-
-
-            <h2
-              className="
-                text-[clamp(2.7rem,6vw,4.6rem)]
-                font-semibold
-                tracking-[-0.055em]
-                leading-[0.92]
-              "
-            >
-              Let's build
-
-              <br />
-
-              <span className="text-gray-400">
-                something great.
-              </span>
-            </h2>
-
-          </div>
-
-
-          {/* RIGHT */}
-          <div
+          <p
             className="
-              flex
-              flex-col
-              justify-end
-              lg:items-end
+              text-[10px]
+              sm:text-[11px]
+
+              font-mono
+              font-medium
+
+              tracking-[0.18em]
+
+              text-gray-400
             "
           >
-
-            <p
-              className="
-                max-w-lg
-                text-sm
-                sm:text-[15px]
-                leading-7
-                text-gray-500
-                lg:text-right
-              "
-            >
-              Have an idea, project, collaboration, or opportunity?
-              I'm always interested in creating thoughtful digital
-              experiences and exploring new possibilities.
-            </p>
-
-          </div>
+            05 / GET IN TOUCH
+          </p>
 
         </div>
 
 
         {/* =====================================
-            MAIN CONTACT GRID
-        ===================================== */}
+            CONTACT GRID
+        ====================================== */}
+
         <div
           className="
             grid
             grid-cols-1
-            lg:grid-cols-2
+            lg:grid-cols-[0.9fr_1.1fr]
 
-            border
-            border-gray-200
-
-            bg-white
+            gap-12
+            lg:gap-20
           "
         >
 
-          {/* =====================================
+          {/* =================================
               LEFT SIDE
-          ===================================== */}
-          <div
-            className="
-              p-5
-              sm:p-8
-              lg:p-10
-              xl:p-12
+          ================================== */}
 
-              border-b
-              lg:border-b-0
-              lg:border-r
-              border-gray-200
+          <div>
 
-              flex
-              flex-col
-            "
-          >
+            {/* HEADING */}
 
-            {/* LABEL */}
-            <div className="mb-7">
+            <h2
+              className="
+                text-4xl
+                sm:text-5xl
+                lg:text-6xl
 
-              <p
-                className="
-                  text-[9px]
-                  sm:text-[10px]
-                  font-mono
-                  tracking-[0.18em]
-                  text-gray-400
-                  mb-2
-                "
-              >
-                DIRECT CONTACT
-              </p>
+                font-semibold
 
-              <p
-                className="
-                  text-sm
-                  text-gray-500
-                "
-              >
-                Prefer email? Reach me directly.
-              </p>
+                tracking-[-0.05em]
+                leading-[0.95]
 
-            </div>
+                mb-6
+              "
+            >
+
+              Let's build
+
+              <br />
+
+              <span className="theme-heading-accent">
+                something great.
+              </span>
+
+            </h2>
+
+
+            {/* DESCRIPTION */}
+
+            <p
+              className="
+                max-w-lg
+
+                text-sm
+                sm:text-[15px]
+
+                leading-7
+
+                text-gray-500
+
+                mb-8
+              "
+            >
+              Have a project, idea, or opportunity
+              you'd like to discuss? Feel free to
+              reach out. I'm always interested in
+              building thoughtful digital experiences
+              and collaborating on meaningful work.
+            </p>
 
 
             {/* =================================
                 EMAIL CARD
             ================================== */}
+
             <div
               className="
                 group/email
+
                 relative
 
                 border
                 border-gray-200
 
-                bg-[#fafafa]
+                bg-white
 
                 p-4
                 sm:p-5
+
+                mb-5
 
                 transition-all
                 duration-300
 
                 hover:border-gray-400
-                hover:bg-white
               "
             >
+
+              {/* BLUE TOP ACCENT */}
+
+              <div
+                className="
+                  absolute
+                  top-0
+                  left-0
+                  right-0
+
+                  h-px
+
+                  bg-blue-500
+                "
+              />
+
 
               <div
                 className="
                   flex
                   flex-col
+
                   sm:flex-row
                   sm:items-center
                   sm:justify-between
+
                   gap-4
                 "
               >
+
+                {/* EMAIL INFO */}
 
                 <div className="min-w-0">
 
@@ -332,8 +369,12 @@ Email: ${formData.email}`
                     className="
                       flex
                       items-center
+
                       gap-2
+
                       mb-2
+
+                      text-gray-500
                     "
                   >
 
@@ -348,12 +389,15 @@ Email: ${formData.email}`
                     <span
                       className="
                         text-[9px]
+
                         font-mono
-                        tracking-[0.15em]
-                        text-gray-400
+
+                        tracking-[0.16em]
+
+                        uppercase
                       "
                     >
-                      EMAIL
+                      Email
                     </span>
 
                   </div>
@@ -361,11 +405,13 @@ Email: ${formData.email}`
 
                   <a
                     href={`mailto:${email}`}
+
                     className="
                       block
 
                       text-[12px]
                       sm:text-sm
+
                       font-mono
                       font-medium
 
@@ -386,589 +432,515 @@ Email: ${formData.email}`
 
 
                 {/* COPY BUTTON */}
+
                 <button
                   type="button"
-                  onClick={handleCopy}
-                  className={`
+
+                  onClick={copyEmail}
+
+                  className="
                     shrink-0
 
                     inline-flex
                     items-center
                     justify-center
+
                     gap-2
 
-                    min-w-[94px]
+                    min-h-[42px]
 
-                    px-4
-                    py-2.5
+                    px-5
 
-                    border
+                    bg-black
+                    text-white
 
                     text-[9px]
                     sm:text-[10px]
+
                     font-mono
+                    font-semibold
+
                     tracking-[0.1em]
 
                     transition-all
                     duration-300
 
-                    ${copied
-                      ? 'bg-black text-white border-black'
-                      : 'bg-white text-black border-gray-300 hover:bg-black hover:text-white hover:border-black'
-                    }
-                  `}
+                    hover:bg-blue-600
+                  "
                 >
 
                   {copied ? (
-                    <>
-                      <Check
-                        size={13}
-                        className="text-emerald-400"
-                      />
-
-                      COPIED
-                    </>
+                    <Check size={13} />
                   ) : (
-                    <>
-                      <Copy size={13} />
-
-                      COPY
-                    </>
+                    <Copy size={13} />
                   )}
+
+                  <span>
+                    {copied
+                      ? 'COPIED'
+                      : 'COPY'
+                    }
+                  </span>
 
                 </button>
 
               </div>
 
-
-              {/* HOVER LINE */}
-              <span
-                className="
-                  absolute
-                  bottom-0
-                  left-0
-
-                  w-0
-                  h-[2px]
-
-                  bg-blue-500
-
-                  transition-all
-                  duration-500
-
-                  group-hover/email:w-full
-                "
-              />
-
             </div>
 
 
             {/* =================================
-                EDUCATION
+                SOCIAL LINKS
+                ALPHABETICAL ORDER:
+                FACEBOOK → GITHUB → LINKEDIN
             ================================== */}
+
             <div
               className="
-                mt-5
+                grid
+                grid-cols-1
+                sm:grid-cols-3
 
-                border
-                border-gray-200
-
-                p-5
-
-                transition-colors
-                duration-300
-
-                hover:border-gray-400
+                gap-2
               "
             >
 
-              <div
+              {/* FACEBOOK */}
+
+              <a
+                href={facebook}
+
+                target="_blank"
+                rel="noopener noreferrer"
+
                 className="
+                  group/social
+
                   flex
-                  items-start
+                  items-center
+                  justify-between
+
                   gap-3
+
+                  min-h-[58px]
+
+                  px-4
+
+                  border
+                  border-gray-200
+
+                  bg-white
+
+                  transition-all
+                  duration-300
+
+                  hover:border-gray-400
                 "
               >
 
                 <div
                   className="
-                    w-8
-                    h-8
-
-                    shrink-0
-
                     flex
                     items-center
-                    justify-center
 
-                    border
-                    border-gray-200
+                    gap-3
+
+                    min-w-0
                   "
                 >
-                  <GraduationCap
-                    size={15}
-                    className="text-blue-500"
+
+                  <FacebookIcon
+                    className="
+                      w-4
+                      h-4
+
+                      shrink-0
+                    "
                   />
-                </div>
 
-
-                <div>
-
-                  <p
+                  <span
                     className="
-                      text-xs
-                      sm:text-[13px]
-                      font-medium
-                      text-black
-                      leading-5
-                    "
-                  >
-                    Bulacan State University
-                    <span className="text-gray-400">
-                      {' '}— Bustos Campus
-                    </span>
-                  </p>
-
-
-                  <p
-                    className="
-                      mt-2
-                      text-[11px]
-                      sm:text-xs
-                      leading-5
-                      text-gray-500
-                    "
-                  >
-                    Bachelor of Science in Information Technology
-                    <br />
-
-                    Web & Mobile Application Development
-                  </p>
-
-
-                  <div
-                    className="
-                      flex
-                      items-center
-                      gap-1.5
-
-                      mt-3
-
                       text-[9px]
-                      sm:text-[10px]
+                      xl:text-[10px]
 
                       font-mono
-                      text-gray-400
+                      font-medium
+
+                      tracking-[0.06em]
+
+                      whitespace-nowrap
                     "
                   >
-                    <MapPin size={12} />
-
-                    <span>
-                      Bustos, Bulacan, Philippines
-                    </span>
-                  </div>
+                    FACEBOOK
+                  </span>
 
                 </div>
 
-              </div>
 
-            </div>
+                <ArrowUpRight
+                  size={13}
 
-
-            {/* =================================
-                SOCIAL PROFILES
-            ================================== */}
-            <div
-              className="
-                mt-8
-                lg:mt-auto
-                lg:pt-10
-              "
-            >
-
-              <p
-                className="
-                  text-[9px]
-                  sm:text-[10px]
-                  font-mono
-                  tracking-[0.18em]
-                  text-gray-400
-                  mb-3
-                "
-              >
-                ELSEWHERE
-              </p>
-
-
-              <div
-                className="
-                  grid
-                  grid-cols-1
-                  sm:grid-cols-2
-                  gap-2
-                "
-              >
-
-                {/* GITHUB */}
-                <a
-                  href={github}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="
-                    group
+                    shrink-0
 
-                    flex
-                    items-center
-                    justify-between
-                    gap-3
-
-                    border
-                    border-gray-200
-
-                    p-4
-
-                    text-black
+                    text-gray-400
 
                     transition-all
                     duration-300
 
-                    hover:bg-black
-                    hover:text-white
-                    hover:border-black
+                    group-hover/social:text-blue-500
+
+                    group-hover/social:translate-x-0.5
+                    group-hover/social:-translate-y-0.5
+                  "
+                />
+
+              </a>
+
+
+              {/* GITHUB */}
+
+              <a
+                href={github}
+
+                target="_blank"
+                rel="noopener noreferrer"
+
+                className="
+                  group/social
+
+                  flex
+                  items-center
+                  justify-between
+
+                  gap-3
+
+                  min-h-[58px]
+
+                  px-4
+
+                  border
+                  border-gray-200
+
+                  bg-white
+
+                  transition-all
+                  duration-300
+
+                  hover:border-gray-400
+                "
+              >
+
+                <div
+                  className="
+                    flex
+                    items-center
+
+                    gap-3
+
+                    min-w-0
                   "
                 >
 
-                  <div
+                  <GithubIcon
                     className="
-                      flex
-                      items-center
-                      gap-3
-                    "
-                  >
+                      w-4
+                      h-4
 
-                    <GithubIcon
-                      className="
-                        w-4
-                        h-4
-                      "
-                    />
-
-                    <div>
-
-                      <span
-                        className="
-                          block
-
-                          text-[10px]
-                          font-mono
-                          tracking-[0.1em]
-                        "
-                      >
-                        GITHUB
-                      </span>
-
-                      <span
-                        className="
-                          block
-
-                          mt-1
-
-                          text-[9px]
-                          text-gray-400
-
-                          transition-colors
-                          group-hover:text-gray-400
-                        "
-                      >
-                        @saintjohn31
-                      </span>
-
-                    </div>
-
-                  </div>
-
-
-                  <ExternalLink
-                    size={13}
-                    className="
-                      text-gray-300
-
-                      transition-all
-                      duration-300
-
-                      group-hover:text-white
-                      group-hover:translate-x-0.5
-                      group-hover:-translate-y-0.5
+                      shrink-0
                     "
                   />
 
-                </a>
+                  <span
+                    className="
+                      text-[9px]
+                      xl:text-[10px]
+
+                      font-mono
+                      font-medium
+
+                      tracking-[0.06em]
+
+                      whitespace-nowrap
+                    "
+                  >
+                    GITHUB
+                  </span>
+
+                </div>
 
 
-                {/* LINKEDIN */}
-                <a
-                  href={linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <ArrowUpRight
+                  size={13}
+
                   className="
-                    group
+                    shrink-0
 
-                    flex
-                    items-center
-                    justify-between
-                    gap-3
-
-                    border
-                    border-gray-200
-
-                    p-4
-
-                    text-black
+                    text-gray-400
 
                     transition-all
                     duration-300
 
-                    hover:bg-blue-600
-                    hover:text-white
-                    hover:border-blue-600
+                    group-hover/social:text-blue-500
+
+                    group-hover/social:translate-x-0.5
+                    group-hover/social:-translate-y-0.5
+                  "
+                />
+
+              </a>
+
+
+              {/* LINKEDIN */}
+
+              <a
+                href={linkedin}
+
+                target="_blank"
+                rel="noopener noreferrer"
+
+                className="
+                  group/social
+
+                  flex
+                  items-center
+                  justify-between
+
+                  gap-3
+
+                  min-h-[58px]
+
+                  px-4
+
+                  border
+                  border-gray-200
+
+                  bg-white
+
+                  transition-all
+                  duration-300
+
+                  hover:border-gray-400
+                "
+              >
+
+                <div
+                  className="
+                    flex
+                    items-center
+
+                    gap-3
+
+                    min-w-0
                   "
                 >
 
-                  <div
+                  <LinkedinIcon
                     className="
-                      flex
-                      items-center
-                      gap-3
-                    "
-                  >
+                      w-4
+                      h-4
 
-                    <LinkedinIcon
-                      className="
-                        w-4
-                        h-4
-                      "
-                    />
-
-                    <div>
-
-                      <span
-                        className="
-                          block
-
-                          text-[10px]
-                          font-mono
-                          tracking-[0.1em]
-                        "
-                      >
-                        LINKEDIN
-                      </span>
-
-                      <span
-                        className="
-                          block
-
-                          mt-1
-
-                          text-[9px]
-                          text-gray-400
-
-                          transition-colors
-                          group-hover:text-blue-100
-                        "
-                      >
-                        John Railey Pael
-                      </span>
-
-                    </div>
-
-                  </div>
-
-
-                  <ExternalLink
-                    size={13}
-                    className="
-                      text-gray-300
-
-                      transition-all
-                      duration-300
-
-                      group-hover:text-white
-                      group-hover:translate-x-0.5
-                      group-hover:-translate-y-0.5
+                      shrink-0
                     "
                   />
 
-                </a>
+                  <span
+                    className="
+                      text-[9px]
+                      xl:text-[10px]
 
-              </div>
+                      font-mono
+                      font-medium
+
+                      tracking-[0.06em]
+
+                      whitespace-nowrap
+                    "
+                  >
+                    LINKEDIN
+                  </span>
+
+                </div>
+
+
+                <ArrowUpRight
+                  size={13}
+
+                  className="
+                    shrink-0
+
+                    text-gray-400
+
+                    transition-all
+                    duration-300
+
+                    group-hover/social:text-blue-500
+
+                    group-hover/social:translate-x-0.5
+                    group-hover/social:-translate-y-0.5
+                  "
+                />
+
+              </a>
 
             </div>
 
           </div>
 
 
-          {/* =====================================
-              RIGHT SIDE — FORM
-          ===================================== */}
+          {/* =================================
+              RIGHT SIDE — MESSAGE FORM
+          ================================== */}
+
           <div
             className="
+              border
+              border-gray-200
+
+              bg-white
+
               p-5
-              sm:p-8
-              lg:p-10
-              xl:p-12
+              sm:p-7
+              lg:p-8
             "
           >
 
             {/* FORM HEADER */}
+
             <div
               className="
                 flex
-                flex-col
-                sm:flex-row
-                sm:items-start
-                sm:justify-between
+                items-center
+                justify-between
+
                 gap-4
-                mb-9
+
+                pb-5
+                mb-6
+
+                border-b
+                border-gray-200
               "
             >
 
               <div>
 
-                <h3
+                <p
                   className="
-                    text-xl
-                    sm:text-2xl
-                    font-medium
-                    tracking-[-0.03em]
+                    text-[9px]
+
+                    font-mono
+
+                    tracking-[0.16em]
+
+                    text-gray-400
+
+                    mb-1
                   "
                 >
-                  Send an inquiry
-                  <span className="text-blue-500">.</span>
-                </h3>
-
+                  SEND A MESSAGE
+                </p>
 
                 <p
                   className="
-                    mt-2
+                    text-sm
 
-                    text-[9px]
-                    sm:text-[10px]
+                    font-medium
 
-                    font-mono
-                    tracking-[0.1em]
-
-                    text-gray-400
+                    text-black
                   "
                 >
-                  YOUR MESSAGE → MY INBOX
+                  Start a conversation.
                 </p>
 
               </div>
 
 
-              <div
+              <Mail
+                size={18}
+
                 className="
-                  hidden
-                  sm:flex
-                  items-center
-                  gap-2
-
-                  text-[9px]
-                  font-mono
-                  text-gray-400
+                  text-blue-500
                 "
-              >
-
-                <span
-                  className="
-                    w-1.5
-                    h-1.5
-                    bg-blue-500
-                    rounded-full
-                  "
-                />
-
-                EMAIL DISPATCH
-
-              </div>
+              />
 
             </div>
 
 
-            {/* =================================
-                FORM
-            ================================== */}
+            {/* FORM */}
+
             <form
               onSubmit={handleSubmit}
-              className="space-y-6"
+
+              className="
+                space-y-5
+              "
             >
 
               {/* NAME */}
-              <div className="group">
+
+              <div>
 
                 <label
                   htmlFor="contact-name"
+
                   className="
                     block
 
                     text-[9px]
-                    sm:text-[10px]
 
                     font-mono
-                    tracking-[0.15em]
+                    font-medium
 
-                    text-gray-400
+                    tracking-[0.12em]
+
+                    text-gray-500
 
                     mb-2
-
-                    transition-colors
-
-                    group-focus-within:text-blue-500
                   "
                 >
-                  YOUR NAME
+                  NAME
                 </label>
 
 
                 <input
                   id="contact-name"
+
                   name="name"
+
                   type="text"
+
                   required
 
                   value={formData.name}
+
                   onChange={handleChange}
 
-                  placeholder="e.g. Maria Santos"
+                  placeholder="Your name"
 
                   className="
                     w-full
 
-                    px-4
-                    sm:px-5
+                    min-h-[46px]
 
-                    py-4
+                    px-3.5
 
-                    bg-white
+                    bg-transparent
 
                     border
-                    border-gray-200
+                    border-gray-300
 
                     text-sm
                     text-black
 
-                    placeholder:text-gray-300
-
                     outline-none
+
+                    placeholder:text-gray-400
 
                     transition-all
                     duration-300
 
-                    hover:border-gray-400
-
-                    focus:border-black
-                    focus:ring-1
-                    focus:ring-black
+                    focus:border-blue-500
                   "
                 />
 
@@ -976,71 +948,69 @@ Email: ${formData.email}`
 
 
               {/* EMAIL */}
-              <div className="group">
+
+              <div>
 
                 <label
                   htmlFor="contact-email"
+
                   className="
                     block
 
                     text-[9px]
-                    sm:text-[10px]
 
                     font-mono
-                    tracking-[0.15em]
+                    font-medium
 
-                    text-gray-400
+                    tracking-[0.12em]
+
+                    text-gray-500
 
                     mb-2
-
-                    transition-colors
-
-                    group-focus-within:text-blue-500
                   "
                 >
-                  YOUR EMAIL
+                  EMAIL
                 </label>
 
 
                 <input
                   id="contact-email"
+
                   name="email"
+
                   type="email"
+
                   required
 
                   value={formData.email}
+
                   onChange={handleChange}
 
-                  placeholder="e.g. maria@company.com"
+                  placeholder="your@email.com"
 
                   className="
                     w-full
 
-                    px-4
-                    sm:px-5
+                    min-h-[46px]
 
-                    py-4
+                    px-3.5
 
-                    bg-white
+                    bg-transparent
 
                     border
-                    border-gray-200
+                    border-gray-300
 
                     text-sm
                     text-black
 
-                    placeholder:text-gray-300
-
                     outline-none
+
+                    placeholder:text-gray-400
 
                     transition-all
                     duration-300
 
-                    hover:border-gray-400
-
-                    focus:border-black
-                    focus:ring-1
-                    focus:ring-black
+                    focus:border-blue-500
                   "
                 />
 
@@ -1048,32 +1018,33 @@ Email: ${formData.email}`
 
 
               {/* MESSAGE */}
-              <div className="group">
+
+              <div>
 
                 <div
                   className="
                     flex
                     items-center
                     justify-between
-                    gap-4
+
+                    gap-3
+
                     mb-2
                   "
                 >
 
                   <label
                     htmlFor="contact-message"
+
                     className="
                       text-[9px]
-                      sm:text-[10px]
 
                       font-mono
-                      tracking-[0.15em]
+                      font-medium
 
-                      text-gray-400
+                      tracking-[0.12em]
 
-                      transition-colors
-
-                      group-focus-within:text-blue-500
+                      text-gray-500
                     "
                   >
                     MESSAGE
@@ -1083,10 +1054,10 @@ Email: ${formData.email}`
                   <span
                     className="
                       text-[8px]
-                      sm:text-[9px]
 
                       font-mono
-                      text-gray-300
+
+                      text-gray-400
                     "
                   >
                     {formData.message.length}/500
@@ -1097,50 +1068,46 @@ Email: ${formData.email}`
 
                 <textarea
                   id="contact-message"
+
                   name="message"
 
-                  rows={6}
                   required
+
+                  rows={7}
+
                   maxLength={500}
 
                   value={formData.message}
+
                   onChange={handleChange}
 
-                  placeholder="Tell me about your project, team, or opportunity..."
+                  placeholder="Tell me about your project or idea..."
 
                   className="
                     w-full
 
-                    min-h-[150px]
-
-                    px-4
-                    sm:px-5
-
-                    py-4
-
-                    bg-white
-
-                    border
-                    border-gray-200
-
-                    text-sm
-                    leading-6
-                    text-black
-
-                    placeholder:text-gray-300
-
                     resize-none
 
+                    p-3.5
+
+                    bg-transparent
+
+                    border
+                    border-gray-300
+
+                    text-sm
+                    text-black
+
+                    leading-6
+
                     outline-none
+
+                    placeholder:text-gray-400
 
                     transition-all
                     duration-300
 
-                    hover:border-gray-400
-
-                    focus:border-black
-                    focus:ring-1
-                    focus:ring-black
+                    focus:border-blue-500
                   "
                 />
 
@@ -1148,88 +1115,76 @@ Email: ${formData.email}`
 
 
               {/* SUBMIT */}
+
               <button
                 type="submit"
-                className="
-                  group
 
-                  relative
-                  overflow-hidden
+                className="
+                  group/send
 
                   w-full
+
+                  min-h-[48px]
 
                   flex
                   items-center
                   justify-center
-                  gap-3
+
+                  gap-2
 
                   bg-black
                   text-white
 
-                  py-4
+                  px-5
+                  py-3
 
                   text-[10px]
-                  sm:text-[11px]
 
                   font-mono
+                  font-semibold
+
                   tracking-[0.12em]
 
                   transition-all
                   duration-300
 
                   hover:bg-blue-600
-                  hover:-translate-y-[2px]
-
-                  active:translate-y-0
                 "
               >
 
                 <Send
                   size={13}
+
                   className="
                     transition-transform
                     duration-300
 
-                    group-hover:-translate-y-0.5
-                    group-hover:translate-x-0.5
+                    group-hover/send:translate-x-0.5
+                    group-hover/send:-translate-y-0.5
                   "
                 />
 
-
-                <span>
-                  SEND INQUIRY
-                </span>
-
-
-                <ArrowUpRight
-                  size={14}
-                  className="
-                    transition-transform
-                    duration-300
-
-                    group-hover:translate-x-1
-                    group-hover:-translate-y-1
-                  "
-                />
+                SEND MESSAGE
 
               </button>
 
 
-              {/* FORM NOTE */}
+              {/* NOTE */}
+
               <p
                 className="
-                  text-[9px]
-                  sm:text-[10px]
+                  text-[8px]
+                  sm:text-[9px]
 
                   font-mono
 
-                  text-gray-400
+                  leading-4
 
-                  leading-5
+                  text-gray-400
                 "
               >
-                Clicking send will open your default email application
-                with the message prepared for you.
+                This opens your default email application
+                with the message automatically prepared.
               </p>
 
             </form>
@@ -1238,123 +1193,196 @@ Email: ${formData.email}`
 
         </div>
 
+      </div>
 
-        {/* =====================================
-            FOOTER BOTTOM
-        ===================================== */}
+
+      {/* =====================================
+          BOTTOM FOOTER
+      ====================================== */}
+
+      <div
+        className="
+          relative
+          z-10
+
+          border-t
+          border-gray-200
+        "
+      >
+
         <div
           className="
-            mt-12
-            sm:mt-16
+            max-w-7xl
+            mx-auto
 
-            pt-6
+            px-4
+            sm:px-6
 
-            border-t
-            border-gray-200
+            min-h-[78px]
 
             flex
             flex-col
             sm:flex-row
 
+            items-start
             sm:items-center
-            sm:justify-between
+
+            justify-between
 
             gap-5
 
-            text-[9px]
-            sm:text-[10px]
-
-            font-mono
-            tracking-[0.08em]
-
-            text-gray-400
+            py-5
           "
         >
 
-          <div
-            className="
-              flex
-              flex-col
-              sm:flex-row
-              sm:items-center
-              gap-1
-              sm:gap-3
-            "
-          >
+          {/* COPYRIGHT */}
 
-            <span>
+          <div>
+
+            <p
+              className="
+                text-[9px]
+                sm:text-[10px]
+
+                font-mono
+                font-medium
+
+                tracking-[0.08em]
+
+                text-black
+              "
+            >
               © 2026 JOHN RAILEY PAEL
-            </span>
+            </p>
 
-            <span className="hidden sm:inline">
-              /
-            </span>
+            <p
+              className="
+                mt-1
 
-            <span>
-              CREATIVE FRONT-END DEVELOPER
-            </span>
+                text-[8px]
+                sm:text-[9px]
+
+                font-mono
+
+                tracking-[0.06em]
+
+                text-gray-400
+              "
+            >
+              CREATIVE FRONT-END DEVELOPER ·
+              AI-ASSISTED DEVELOPER
+            </p>
 
           </div>
 
 
-          <button
-            type="button"
-            onClick={scrollToTop}
+          {/* RIGHT */}
+
+          <div
             className="
-              group
-
-              self-start
-              sm:self-auto
-
-              inline-flex
+              flex
               items-center
-              gap-2
 
-              text-gray-400
-
-              transition-colors
-              duration-300
-
-              hover:text-black
+              gap-3
             "
           >
-            BACK TO TOP
 
-            <span
+            <a
+              href={`mailto:${email}`}
+
               className="
-                w-7
-                h-7
+                hidden
+                sm:inline-flex
 
-                border
-                border-gray-200
+                items-center
 
-                flex
+                gap-1.5
+
+                text-[9px]
+
+                font-mono
+
+                tracking-[0.06em]
+
+                text-gray-500
+
+                transition-colors
+                duration-300
+
+                hover:text-blue-500
+              "
+            >
+
+              EMAIL ME
+
+              <ExternalLink size={10} />
+
+            </a>
+
+
+            <button
+              type="button"
+
+              onClick={backToTop}
+
+              className="
+                group/top
+
+                inline-flex
                 items-center
                 justify-center
+
+                gap-2
+
+                min-h-[38px]
+
+                px-3
+
+                border
+                border-gray-300
+
+                bg-white
+
+                text-[9px]
+
+                font-mono
+                font-medium
+
+                tracking-[0.08em]
+
+                text-black
 
                 transition-all
                 duration-300
 
-                group-hover:bg-black
-                group-hover:text-white
-                group-hover:border-black
+                hover:border-blue-500
+                hover:text-blue-500
               "
             >
+
+              BACK TO TOP
+
               <ArrowUp
-                size={12}
+                size={11}
+
                 className="
                   transition-transform
                   duration-300
-                  group-hover:-translate-y-0.5
+
+                  group-hover/top:-translate-y-0.5
                 "
               />
-            </span>
 
-          </button>
+            </button>
+
+          </div>
 
         </div>
 
       </div>
+
     </footer>
+
   );
+
 }

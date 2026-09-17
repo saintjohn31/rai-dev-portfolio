@@ -71,7 +71,7 @@ export default function Skills() {
               Tools behind
               <br />
 
-              <span className="text-gray-400">
+              <span className="theme-heading-accent">
                 the interfaces.
               </span>
             </h2>

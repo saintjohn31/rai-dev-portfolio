@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import {
   Globe,
   ArrowUpRight,
@@ -6,45 +7,110 @@ import {
 } from 'lucide-react';
 
 import ProjectModal from './ProjectModal';
+import { GithubIcon } from './Icons';
+
 import { projects } from '../data/projectsData';
-import masPreview from '../images/mas-preview.png';
-import stayscapePreview from '../images/stayscape-preview.png';
-import soamcPreview from '../images/soamc-preview.jpg';
 
 
 export default function Projects() {
-  const [selectedProject, setSelectedProject] = useState(null);
+
+  const [selectedProject, setSelectedProject] =
+    useState(null);
 
 
   /* =========================================
-     PROJECT DATA
+     PROJECT PREVIEW CLICK
   ========================================= */
 
+  const handleProjectPreview = (project) => {
+
+    // Projects with a live website/game
+    if (project.liveUrl) {
+      setSelectedProject(project);
+      return;
+    }
+
+    // GitHub-only projects
+    if (project.repoUrl) {
+      window.open(
+        project.repoUrl,
+        '_blank',
+        'noopener,noreferrer'
+      );
+    }
+
+  };
+
+
+  /* =========================================
+     PROJECT DISPLAY URL
+  ========================================= */
+
+  const getProjectUrl = (project) => {
+
+    if (project.liveUrl) {
+      return project.liveUrl.replace(
+        /^https?:\/\//,
+        ''
+      );
+    }
+
+    if (project.repoUrl) {
+      return project.repoUrl.replace(
+        /^https?:\/\//,
+        ''
+      );
+    }
+
+    return 'PROJECT PREVIEW';
+
+  };
+
+
+  /* =========================================
+     PRIMARY ACTION LABEL
+  ========================================= */
+
+  const getPrimaryLabel = (project) => {
+
+    if (project.category === 'GAME DEVELOPMENT') {
+      return 'PLAY GAME';
+    }
+
+    return 'VISIT WEBSITE';
+
+  };
 
 
   return (
+
     <section
       id="projects"
       className="
         bg-white
         text-black
+
         py-20
         sm:py-24
         lg:py-28
       "
     >
+
       <div
         className="
           max-w-7xl
           mx-auto
+
           px-4
           sm:px-6
         "
       >
 
+
         {/* =====================================
             SECTION HEADER
         ====================================== */}
+
         <div
           className="
             grid
@@ -60,7 +126,9 @@ export default function Projects() {
           "
         >
 
+
           {/* LEFT */}
+
           <div>
 
             <p
@@ -78,7 +146,7 @@ export default function Projects() {
                 mb-4
               "
             >
-              02 / WEB PROJECTS
+              02 / FEATURED PROJECTS
             </p>
 
 
@@ -94,19 +162,22 @@ export default function Projects() {
                 leading-[0.95]
               "
             >
-              Featured Web
+
+              Selected
 
               <br />
 
-              <span className="text-gray-400">
-                Applications & Systems.
+              <span className="theme-heading-accent">
+                Projects & Systems.
               </span>
+
             </h2>
 
           </div>
 
 
           {/* RIGHT */}
+
           <div
             className="
               lg:flex
@@ -130,9 +201,9 @@ export default function Projects() {
                 lg:text-right
               "
             >
-              Selected web applications and systems built through
-              academic projects, community work, and hands-on
-              development using modern web technologies.
+              Selected projects across web development,
+              game development, desktop applications,
+              academic work, and community-based systems.
             </p>
 
           </div>
@@ -143,6 +214,7 @@ export default function Projects() {
         {/* =====================================
             PROJECT GRID
         ====================================== */}
+
         <div
           className="
             grid
@@ -154,6 +226,7 @@ export default function Projects() {
             border-gray-200
           "
         >
+
 
           {projects.map((project) => (
 
@@ -184,12 +257,16 @@ export default function Projects() {
               "
             >
 
+
               {/* =================================
                   MAIN CONTENT
               ================================== */}
+
               <div>
 
+
                 {/* TOP */}
+
                 <div
                   className="
                     flex
@@ -202,7 +279,9 @@ export default function Projects() {
                   "
                 >
 
+
                   {/* NUMBER */}
+
                   <span
                     className="
                       text-[10px]
@@ -218,6 +297,7 @@ export default function Projects() {
 
 
                   {/* CATEGORY */}
+
                   <span
                     className="
                       text-[8px]
@@ -245,10 +325,14 @@ export default function Projects() {
 
 
                 {/* =================================
-                    BROWSER PREVIEW
+                    PROJECT PREVIEW
                 ================================== */}
+
                 <div
-                  onClick={() => setSelectedProject(project)}
+                  onClick={() =>
+                    handleProjectPreview(project)
+                  }
+
                   className="
                     group/preview
 
@@ -277,9 +361,11 @@ export default function Projects() {
                   "
                 >
 
+
                   {/* ===============================
-                      BROWSER BAR
+                      BROWSER / PROJECT BAR
                   ================================ */}
+
                   <div
                     className="
                       h-8
@@ -307,7 +393,9 @@ export default function Projects() {
                     "
                   >
 
+
                     {/* DOTS */}
+
                     <div
                       className="
                         flex
@@ -317,10 +405,12 @@ export default function Projects() {
                         shrink-0
                       "
                     >
+
                       <span
                         className="
                           w-2
                           h-2
+
                           sm:w-2.5
                           sm:h-2.5
 
@@ -338,6 +428,7 @@ export default function Projects() {
                         className="
                           w-2
                           h-2
+
                           sm:w-2.5
                           sm:h-2.5
 
@@ -355,6 +446,7 @@ export default function Projects() {
                         className="
                           w-2
                           h-2
+
                           sm:w-2.5
                           sm:h-2.5
 
@@ -367,10 +459,12 @@ export default function Projects() {
                           group-hover/preview:bg-gray-400
                         "
                       />
+
                     </div>
 
 
-                    {/* URL */}
+                    {/* URL / REPOSITORY */}
+
                     <div
                       className="
                         flex
@@ -391,30 +485,45 @@ export default function Projects() {
 
                         text-gray-600
 
-                        max-w-[170px]
+                        max-w-[190px]
                         sm:max-w-xs
                       "
                     >
 
-                      <Globe
-                        size={10}
-                        className="
-                          text-gray-400
-                          shrink-0
-                        "
-                      />
+                      {project.liveUrl ? (
+
+                        <Globe
+                          size={10}
+                          className="
+                            text-gray-400
+                            shrink-0
+                          "
+                        />
+
+                      ) : (
+
+                        <GithubIcon
+                          className="
+                            w-2.5
+                            h-2.5
+
+                            text-gray-400
+                            shrink-0
+                          "
+                        />
+
+                      )}
+
 
                       <span className="truncate">
-                        {project.liveUrl.replace(
-                          'https://',
-                          ''
-                        )}
+                        {getProjectUrl(project)}
                       </span>
 
                     </div>
 
 
-                    {/* MAXIMIZE */}
+                    {/* ACTION ICON */}
+
                     <span
                       className="
                         shrink-0
@@ -425,17 +534,32 @@ export default function Projects() {
 
                         group-hover/preview:text-black
                       "
-                      title="View Preview"
+                      title={
+                        project.liveUrl
+                          ? 'View Project'
+                          : 'View Repository'
+                      }
                     >
-                      <Maximize2 size={12} />
+
+                      {project.liveUrl ? (
+
+                        <Maximize2 size={12} />
+
+                      ) : (
+
+                        <ArrowUpRight size={12} />
+
+                      )}
+
                     </span>
 
                   </div>
 
 
                   {/* =================================
-                      WEBSITE IMAGE
+                      PROJECT IMAGE
                   ================================== */}
+
                   <div
                     className="
                       relative
@@ -453,8 +577,11 @@ export default function Projects() {
 
                     <img
                       src={project.image}
-                      alt={`${project.title} landing page preview`}
+
+                      alt={`${project.title} project preview`}
+
                       loading="lazy"
+
                       className="
                         w-full
                         h-full
@@ -474,6 +601,7 @@ export default function Projects() {
                     {/* =================================
                         HOVER OVERLAY
                     ================================== */}
+
                     <div
                       className="
                         absolute
@@ -523,9 +651,28 @@ export default function Projects() {
                         "
                       >
 
-                        <Maximize2 size={13} />
+                        {project.repoUrl && !project.liveUrl ? (
 
-                        VIEW PROJECT
+                          <GithubIcon
+                            className="
+                              w-3.5
+                              h-3.5
+                            "
+                          />
+
+                        ) : (
+
+                          <Maximize2 size={13} />
+
+                        )}
+
+
+                        {project.repoUrl && !project.liveUrl
+                          ? 'VIEW REPOSITORY'
+                          : project.category === 'GAME DEVELOPMENT'
+                            ? 'VIEW GAME'
+                            : 'VIEW PROJECT'
+                        }
 
                       </span>
 
@@ -539,6 +686,7 @@ export default function Projects() {
                 {/* =================================
                     PROJECT TITLE
                 ================================== */}
+
                 <h3
                   className="
                     text-xl
@@ -560,6 +708,7 @@ export default function Projects() {
 
 
                 {/* SUBTITLE */}
+
                 {project.subtitle && (
 
                   <p
@@ -583,6 +732,7 @@ export default function Projects() {
 
 
                 {/* DESCRIPTION */}
+
                 <p
                   className="
                     text-sm
@@ -603,9 +753,12 @@ export default function Projects() {
               {/* =================================
                   BOTTOM CONTENT
               ================================== */}
+
               <div>
 
+
                 {/* TAGS */}
+
                 <div
                   className="
                     flex
@@ -626,6 +779,7 @@ export default function Projects() {
 
                     <span
                       key={tag}
+
                       className="
                         text-[8px]
                         sm:text-[9px]
@@ -656,6 +810,7 @@ export default function Projects() {
                 {/* =================================
                     ACTION BUTTONS
                 ================================== */}
+
                 <div
                   className="
                     grid
@@ -671,115 +826,211 @@ export default function Projects() {
                   "
                 >
 
-                  {/* VISIT WEBSITE */}
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="
-                      group/button
 
-                      inline-flex
-                      items-center
-                      justify-center
+                  {/* ===============================
+                      LIVE WEBSITE / GAME
+                  ================================ */}
 
-                      gap-2
+                  {project.liveUrl && (
 
-                      min-h-[44px]
+                    <>
 
-                      bg-black
-                      text-white
+                      <a
+                        href={project.liveUrl}
 
-                      px-5
-                      py-3
+                        target="_blank"
 
-                      text-[9px]
-                      sm:text-[10px]
+                        rel="noopener noreferrer"
 
-                      font-mono
-                      tracking-[0.1em]
+                        className="
+                          group/button
 
-                      transition-all
-                      duration-300
+                          inline-flex
+                          items-center
+                          justify-center
 
-                      hover:bg-blue-600
-                    "
-                  >
+                          gap-2
 
-                    <span>
-                      VISIT WEBSITE
-                    </span>
+                          min-h-[44px]
 
-                    <ArrowUpRight
-                      size={13}
-                      className="
-                        transition-transform
-                        duration-300
+                          bg-black
+                          text-white
 
-                        group-hover/button:translate-x-0.5
-                        group-hover/button:-translate-y-0.5
-                      "
-                    />
+                          px-5
+                          py-3
 
-                  </a>
+                          text-[9px]
+                          sm:text-[10px]
+
+                          font-mono
+                          tracking-[0.1em]
+
+                          transition-all
+                          duration-300
+
+                          hover:bg-blue-600
+                        "
+                      >
+
+                        <span>
+                          {getPrimaryLabel(project)}
+                        </span>
 
 
-                  {/* RESPONSIVE VIEW */}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setSelectedProject(project)
-                    }
-                    className="
-                      group/button
+                        <ArrowUpRight
+                          size={13}
 
-                      inline-flex
-                      items-center
-                      justify-center
+                          className="
+                            transition-transform
+                            duration-300
 
-                      gap-2
+                            group-hover/button:translate-x-0.5
+                            group-hover/button:-translate-y-0.5
+                          "
+                        />
 
-                      min-h-[44px]
+                      </a>
 
-                      border
-                      border-gray-300
 
-                      bg-white
-                      text-black
+                      {/* RESPONSIVE VIEW */}
 
-                      px-4
-                      py-3
+                      <button
+                        type="button"
 
-                      text-[9px]
-                      sm:text-[10px]
+                        onClick={() =>
+                          setSelectedProject(project)
+                        }
 
-                      font-mono
-                      tracking-[0.08em]
+                        className="
+                          group/button
 
-                      transition-all
-                      duration-300
+                          inline-flex
+                          items-center
+                          justify-center
 
-                      hover:bg-gray-100
-                      hover:border-gray-400
-                    "
-                    title="Open responsive device preview"
-                  >
+                          gap-2
 
-                    <Maximize2
-                      size={13}
-                      className="
-                        transition-transform
-                        duration-300
+                          min-h-[44px]
 
-                        group-hover/button:scale-110
-                      "
-                    />
+                          border
+                          border-gray-300
 
-                    <span>
-                      RESPONSIVE VIEW
-                    </span>
+                          bg-white
+                          text-black
 
-                  </button>
+                          px-4
+                          py-3
+
+                          text-[9px]
+                          sm:text-[10px]
+
+                          font-mono
+                          tracking-[0.08em]
+
+                          transition-all
+                          duration-300
+
+                          hover:bg-gray-100
+                          hover:border-gray-400
+                        "
+                        title="Open responsive device preview"
+                      >
+
+                        <Maximize2
+                          size={13}
+
+                          className="
+                            transition-transform
+                            duration-300
+
+                            group-hover/button:scale-110
+                          "
+                        />
+
+                        <span>
+                          RESPONSIVE VIEW
+                        </span>
+
+                      </button>
+
+                    </>
+
+                  )}
+
+
+                  {/* ===============================
+                      GITHUB-ONLY PROJECT
+                  ================================ */}
+
+                  {!project.liveUrl &&
+                    project.repoUrl && (
+
+                      <a
+                        href={project.repoUrl}
+
+                        target="_blank"
+
+                        rel="noopener noreferrer"
+
+                        className="
+                          group/button
+
+                          sm:col-span-2
+
+                          inline-flex
+                          items-center
+                          justify-center
+
+                          gap-2
+
+                          min-h-[44px]
+
+                          bg-black
+                          text-white
+
+                          px-5
+                          py-3
+
+                          text-[9px]
+                          sm:text-[10px]
+
+                          font-mono
+                          tracking-[0.1em]
+
+                          transition-all
+                          duration-300
+
+                          hover:bg-blue-600
+                        "
+                      >
+
+                        <GithubIcon
+                          className="
+                            w-3.5
+                            h-3.5
+                          "
+                        />
+
+                        <span>
+                          VIEW REPOSITORY
+                        </span>
+
+
+                        <ArrowUpRight
+                          size={13}
+
+                          className="
+                            transition-transform
+                            duration-300
+
+                            group-hover/button:translate-x-0.5
+                            group-hover/button:-translate-y-0.5
+                          "
+                        />
+
+                      </a>
+
+                    )}
 
                 </div>
 
@@ -797,10 +1048,12 @@ export default function Projects() {
       {/* =====================================
           RESPONSIVE PROJECT MODAL
       ====================================== */}
+
       {selectedProject && (
 
         <ProjectModal
           project={selectedProject}
+
           onClose={() =>
             setSelectedProject(null)
           }
@@ -809,5 +1062,7 @@ export default function Projects() {
       )}
 
     </section>
+
   );
+
 }

@@ -18,7 +18,7 @@ export default function InteractivePortrait() {
   ========================================= */
 
   const [sliderPosition, setSliderPosition] =
-    useState(60);
+    useState(95);
 
   const [isDragging, setIsDragging] =
     useState(false);
