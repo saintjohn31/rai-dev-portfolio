@@ -337,6 +337,7 @@ export default function Projects() {
                 ================================== */}
 
                 <div
+                  onMouseEnter={playHover}
                   onClick={() =>
                     handleProjectPreview(project)
                   }

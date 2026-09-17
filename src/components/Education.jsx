@@ -8,6 +8,10 @@ import {
 
 import bulsuLogo from '../images/bulsubg.png';
 
+import {
+    playHover,
+} from '../utils/sound';
+
 
 export default function Education() {
 
@@ -236,6 +240,7 @@ export default function Education() {
           ================================== */}
 
                     <article
+                        onMouseEnter={playHover}
                         className="
               group
 

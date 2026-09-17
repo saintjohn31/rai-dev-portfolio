@@ -171,6 +171,7 @@ export default function Skills() {
           {filteredSkills.map((skill) => (
             <article
               key={skill.number}
+              onMouseEnter={playHover}
               className="
                 group
                 relative
