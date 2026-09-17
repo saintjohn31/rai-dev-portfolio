@@ -8,6 +8,12 @@ import {
 import profilePic from '../images/2bg.png';
 import formalPic from '../images/1bg.png';
 
+import {
+  playClick,
+  playToggle,
+  playHover,
+} from '../utils/sound';
+
 
 export default function InteractivePortrait() {
 
@@ -1011,8 +1017,11 @@ export default function InteractivePortrait() {
                     event.stopPropagation();
                   }}
 
+                  onMouseEnter={playHover}
+
                   onClick={(event) => {
                     event.stopPropagation();
+                    playClick();
 
                     setActiveFilter(
                       filter.id
@@ -1541,6 +1550,7 @@ export default function InteractivePortrait() {
           return (
 
             <button
+              onMouseEnter={playHover}
               key={item.id}
               type="button"
 
@@ -1550,6 +1560,7 @@ export default function InteractivePortrait() {
 
               onClick={(event) => {
                 event.stopPropagation();
+                playToggle();
 
                 setPortraitMode(
                   item.id

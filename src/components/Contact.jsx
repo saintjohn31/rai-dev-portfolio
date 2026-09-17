@@ -17,6 +17,12 @@ import {
   LinkedinIcon,
 } from './Icons';
 
+import {
+  playClick,
+  playHover,
+  playKeypress,
+} from '../utils/sound';
+
 
 /* =========================================
    FACEBOOK ICON
@@ -84,6 +90,8 @@ export default function Contact() {
         email
       );
 
+      playClick();
+
       setCopied(true);
 
       setTimeout(() => {
@@ -121,6 +129,23 @@ export default function Contact() {
           ? value.slice(0, 500)
           : value,
     }));
+
+  };
+
+
+  /* =========================================
+     FORM KEYBOARD SOUND
+  ========================================= */
+
+  const handleFormKeyDown = (event) => {
+
+    if (
+      event.key.length === 1 ||
+      event.key === 'Backspace' ||
+      event.key === 'Delete'
+    ) {
+      playKeypress(event.key);
+    }
 
   };
 
@@ -404,6 +429,7 @@ export default function Contact() {
 
 
                   <a
+                    onMouseEnter={playHover}
                     href={`mailto:${email}`}
 
                     className="
@@ -434,6 +460,7 @@ export default function Contact() {
                 {/* COPY BUTTON */}
 
                 <button
+                  onMouseEnter={playHover}
                   type="button"
 
                   onClick={copyEmail}
@@ -508,6 +535,7 @@ export default function Contact() {
               {/* FACEBOOK */}
 
               <a
+                onMouseEnter={playHover}
                 href={facebook}
 
                 target="_blank"
@@ -601,6 +629,7 @@ export default function Contact() {
               {/* GITHUB */}
 
               <a
+                onMouseEnter={playHover}
                 href={github}
 
                 target="_blank"
@@ -694,6 +723,7 @@ export default function Contact() {
               {/* LINKEDIN */}
 
               <a
+                onMouseEnter={playHover}
                 href={linkedin}
 
                 target="_blank"
@@ -916,6 +946,8 @@ export default function Contact() {
 
                   onChange={handleChange}
 
+                  onKeyDown={handleFormKeyDown}
+
                   placeholder="Your name"
 
                   className="
@@ -985,6 +1017,8 @@ export default function Contact() {
                   value={formData.email}
 
                   onChange={handleChange}
+
+                  onKeyDown={handleFormKeyDown}
 
                   placeholder="your@email.com"
 
@@ -1081,6 +1115,8 @@ export default function Contact() {
 
                   onChange={handleChange}
 
+                  onKeyDown={handleFormKeyDown}
+
                   placeholder="Tell me about your project or idea..."
 
                   className="
@@ -1117,6 +1153,7 @@ export default function Contact() {
               {/* SUBMIT */}
 
               <button
+                onMouseEnter={playHover}
                 type="submit"
 
                 className="
@@ -1288,6 +1325,7 @@ export default function Contact() {
           >
 
             <a
+              onMouseEnter={playHover}
               href={`mailto:${email}`}
 
               className="
@@ -1321,6 +1359,7 @@ export default function Contact() {
 
 
             <button
+              onMouseEnter={playHover}
               type="button"
 
               onClick={backToTop}

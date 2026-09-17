@@ -13,6 +13,11 @@ import InteractivePortrait from './InteractivePortrait';
 import { projects } from '../data/projectsData';
 import { skills } from '../data/skillsData';
 
+import {
+  playClick,
+  playHover,
+} from '../utils/sound';
+
 
 export default function About() {
 
@@ -690,6 +695,8 @@ export default function About() {
 
                 <a
                   href="#projects"
+                  onClick={playClick}
+                  onMouseEnter={playHover}
 
                   className="
                     group
@@ -741,6 +748,8 @@ export default function About() {
 
                 <a
                   href="#contact"
+                  onClick={playClick}
+                  onMouseEnter={playHover}
 
                   className="
                     inline-flex

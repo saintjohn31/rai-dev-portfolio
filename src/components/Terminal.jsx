@@ -6,6 +6,13 @@ import {
     ArrowUpRight,
 } from 'lucide-react';
 
+import {
+    playTerminal,
+    playOpen,
+    playHover,
+    playKeypress,
+} from '../utils/sound';
+
 const COMMANDS = {
     help: [
         { command: 'about', description: 'Who is John?' },
@@ -52,6 +59,7 @@ export default function Terminal() {
     ====================================================== */
     useEffect(() => {
         const openTerminal = () => {
+            playOpen();
             setIsOpen(true);
             setIsMinimized(false);
         };
@@ -167,6 +175,8 @@ export default function Terminal() {
             .toLowerCase();
 
         if (!command) return;
+
+        playTerminal();
 
         setHistory((current) => [
             ...current,
@@ -505,6 +515,17 @@ export default function Terminal() {
        HISTORY
     ====================================================== */
     const handleKeyDown = (event) => {
+        // Soft keyboard feedback only for keys that edit the command.
+        // Enter keeps the existing command/terminal sound, while
+        // modifiers and navigation keys stay silent.
+        if (
+            event.key.length === 1 ||
+            event.key === 'Backspace' ||
+            event.key === 'Delete'
+        ) {
+            playKeypress(event.key);
+        }
+
         if (
             event.key === 'ArrowUp' &&
             history.length > 0
@@ -585,6 +606,7 @@ export default function Terminal() {
                 >
                     {line.content.map((item) => (
                         <button
+                            onMouseEnter={playHover}
                             key={item.command}
                             type="button"
                             onClick={() =>
@@ -705,6 +727,7 @@ export default function Terminal() {
       ================================================== */}
             {!isOpen && (
                 <button
+                    onMouseEnter={playHover}
                     type="button"
                     onClick={() => {
                         setIsOpen(true);
@@ -794,6 +817,7 @@ export default function Terminal() {
       ================================================== */}
             {isOpen && !isMinimized && (
                 <button
+                    onMouseEnter={playHover}
                     type="button"
                     aria-label="Close terminal"
                     onClick={() => setIsOpen(false)}
@@ -954,6 +978,7 @@ export default function Terminal() {
               "
                         >
                             <button
+                                onMouseEnter={playHover}
                                 type="button"
                                 onClick={() =>
                                     setIsMinimized(
@@ -991,6 +1016,7 @@ export default function Terminal() {
                             </button>
 
                             <button
+                                onMouseEnter={playHover}
                                 type="button"
                                 onClick={() =>
                                     setIsOpen(false)
@@ -1259,6 +1285,7 @@ export default function Terminal() {
                                 </span>
 
                                 <button
+                                    onMouseEnter={playHover}
                                     type="button"
                                     onClick={() =>
                                         executeCommand(

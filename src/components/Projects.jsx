@@ -11,6 +11,12 @@ import { GithubIcon } from './Icons';
 
 import { projects } from '../data/projectsData';
 
+import {
+  playOpen,
+  playClick,
+  playHover,
+} from '../utils/sound';
+
 
 export default function Projects() {
 
@@ -26,12 +32,14 @@ export default function Projects() {
 
     // Projects with a live website/game
     if (project.liveUrl) {
+      playOpen();
       setSelectedProject(project);
       return;
     }
 
     // GitHub-only projects
     if (project.repoUrl) {
+      playClick();
       window.open(
         project.repoUrl,
         '_blank',
@@ -836,6 +844,7 @@ export default function Projects() {
                     <>
 
                       <a
+                        onMouseEnter={playHover}
                         href={project.liveUrl}
 
                         target="_blank"
@@ -895,6 +904,7 @@ export default function Projects() {
                       {/* RESPONSIVE VIEW */}
 
                       <button
+                        onMouseEnter={playHover}
                         type="button"
 
                         onClick={() =>
@@ -966,6 +976,7 @@ export default function Projects() {
                     project.repoUrl && (
 
                       <a
+                        onMouseEnter={playHover}
                         href={project.repoUrl}
 
                         target="_blank"

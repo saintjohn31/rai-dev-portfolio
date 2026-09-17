@@ -8,6 +8,13 @@ import {
   Sun,
 } from 'lucide-react';
 
+import SoundToggle from './SoundToggle';
+
+import {
+  playToggle,
+  playHover,
+} from '../utils/sound';
+
 
 /* =========================================
    CUSTOM ICONS
@@ -372,6 +379,7 @@ export default function Navbar({
             ================================== */}
 
             <a
+              onMouseEnter={playHover}
               href="#about"
               onClick={() =>
                 handleNavClick('about')
@@ -452,6 +460,7 @@ export default function Navbar({
                 return (
 
                   <a
+                    onMouseEnter={playHover}
                     key={link.id}
 
                     href={link.href}
@@ -571,6 +580,7 @@ export default function Navbar({
                     return (
 
                       <a
+                        onMouseEnter={playHover}
                         key={social.name}
 
                         href={social.href}
@@ -641,6 +651,7 @@ export default function Navbar({
               ================================== */}
 
               <a
+                onMouseEnter={playHover}
                 href="#contact"
 
                 onClick={() =>
@@ -706,13 +717,24 @@ export default function Navbar({
 
 
               {/* =================================
+                  SOUND TOGGLE
+              ================================== */}
+
+              <SoundToggle />
+
+
+              {/* =================================
                   THEME TOGGLE
               ================================== */}
 
               <button
+                onMouseEnter={playHover}
                 type="button"
 
-                onClick={toggleTheme}
+                onClick={() => {
+                  playToggle();
+                  toggleTheme();
+                }}
 
                 aria-label={
                   isDark
@@ -850,6 +872,7 @@ export default function Navbar({
             >
 
               <a
+                onMouseEnter={playHover}
                 href="#contact"
 
                 onClick={() =>
@@ -894,9 +917,13 @@ export default function Navbar({
 
 
               <button
+                onMouseEnter={playHover}
                 type="button"
 
-                onClick={toggleTheme}
+                onClick={() => {
+                  playToggle();
+                  toggleTheme();
+                }}
 
                 aria-label={
                   isDark
@@ -970,12 +997,21 @@ export default function Navbar({
               "
             >
 
+              {/* MOBILE SOUND */}
+
+              <SoundToggle />
+
+
               {/* MOBILE THEME */}
 
               <button
+                onMouseEnter={playHover}
                 type="button"
 
-                onClick={toggleTheme}
+                onClick={() => {
+                  playToggle();
+                  toggleTheme();
+                }}
 
                 aria-label={
                   isDark
@@ -1033,6 +1069,7 @@ export default function Navbar({
               {/* MENU */}
 
               <button
+                onMouseEnter={playHover}
                 type="button"
 
                 onClick={() =>
@@ -1236,6 +1273,7 @@ export default function Navbar({
                   return (
 
                     <a
+                      onMouseEnter={playHover}
                       key={link.id}
 
                       href={link.href}
@@ -1431,9 +1469,13 @@ export default function Navbar({
 
 
               <button
+                onMouseEnter={playHover}
                 type="button"
 
-                onClick={toggleTheme}
+                onClick={() => {
+                  playToggle();
+                  toggleTheme();
+                }}
 
                 className={`
                   group
@@ -1573,6 +1615,13 @@ export default function Navbar({
 
               </button>
 
+
+              {/* MOBILE SOUND CONTROL */}
+
+              <div className="mt-2">
+                <SoundToggle mobile />
+              </div>
+
             </div>
 
 
@@ -1616,6 +1665,7 @@ export default function Navbar({
                     return (
 
                       <a
+                        onMouseEnter={playHover}
                         key={social.name}
 
                         href={social.href}

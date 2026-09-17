@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { skills } from '../data/skillsData';
 
+import {
+  playClick,
+  playHover,
+} from '../utils/sound';
+
 export default function Skills() {
   const [selectedCategory, setSelectedCategory] = useState('ALL');
 
@@ -119,7 +124,11 @@ export default function Skills() {
                   <button
                     key={category.id}
                     type="button"
-                    onClick={() => setSelectedCategory(category.id)}
+                    onMouseEnter={playHover}
+                    onClick={() => {
+                      playClick();
+                      setSelectedCategory(category.id);
+                    }}
                     className={`
                       px-4
                       py-2.5

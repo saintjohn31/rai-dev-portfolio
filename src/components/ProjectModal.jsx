@@ -14,6 +14,12 @@ import {
 } from 'lucide-react';
 import { GithubIcon } from './Icons';
 
+import {
+  playClick,
+  playClose,
+  playHover,
+} from '../utils/sound';
+
 export default function ProjectModal({ project, onClose }) {
   if (!project) return null;
 
@@ -36,7 +42,10 @@ export default function ProjectModal({ project, onClose }) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 lg:p-6 bg-black/75 backdrop-blur-md animate-in fade-in duration-200"
-      onClick={onClose}
+      onClick={() => {
+        playClose();
+        onClose();
+      }}
     >
       <div
         className="relative w-full max-w-5xl bg-white border border-gray-300 shadow-2xl text-left overflow-hidden flex flex-col max-h-[92vh]"
@@ -56,6 +65,7 @@ export default function ProjectModal({ project, onClose }) {
           <div className="flex items-center gap-2">
             {project.liveUrl && (
               <a
+                onMouseEnter={playHover}
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -67,7 +77,11 @@ export default function ProjectModal({ project, onClose }) {
             )}
 
             <button
-              onClick={onClose}
+              onMouseEnter={playHover}
+              onClick={() => {
+                playClose();
+                onClose();
+              }}
               className="w-9 h-9 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-100 transition-colors"
               aria-label="Close modal"
             >
@@ -81,23 +95,29 @@ export default function ProjectModal({ project, onClose }) {
           {/* Tabs */}
           <div className="flex items-center gap-2 text-xs font-mono">
             <button
-              onClick={() => setActiveTab('preview')}
-              className={`px-3 py-1.5 font-semibold transition-all border ${
-                activeTab === 'preview'
+              onMouseEnter={playHover}
+              onClick={() => {
+                playClick();
+                setActiveTab('preview');
+              }}
+              className={`px-3 py-1.5 font-semibold transition-all border ${activeTab === 'preview'
                   ? 'bg-black text-white border-black shadow-sm'
                   : 'bg-white text-gray-500 border-gray-200 hover:text-black'
-              }`}
+                }`}
             >
               LIVE LANDING PAGE
             </button>
 
             <button
-              onClick={() => setActiveTab('details')}
-              className={`px-3 py-1.5 font-semibold transition-all border ${
-                activeTab === 'details'
+              onMouseEnter={playHover}
+              onClick={() => {
+                playClick();
+                setActiveTab('details');
+              }}
+              className={`px-3 py-1.5 font-semibold transition-all border ${activeTab === 'details'
                   ? 'bg-black text-white border-black shadow-sm'
                   : 'bg-white text-gray-500 border-gray-200 hover:text-black'
-              }`}
+                }`}
             >
               SPECIFICATIONS & STACK
             </button>
@@ -109,45 +129,55 @@ export default function ProjectModal({ project, onClose }) {
               <span className="text-[10px] text-gray-400 px-1 hidden md:inline">VIEWPORT:</span>
 
               <button
-                onClick={() => setViewportMode('desktop')}
+                onMouseEnter={playHover}
+                onClick={() => {
+                  playClick();
+                  setViewportMode('desktop');
+                }}
                 title="Desktop View (Full Width)"
-                className={`flex items-center gap-1 px-2.5 py-1 transition-colors ${
-                  viewportMode === 'desktop'
+                className={`flex items-center gap-1 px-2.5 py-1 transition-colors ${viewportMode === 'desktop'
                     ? 'bg-black text-white font-bold'
                     : 'text-gray-400 hover:text-black'
-                }`}
+                  }`}
               >
                 <Monitor size={12} />
                 <span className="hidden sm:inline text-[10px]">DESKTOP</span>
               </button>
 
               <button
-                onClick={() => setViewportMode('tablet')}
+                onMouseEnter={playHover}
+                onClick={() => {
+                  playClick();
+                  setViewportMode('tablet');
+                }}
                 title="Tablet View (768px)"
-                className={`flex items-center gap-1 px-2.5 py-1 transition-colors ${
-                  viewportMode === 'tablet'
+                className={`flex items-center gap-1 px-2.5 py-1 transition-colors ${viewportMode === 'tablet'
                     ? 'bg-black text-white font-bold'
                     : 'text-gray-400 hover:text-black'
-                }`}
+                  }`}
               >
                 <Tablet size={12} />
                 <span className="hidden sm:inline text-[10px]">TABLET</span>
               </button>
 
               <button
-                onClick={() => setViewportMode('mobile')}
+                onMouseEnter={playHover}
+                onClick={() => {
+                  playClick();
+                  setViewportMode('mobile');
+                }}
                 title="Mobile View (390px)"
-                className={`flex items-center gap-1 px-2.5 py-1 transition-colors ${
-                  viewportMode === 'mobile'
+                className={`flex items-center gap-1 px-2.5 py-1 transition-colors ${viewportMode === 'mobile'
                     ? 'bg-black text-white font-bold'
                     : 'text-gray-400 hover:text-black'
-                }`}
+                  }`}
               >
                 <Smartphone size={12} />
                 <span className="hidden sm:inline text-[10px]">MOBILE</span>
               </button>
 
               <button
+                onMouseEnter={playHover}
                 onClick={() => setIframeKey((prev) => prev + 1)}
                 title="Reload Page"
                 className="p-1 text-gray-400 hover:text-black transition-colors ml-1 border-l border-gray-200 pl-2"
@@ -182,6 +212,7 @@ export default function ProjectModal({ project, onClose }) {
                     </div>
 
                     <a
+                      onMouseEnter={playHover}
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -215,6 +246,7 @@ export default function ProjectModal({ project, onClose }) {
                 <span>⚡ Interactive iframe — scroll and interact directly</span>
                 {project.liveUrl && (
                   <a
+                    onMouseEnter={playHover}
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -278,6 +310,7 @@ export default function ProjectModal({ project, onClose }) {
               <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-gray-200">
                 {project.liveUrl && (
                   <a
+                    onMouseEnter={playHover}
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -289,6 +322,7 @@ export default function ProjectModal({ project, onClose }) {
                 )}
 
                 <button
+                  onMouseEnter={playHover}
                   onClick={() => {
                     alert(`Source code repository available upon request: ${project.title}`);
                   }}
