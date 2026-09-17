@@ -2,10 +2,11 @@ import {
     GraduationCap,
     MapPin,
     CalendarDays,
-    ArrowUpRight,
     Code2,
     BookOpen,
 } from 'lucide-react';
+
+import bulsuLogo from '../images/bulsubg.png';
 
 
 export default function Education() {
@@ -136,7 +137,7 @@ export default function Education() {
                   font-medium
                 "
                             >
-                                Web & Mobile Application Development
+                                Web &amp; Mobile Application Development
                             </span>
 
                             . My studies focus on web development,
@@ -248,13 +249,16 @@ export default function Education() {
               overflow-hidden
 
               transition-all
-              duration-300
+              duration-500
 
               hover:border-gray-400
+              hover:-translate-y-[2px]
             "
                     >
 
-                        {/* BLUE TOP ACCENT */}
+                        {/* =================================
+                MINIMAL TOP ACCENT
+            ================================== */}
 
                         <div
                             className="
@@ -262,10 +266,16 @@ export default function Education() {
                 top-0
                 left-0
 
-                w-full
+                w-14
                 h-[2px]
 
-                bg-blue-500
+                bg-black
+
+                transition-all
+                duration-700
+                ease-out
+
+                group-hover:w-full
               "
                         />
 
@@ -304,39 +314,62 @@ export default function Education() {
                                 <div
                                     className="
                     flex
-                    items-start
+                    items-center
 
                     gap-4
+                    sm:gap-5
 
                     min-w-0
                   "
                                 >
 
+                                    {/* =============================
+                      BULSU LOGO
+                  ============================== */}
+
                                     <div
                                         className="
-                      w-11
-                      h-11
+                      w-14
+                      h-14
+
+                      sm:w-16
+                      sm:h-16
 
                       shrink-0
-
-                      border
-                      border-gray-200
 
                       flex
                       items-center
                       justify-center
 
-                      text-blue-500
+                      transition-transform
+                      duration-500
+
+                      group-hover:scale-[1.04]
                     "
                                     >
 
-                                        <GraduationCap
-                                            size={20}
-                                            strokeWidth={1.6}
+                                        <img
+                                            src={bulsuLogo}
+                                            alt="Bulacan State University logo"
+
+                                            draggable="false"
+
+                                            className="
+                        w-full
+                        h-full
+
+                        object-contain
+
+                        select-none
+                      "
                                         />
 
                                     </div>
 
+
+                                    {/* =============================
+                      SCHOOL NAME
+                  ============================== */}
 
                                     <div className="min-w-0">
 
@@ -351,7 +384,7 @@ export default function Education() {
 
                         tracking-[0.16em]
 
-                        text-blue-500
+                        text-gray-400
                       "
                                         >
                                             UNIVERSITY
@@ -391,7 +424,9 @@ export default function Education() {
                                 </div>
 
 
-                                {/* CURRENT STATUS */}
+                                {/* =================================
+                    CURRENT STATUS
+                ================================== */}
 
                                 <div
                                     className="
@@ -404,11 +439,7 @@ export default function Education() {
 
                     shrink-0
 
-                    border
-                    border-gray-200
-
-                    px-3
-                    py-2
+                    pt-1
                   "
                                 >
 
@@ -417,7 +448,7 @@ export default function Education() {
                       w-1.5
                       h-1.5
 
-                      bg-blue-500
+                      bg-black
 
                       rounded-full
                     "
@@ -454,7 +485,7 @@ export default function Education() {
                   grid-cols-1
                   sm:grid-cols-2
 
-                  gap-x-8
+                  gap-x-10
                   gap-y-8
                 "
                             >
@@ -472,7 +503,7 @@ export default function Education() {
                                     icon={Code2}
                                     label="SPECIALIZATION"
                                 >
-                                    Web & Mobile Application
+                                    Web &amp; Mobile Application
                                     Development
                                 </EducationDetail>
 
@@ -524,7 +555,12 @@ export default function Education() {
                       items-center
                       justify-center
 
-                      text-blue-500
+                      text-black
+
+                      transition-colors
+                      duration-300
+
+                      group-hover:border-gray-300
                     "
                                     >
 
@@ -569,132 +605,15 @@ export default function Education() {
                         text-gray-500
                       "
                                         >
-                                            Developing practical knowledge in
-                                            front-end development, web and
-                                            mobile applications, database
-                                            management, software development,
-                                            and user-centered interface design.
-                                            Academic projects are used to apply
-                                            these concepts to real-world
-                                            systems and digital solutions.
+                                            Front-end development, web and mobile
+                                            applications, database systems, software
+                                            development, and user-centered interface
+                                            design.
                                         </p>
 
                                     </div>
 
                                 </div>
-
-                            </div>
-
-
-                            {/* =================================
-                  BOTTOM META
-              ================================== */}
-
-                            <div
-                                className="
-                  mt-10
-
-                  flex
-                  flex-col
-                  sm:flex-row
-
-                  sm:items-center
-                  sm:justify-between
-
-                  gap-3
-                "
-                            >
-
-                                <div
-                                    className="
-                    flex
-                    flex-wrap
-                    items-center
-
-                    gap-x-3
-                    gap-y-1
-                  "
-                                >
-
-                                    <span
-                                        className="
-                      text-[8px]
-                      sm:text-[9px]
-
-                      font-mono
-
-                      tracking-[0.14em]
-
-                      text-gray-400
-                    "
-                                    >
-                                        BSIT
-                                    </span>
-
-
-                                    <span className="text-gray-300">
-                                        /
-                                    </span>
-
-
-                                    <span
-                                        className="
-                      text-[8px]
-                      sm:text-[9px]
-
-                      font-mono
-
-                      tracking-[0.14em]
-
-                      text-gray-400
-                    "
-                                    >
-                                        WEB & MOBILE
-                                    </span>
-
-
-                                    <span className="text-gray-300">
-                                        /
-                                    </span>
-
-
-                                    <span
-                                        className="
-                      text-[8px]
-                      sm:text-[9px]
-
-                      font-mono
-
-                      tracking-[0.14em]
-
-                      text-gray-400
-                    "
-                                    >
-                                        2023 — PRESENT
-                                    </span>
-
-                                </div>
-
-
-                                <ArrowUpRight
-                                    size={15}
-
-                                    className="
-                    hidden
-                    sm:block
-
-                    shrink-0
-
-                    text-gray-300
-
-                    transition-all
-                    duration-300
-
-                    group-hover:text-blue-500
-                    group-hover:translate-x-0.5
-                    group-hover:-translate-y-0.5
-                  "
-                                />
 
                             </div>
 
@@ -722,6 +641,7 @@ function EducationDetail({
 }) {
 
     return (
+
         <div
             className="
         flex
@@ -732,6 +652,8 @@ function EducationDetail({
         min-w-0
       "
         >
+
+            {/* ICON */}
 
             <div
                 className="
@@ -747,7 +669,12 @@ function EducationDetail({
           items-center
           justify-center
 
-          text-blue-500
+          text-black
+
+          transition-colors
+          duration-300
+
+          group-hover:border-gray-300
         "
             >
 
@@ -758,6 +685,8 @@ function EducationDetail({
 
             </div>
 
+
+            {/* CONTENT */}
 
             <div className="min-w-0">
 
@@ -798,6 +727,7 @@ function EducationDetail({
             </div>
 
         </div>
+
     );
 
 }

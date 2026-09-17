@@ -6,6 +6,7 @@ import {
 } from 'react';
 
 import profilePic from '../images/2bg.png';
+import formalPic from '../images/1bg.png';
 
 
 export default function InteractivePortrait() {
@@ -14,7 +15,15 @@ export default function InteractivePortrait() {
 
 
   /* =========================================
-     STATE
+     PORTRAIT MODE
+  ========================================= */
+
+  const [portraitMode, setPortraitMode] =
+    useState('digital');
+
+
+  /* =========================================
+     DIGITAL MODE
   ========================================= */
 
   const [sliderPosition, setSliderPosition] =
@@ -26,21 +35,35 @@ export default function InteractivePortrait() {
   const [activeFilter, setActiveFilter] =
     useState('scanline');
 
+
+  /* =========================================
+     MOUSE
+  ========================================= */
+
   const [mouseCoords, setMouseCoords] =
     useState({
       x: 0,
       y: 0,
     });
 
+  const [mousePercent, setMousePercent] =
+    useState({
+      x: 50,
+      y: 50,
+    });
+
   const [isHovered, setIsHovered] =
+    useState(false);
+
+  const [formalScanPlayed, setFormalScanPlayed] =
     useState(false);
 
 
   /* =========================================
-     SLIDER POSITION
+     UPDATE SLIDER
   ========================================= */
 
-  const handleMove = useCallback(
+  const updateSlider = useCallback(
     (clientX) => {
 
       if (!containerRef.current) {
@@ -51,11 +74,11 @@ export default function InteractivePortrait() {
         containerRef.current
           .getBoundingClientRect();
 
-      const rawX =
+      const x =
         clientX - rect.left;
 
       const percentage =
-        (rawX / rect.width) * 100;
+        (x / rect.width) * 100;
 
       const clamped =
         Math.max(
@@ -93,13 +116,46 @@ export default function InteractivePortrait() {
     const y =
       event.clientY - rect.top;
 
+    const percentX =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          (x / rect.width) * 100
+        )
+      );
+
+    const percentY =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          (y / rect.height) * 100
+        )
+      );
+
+
     setMouseCoords({
       x: Math.round(x),
       y: Math.round(y),
     });
 
-    if (isDragging) {
-      handleMove(event.clientX);
+
+    setMousePercent({
+      x: percentX,
+      y: percentY,
+    });
+
+
+    if (
+      portraitMode === 'digital' &&
+      isDragging
+    ) {
+
+      updateSlider(
+        event.clientX
+      );
+
     }
 
   };
@@ -112,15 +168,16 @@ export default function InteractivePortrait() {
   const handleTouchMove = (event) => {
 
     if (
-      event.touches &&
-      event.touches.length > 0
+      portraitMode !== 'digital' ||
+      !event.touches ||
+      event.touches.length === 0
     ) {
-
-      handleMove(
-        event.touches[0].clientX
-      );
-
+      return;
     }
+
+    updateSlider(
+      event.touches[0].clientX
+    );
 
   };
 
@@ -136,19 +193,15 @@ export default function InteractivePortrait() {
     };
 
 
-    if (isDragging) {
+    window.addEventListener(
+      'mouseup',
+      stopDragging
+    );
 
-      window.addEventListener(
-        'mouseup',
-        stopDragging
-      );
-
-      window.addEventListener(
-        'touchend',
-        stopDragging
-      );
-
-    }
+    window.addEventListener(
+      'touchend',
+      stopDragging
+    );
 
 
     return () => {
@@ -165,7 +218,37 @@ export default function InteractivePortrait() {
 
     };
 
-  }, [isDragging]);
+  }, []);
+
+
+  /* =========================================
+     FORMAL PARALLAX
+  ========================================= */
+
+  const normalizedX =
+    (mousePercent.x - 50) / 50;
+
+  const normalizedY =
+    (mousePercent.y - 50) / 50;
+
+
+  /*
+    Very subtle movement.
+    We don't want the formal portrait
+    to feel like a game card.
+  */
+
+  const imageMoveX =
+    normalizedX * -5;
+
+  const imageMoveY =
+    normalizedY * -3;
+
+  const rotateY =
+    normalizedX * 0.7;
+
+  const rotateX =
+    normalizedY * -0.5;
 
 
   return (
@@ -179,11 +262,23 @@ export default function InteractivePortrait() {
 
       onMouseEnter={() => {
         setIsHovered(true);
+
+        if (portraitMode === 'formal' && !formalScanPlayed) {
+          setFormalScanPlayed(true);
+        }
       }}
 
       onMouseLeave={() => {
+
         setIsHovered(false);
+
         setIsDragging(false);
+
+        setMousePercent({
+          x: 50,
+          y: 50,
+        });
+
       }}
 
       onTouchMove={
@@ -203,15 +298,11 @@ export default function InteractivePortrait() {
         sm:min-h-[540px]
         lg:min-h-[580px]
 
-        bg-[#f5f5f3]
-
         overflow-hidden
 
+        bg-[#f7f7f5]
+
         select-none
-
-        cursor-ew-resize
-
-        group
       "
     >
 
@@ -221,14 +312,20 @@ export default function InteractivePortrait() {
       ====================================== */}
 
       <div
-        className="
+        className={`
           absolute
           inset-0
 
           pointer-events-none
 
-          opacity-[0.045]
-        "
+          transition-opacity
+          duration-700
+
+          ${portraitMode === 'digital'
+            ? 'opacity-[0.045]'
+            : 'opacity-[0.025]'
+          }
+        `}
 
         style={{
           backgroundImage: `
@@ -246,47 +343,129 @@ export default function InteractivePortrait() {
           `,
 
           backgroundSize:
-            '24px 24px',
+            portraitMode === 'digital'
+              ? '24px 24px'
+              : '32px 32px',
         }}
       />
 
 
       {/* =====================================
-          TOP LEFT STATUS
+          DIGITAL MODE
       ====================================== */}
 
       <div
-        className="
+        className={`
           absolute
+          inset-0
 
-          top-4
-          left-4
+          transition-all
+          duration-700
+          ease-out
 
-          z-40
-
-          pointer-events-none
-        "
+          ${portraitMode === 'digital'
+            ? `
+                  opacity-100
+                  translate-x-0
+                  scale-100
+                  pointer-events-auto
+                `
+            : `
+                  opacity-0
+                  -translate-x-5
+                  scale-[0.99]
+                  pointer-events-none
+                `
+          }
+        `}
       >
+
+
+        {/* =================================
+            DIGITAL TOP LEFT
+        ================================== */}
 
         <div
           className="
-            flex
-            items-center
+            absolute
 
-            bg-white/90
+            top-4
+            left-4
 
-            backdrop-blur-sm
+            z-40
 
-            border
-            border-gray-200
-
-            px-2.5
-            py-1.5
+            pointer-events-none
           "
         >
 
-          <span
+          <div
             className="
+              bg-white/90
+
+              backdrop-blur-sm
+
+              border
+              border-gray-200
+
+              px-2.5
+              py-1.5
+            "
+          >
+
+            <span
+              className="
+                text-[8px]
+                sm:text-[9px]
+
+                font-mono
+
+                tracking-[0.08em]
+
+                text-gray-500
+              "
+            >
+
+              {isHovered
+                ? `X: ${mouseCoords.x} Y: ${mouseCoords.y}`
+                : 'INTERACTIVE PORTRAIT'
+              }
+
+            </span>
+
+          </div>
+
+        </div>
+
+
+        {/* =================================
+            DIGITAL TOP RIGHT
+        ================================== */}
+
+        <div
+          className="
+            absolute
+
+            top-4
+            right-4
+
+            z-40
+
+            pointer-events-none
+          "
+        >
+
+          <div
+            className="
+              bg-white/90
+
+              backdrop-blur-sm
+
+              border
+              border-gray-200
+
+              px-2.5
+              py-1.5
+
               text-[8px]
               sm:text-[9px]
 
@@ -294,452 +473,350 @@ export default function InteractivePortrait() {
 
               tracking-[0.08em]
 
-              text-gray-500
-            "
-          >
-
-            {isHovered
-              ? `X: ${mouseCoords.x} Y: ${mouseCoords.y}`
-              : 'INTERACTIVE PORTRAIT'
-            }
-
-          </span>
-
-        </div>
-
-      </div>
-
-
-      {/* =====================================
-          TOP RIGHT
-      ====================================== */}
-
-      <div
-        className="
-          absolute
-
-          top-4
-          right-4
-
-          z-40
-
-          pointer-events-none
-        "
-      >
-
-        <div
-          className="
-            bg-white/90
-
-            backdrop-blur-sm
-
-            border
-            border-gray-200
-
-            px-2.5
-            py-1.5
-
-            text-[8px]
-            sm:text-[9px]
-
-            font-mono
-
-            tracking-[0.08em]
-
-            text-gray-400
-          "
-        >
-          DRAG SLIDER
-        </div>
-
-      </div>
-
-
-      {/* =====================================
-          CLEAN PORTRAIT
-      ====================================== */}
-
-      <div
-        className="
-          absolute
-          inset-0
-
-          overflow-hidden
-        "
-      >
-
-        <img
-          src={profilePic}
-
-          alt="John Railey Pael"
-
-          draggable="false"
-
-          className="
-            absolute
-
-            bottom-0
-            left-1/2
-
-            -translate-x-1/2
-
-            w-auto
-            h-[92%]
-
-            max-w-none
-
-            object-contain
-            object-bottom
-
-            contrast-[1.03]
-
-            select-none
-            pointer-events-none
-          "
-        />
-
-
-        {/* CLEAN LABEL */}
-
-        <div
-          className="
-            absolute
-
-            bottom-4
-            right-4
-
-            z-20
-
-            pointer-events-none
-          "
-        >
-
-          <span
-            className="
-              bg-white/90
-
-              border
-              border-gray-200
-
-              px-2
-              py-1
-
-              text-[8px]
-
-              font-mono
-              tracking-[0.12em]
-
               text-gray-400
             "
           >
-            CLEAN
-          </span>
+            DRAG SLIDER
+          </div>
 
         </div>
 
-      </div>
-
-
-      {/* =====================================
-          FILTERED PORTRAIT
-      ====================================== */}
-
-      <div
-        className="
-          absolute
-          inset-0
-
-          overflow-hidden
-
-          bg-[#ededeb]
-        "
-
-        style={{
-          clipPath: `
-            polygon(
-              0 0,
-              ${sliderPosition}% 0,
-              ${sliderPosition}% 100%,
-              0 100%
-            )
-          `,
-        }}
-      >
-
-
-        {/* IMPORTANT:
-            Same exact image positioning
-            as the clean image.
-        */}
-
-        <img
-          src={profilePic}
-
-          alt="John Railey Pael filtered"
-
-          draggable="false"
-
-          className={`
-            absolute
-
-            bottom-0
-            left-1/2
-
-            -translate-x-1/2
-
-            w-auto
-            h-[92%]
-
-            max-w-none
-
-            object-contain
-            object-bottom
-
-            select-none
-            pointer-events-none
-
-            filter
-
-
-            ${activeFilter ===
-              'scanline'
-
-              ? `
-                    grayscale
-                    contrast-[2.15]
-                    brightness-[0.92]
-                  `
-
-              : ''
-            }
-
-
-            ${activeFilter ===
-              'contrast'
-
-              ? `
-                    grayscale
-                    contrast-[2.8]
-                    brightness-[0.95]
-                  `
-
-              : ''
-            }
-
-
-            ${activeFilter ===
-              'invert'
-
-              ? `
-                    invert
-                    grayscale
-                    contrast-[2.2]
-                  `
-
-              : ''
-            }
-          `}
-        />
-
 
         {/* =================================
-            SCANLINES
-        ================================== */}
-
-        {activeFilter ===
-          'scanline' && (
-
-            <div
-              className="
-              absolute
-              inset-0
-
-              z-10
-
-              pointer-events-none
-
-              opacity-[0.25]
-            "
-
-              style={{
-                backgroundImage: `
-                repeating-linear-gradient(
-                  0deg,
-
-                  #000 0px,
-                  #000 1px,
-
-                  transparent 1px,
-                  transparent 3px
-                )
-              `,
-              }}
-            />
-
-          )}
-
-
-        {/* =================================
-            MICRO GRID
-        ================================== */}
-
-        {activeFilter ===
-          'scanline' && (
-
-            <div
-              className="
-              absolute
-              inset-0
-
-              z-10
-
-              pointer-events-none
-
-              opacity-[0.08]
-            "
-
-              style={{
-                backgroundImage: `
-                repeating-linear-gradient(
-                  90deg,
-
-                  #000 0px,
-                  #000 1px,
-
-                  transparent 1px,
-                  transparent 4px
-                )
-              `,
-              }}
-            />
-
-          )}
-
-
-        {/* =================================
-            CONTRAST TEXTURE
-        ================================== */}
-
-        {activeFilter ===
-          'contrast' && (
-
-            <div
-              className="
-              absolute
-              inset-0
-
-              z-10
-
-              pointer-events-none
-
-              opacity-[0.12]
-            "
-
-              style={{
-                backgroundImage: `
-                repeating-linear-gradient(
-                  0deg,
-
-                  #000 0px,
-                  #000 1px,
-
-                  transparent 1px,
-                  transparent 5px
-                )
-              `,
-              }}
-            />
-
-          )}
-
-
-        {/* =================================
-            FILTER LABEL
+            CLEAN IMAGE
         ================================== */}
 
         <div
           className="
             absolute
+            inset-0
 
-            bottom-4
-            left-4
-
-            z-20
-
-            pointer-events-none
+            overflow-hidden
           "
         >
 
-          <span
+          <img
+            src={profilePic}
+
+            alt="John Railey Pael"
+
+            draggable="false"
+
             className="
-              bg-white/90
+              absolute
 
-              border
-              border-gray-200
+              bottom-0
+              left-1/2
 
-              px-2
-              py-1
+              -translate-x-1/2
 
-              text-[8px]
+              w-auto
+              h-[92%]
 
-              font-mono
-              tracking-[0.12em]
+              max-w-none
 
-              text-black
+              object-contain
+              object-bottom
+
+              contrast-[1.03]
+
+              select-none
+              pointer-events-none
+            "
+          />
+
+
+          {/* CLEAN LABEL */}
+
+          <div
+            className="
+              absolute
+
+              bottom-4
+              right-4
+
+              z-20
+
+              pointer-events-none
             "
           >
 
-            {activeFilter.toUpperCase()}
+            <span
+              className="
+                bg-white/90
 
-          </span>
+                border
+                border-gray-200
+
+                px-2
+                py-1
+
+                text-[8px]
+
+                font-mono
+
+                tracking-[0.12em]
+
+                text-gray-400
+              "
+            >
+              CLEAN
+            </span>
+
+          </div>
 
         </div>
 
-      </div>
+
+        {/* =================================
+            FILTERED IMAGE
+        ================================== */}
+
+        <div
+          className="
+            absolute
+            inset-0
+
+            overflow-hidden
+
+            bg-[#ededeb]
+          "
+
+          style={{
+            clipPath: `
+              polygon(
+                0 0,
+                ${sliderPosition}% 0,
+                ${sliderPosition}% 100%,
+                0 100%
+              )
+            `,
+          }}
+        >
+
+          <img
+            src={profilePic}
+
+            alt="John Railey Pael filtered"
+
+            draggable="false"
+
+            className={`
+              absolute
+
+              bottom-0
+              left-1/2
+
+              -translate-x-1/2
+
+              w-auto
+              h-[92%]
+
+              max-w-none
+
+              object-contain
+              object-bottom
+
+              select-none
+              pointer-events-none
+
+              filter
+
+              ${activeFilter ===
+                'scanline'
+
+                ? `
+                      grayscale
+                      contrast-[2.15]
+                      brightness-[0.92]
+                    `
+
+                : ''
+              }
+
+              ${activeFilter ===
+                'contrast'
+
+                ? `
+                      grayscale
+                      contrast-[2.8]
+                      brightness-[0.95]
+                    `
+
+                : ''
+              }
+
+              ${activeFilter ===
+                'invert'
+
+                ? `
+                      invert
+                      grayscale
+                      contrast-[2.2]
+                    `
+
+                : ''
+              }
+            `}
+          />
 
 
-      {/* =====================================
-          SLIDER
-      ====================================== */}
+          {/* =================================
+              SCANLINES
+          ================================== */}
 
-      <div
-        className="
-          absolute
+          {activeFilter ===
+            'scanline' && (
 
-          top-0
-          bottom-0
+              <div
+                className="
+                  absolute
+                  inset-0
 
-          z-30
+                  z-10
 
-          flex
-          items-center
-          justify-center
+                  pointer-events-none
 
-          cursor-ew-resize
-        "
+                  opacity-[0.25]
+                "
 
-        style={{
-          left:
-            `${sliderPosition}%`,
-        }}
+                style={{
+                  backgroundImage: `
+                    repeating-linear-gradient(
+                      0deg,
 
-        onMouseDown={(event) => {
+                      #000 0px,
+                      #000 1px,
 
-          event.preventDefault();
+                      transparent 1px,
+                      transparent 3px
+                    )
+                  `,
+                }}
+              />
 
-          setIsDragging(true);
-
-        }}
-
-        onTouchStart={() => {
-
-          setIsDragging(true);
-
-        }}
-      >
+            )}
 
 
-        {/* SLIDER LINE */}
+          {/* =================================
+              MICRO GRID
+          ================================== */}
+
+          {activeFilter ===
+            'scanline' && (
+
+              <div
+                className="
+                  absolute
+                  inset-0
+
+                  z-10
+
+                  pointer-events-none
+
+                  opacity-[0.08]
+                "
+
+                style={{
+                  backgroundImage: `
+                    repeating-linear-gradient(
+                      90deg,
+
+                      #000 0px,
+                      #000 1px,
+
+                      transparent 1px,
+                      transparent 4px
+                    )
+                  `,
+                }}
+              />
+
+            )}
+
+
+          {/* =================================
+              CONTRAST TEXTURE
+          ================================== */}
+
+          {activeFilter ===
+            'contrast' && (
+
+              <div
+                className="
+                  absolute
+                  inset-0
+
+                  z-10
+
+                  pointer-events-none
+
+                  opacity-[0.12]
+                "
+
+                style={{
+                  backgroundImage: `
+                    repeating-linear-gradient(
+                      0deg,
+
+                      #000 0px,
+                      #000 1px,
+
+                      transparent 1px,
+                      transparent 5px
+                    )
+                  `,
+                }}
+              />
+
+            )}
+
+
+          {/* FILTER LABEL */}
+
+          <div
+            className="
+              absolute
+
+              bottom-4
+              left-4
+
+              z-20
+
+              pointer-events-none
+            "
+          >
+
+            <span
+              className="
+                bg-white/90
+
+                border
+                border-gray-200
+
+                px-2
+                py-1
+
+                text-[8px]
+
+                font-mono
+
+                tracking-[0.12em]
+
+                text-black
+              "
+            >
+              {activeFilter.toUpperCase()}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        {/* =================================
+            SLIDER
+        ================================== */}
 
         <div
           className="
@@ -748,207 +825,822 @@ export default function InteractivePortrait() {
             top-0
             bottom-0
 
-            w-px
-
-            bg-white
-
-            shadow-[0_0_5px_rgba(0,0,0,0.15)]
-          "
-        />
-
-
-        {/* SLIDER HANDLE */}
-
-        <div
-          className="
-            relative
-
-            w-6
-            h-12
-
-            bg-white
-
-            border
-            border-gray-300
-
-            rounded-r-full
-
-            shadow-sm
+            z-30
 
             flex
             items-center
             justify-center
 
-            transition-transform
-            duration-200
-
-            hover:scale-105
-            active:scale-95
+            cursor-ew-resize
           "
+
+          style={{
+            left:
+              `${sliderPosition}%`,
+          }}
+
+          onMouseDown={(event) => {
+
+            event.preventDefault();
+
+            setIsDragging(true);
+
+          }}
+
+          onTouchStart={() => {
+
+            setIsDragging(true);
+
+          }}
         >
+
+          {/* LINE */}
 
           <div
             className="
+              absolute
+
+              top-0
+              bottom-0
+
+              w-px
+
+              bg-white
+
+              shadow-[0_0_5px_rgba(0,0,0,0.15)]
+            "
+          />
+
+
+          {/* HANDLE */}
+
+          <div
+            className="
+              relative
+
+              w-6
+              h-12
+
+              bg-white
+
+              border
+              border-gray-300
+
+              rounded-r-full
+
+              shadow-sm
+
               flex
-              flex-col
-
               items-center
+              justify-center
 
-              gap-1
+              transition-transform
+              duration-200
+
+              hover:scale-105
+              active:scale-95
             "
           >
 
-            <span
+            <div
               className="
-                w-1
-                h-1
+                flex
+                flex-col
 
-                rounded-full
+                items-center
 
-                bg-gray-400
+                gap-1
               "
-            />
+            >
 
-            <span
-              className="
-                w-1
-                h-1
+              <span
+                className="
+                  w-1
+                  h-1
 
-                rounded-full
+                  rounded-full
 
-                bg-gray-400
-              "
-            />
+                  bg-gray-400
+                "
+              />
 
-            <span
-              className="
-                w-1
-                h-1
+              <span
+                className="
+                  w-1
+                  h-1
 
-                rounded-full
+                  rounded-full
 
-                bg-gray-400
-              "
-            />
+                  bg-gray-400
+                "
+              />
+
+              <span
+                className="
+                  w-1
+                  h-1
+
+                  rounded-full
+
+                  bg-gray-400
+                "
+              />
+
+            </div>
 
           </div>
 
         </div>
 
+
+        {/* =================================
+    FILTER CONTROLS — BOTTOM
+================================= */}
+
+        {portraitMode === 'digital' && (
+
+          <div
+            className="
+      absolute
+      bottom-5
+      left-1/2
+      -translate-x-1/2
+
+      z-40
+
+      flex
+      items-center
+
+      bg-white/95
+      backdrop-blur-md
+
+      border
+      border-gray-200
+
+      p-1
+
+      shadow-[0_8px_30px_rgba(0,0,0,0.035)]
+    "
+          >
+
+            {[
+              {
+                id: 'scanline',
+                label: 'SCANLINE',
+              },
+              {
+                id: 'contrast',
+                label: 'CONTRAST',
+              },
+              {
+                id: 'invert',
+                label: 'INVERT',
+              },
+            ].map((filter) => {
+
+              const active =
+                activeFilter === filter.id;
+
+              return (
+
+                <button
+                  key={filter.id}
+                  type="button"
+
+                  onMouseDown={(event) => {
+                    event.stopPropagation();
+                  }}
+
+                  onClick={(event) => {
+                    event.stopPropagation();
+
+                    setActiveFilter(
+                      filter.id
+                    );
+                  }}
+
+                  className={`
+            min-h-[32px]
+
+            px-3
+            sm:px-4
+
+            flex
+            items-center
+            justify-center
+
+            whitespace-nowrap
+
+            text-[7px]
+            sm:text-[8px]
+            lg:text-[9px]
+
+            font-mono
+            font-medium
+
+            tracking-[0.08em]
+
+            transition-all
+            duration-300
+
+            ${active
+                      ? `
+                    bg-black
+                    text-white
+                  `
+                      : `
+                    bg-transparent
+                    text-gray-400
+
+                    hover:bg-gray-100
+                    hover:text-black
+                  `
+                    }
+          `}
+                >
+                  {filter.label}
+                </button>
+
+              );
+
+            })}
+
+          </div>
+
+        )}
+
       </div>
 
 
       {/* =====================================
-          FILTER CONTROLS
+          FORMAL MODE
       ====================================== */}
 
       <div
-        className="
+        className={`
           absolute
+          inset-0
 
-          bottom-4
-          left-1/2
+          overflow-hidden
 
-          -translate-x-1/2
+          transition-all
+          duration-700
+          ease-out
 
-          z-40
+          ${portraitMode === 'formal'
+            ? `
+                  opacity-100
+                  translate-x-0
+                  scale-100
+                  pointer-events-auto
+                `
+            : `
+                  opacity-0
+                  translate-x-5
+                  scale-[0.99]
+                  pointer-events-none
+                `
+          }
+        `}
+      >
 
-          flex
-          items-center
 
-          bg-white/95
+        {/* =================================
+            SOFT BACKGROUND
+        ================================== */}
 
-          backdrop-blur-sm
+        <div
+          className="
+            absolute
+            inset-0
 
-          border
-          border-gray-200
+            bg-gradient-to-b
+            from-white/30
+            via-transparent
+            to-black/[0.015]
 
-          p-1
-        "
+            pointer-events-none
+          "
+        />
+
+
+        {/* =================================
+            CURSOR SPOTLIGHT
+        ================================== */}
+
+        <div
+          className="
+            absolute
+            inset-0
+
+            pointer-events-none
+
+            transition-opacity
+            duration-500
+          "
+
+          style={{
+            opacity:
+              isHovered
+                ? 1
+                : 0,
+
+            background: `
+              radial-gradient(
+                320px circle at
+                ${mousePercent.x}%
+                ${mousePercent.y}%,
+
+                rgba(
+                  0,
+                  0,
+                  0,
+                  0.045
+                ),
+
+                transparent 68%
+              )
+            `,
+          }}
+        />
+
+
+        {/* =================================
+            TOP LABEL
+        ================================== */}
+
+        <div
+          className="
+            absolute
+
+            top-5
+            left-5
+
+            sm:top-6
+            sm:left-6
+
+            z-30
+
+            flex
+            items-center
+
+            gap-3
+
+            pointer-events-none
+          "
+        >
+
+          <span
+            className="
+              block
+
+              w-5
+              h-px
+
+              bg-black
+            "
+          />
+
+          <span
+            className="
+              text-[8px]
+              sm:text-[9px]
+
+              font-mono
+              font-medium
+
+              tracking-[0.16em]
+
+              text-gray-500
+            "
+          >
+            02 / FORMAL
+          </span>
+
+        </div>
+
+
+        {/* =================================
+            TOP RIGHT STATUS
+        ================================== */}
+
+        <div
+          className="
+            absolute
+
+            top-5
+            right-5
+
+            sm:top-6
+            sm:right-6
+
+            z-30
+
+            flex
+            items-center
+
+            gap-2
+
+            pointer-events-none
+          "
+        >
+
+          <span
+            className={`
+              block
+
+              w-1.5
+              h-1.5
+
+              rounded-full
+
+              transition-all
+              duration-500
+
+              ${isHovered
+                ? `
+                      bg-black
+                      scale-100
+                    `
+                : `
+                      bg-gray-300
+                      scale-75
+                    `
+              }
+            `}
+          />
+
+
+          <span
+            className="
+              hidden
+              sm:block
+
+              text-[8px]
+
+              font-mono
+
+              tracking-[0.12em]
+
+              text-gray-400
+            "
+          >
+            PORTRAIT
+          </span>
+
+        </div>
+
+
+        {/* =================================
+            BLUE ACCENT
+        ================================== */}
+
+        <div
+          className="
+            absolute
+
+            left-5
+            sm:left-6
+
+            top-[72px]
+
+            z-20
+
+            pointer-events-none
+          "
+        >
+
+          <div
+            className={`
+              w-px
+
+              bg-black
+
+              transition-all
+              duration-700
+              ease-out
+
+              ${isHovered
+                ? 'h-14'
+                : 'h-7'
+              }
+            `}
+          />
+
+        </div>
+
+
+        {/* =================================
+            FORMAL IMAGE
+        ================================== */}
+
+        <div
+          className="
+            absolute
+            inset-0
+
+            flex
+            items-end
+            justify-center
+
+            pointer-events-none
+
+            [perspective:1200px]
+          "
+        >
+
+          <img
+            src={formalPic}
+
+            alt="John Railey Pael formal portrait"
+
+            draggable="false"
+
+            className="
+              absolute
+
+              bottom-0
+              left-1/2
+
+              w-auto
+
+              h-[94%]
+              sm:h-[95%]
+              lg:h-[96%]
+
+              max-w-none
+
+              object-contain
+              object-bottom
+
+              select-none
+
+              transition-transform
+              duration-500
+              ease-out
+
+              drop-shadow-[0_20px_35px_rgba(0,0,0,0.04)]
+            "
+
+            style={{
+              transform: `
+                translateX(
+                  calc(
+                    -50% +
+                    ${imageMoveX}px
+                  )
+                )
+
+                translateY(
+                  ${imageMoveY}px
+                )
+
+                rotateX(
+                  ${rotateX}deg
+                )
+
+                rotateY(
+                  ${rotateY}deg
+                )
+
+                scale(
+                  ${isHovered
+                  ? 1.008
+                  : 1
+                }
+                )
+              `,
+            }}
+          />
+
+        </div>
+
+
+        {/* =================================
+            SOFT FOCUS LENS
+            Only appears while exploring portrait 02.
+        ================================== */}
+
+        <div
+          className="
+            absolute
+            inset-0
+            z-10
+            pointer-events-none
+            transition-opacity
+            duration-300
+          "
+          style={{
+            opacity: isHovered ? 1 : 0,
+            background: `
+              radial-gradient(
+                105px circle at
+                ${mousePercent.x}%
+                ${mousePercent.y}%,
+                rgba(255,255,255,0.13) 0%,
+                rgba(255,255,255,0.055) 42%,
+                transparent 72%
+              )
+            `,
+          }}
+        />
+
+
+        {/* =================================
+            ONE-TIME BLUE SCAN REVEAL
+        ================================== */}
+
+        {formalScanPlayed && (
+          <div
+            className="
+              formal-scan-line
+              absolute
+              left-[8%]
+              right-[8%]
+              top-0
+              z-20
+              h-px
+              bg-black/70
+              pointer-events-none
+              shadow-[0_0_14px_rgba(59,130,246,0.28)]
+            "
+          />
+        )}
+
+
+        {/* =================================
+            SUBTLE BOTTOM FADE
+        ================================== */}
+
+        <div
+          className="
+            absolute
+
+            left-0
+            right-0
+            bottom-0
+
+            h-24
+
+            bg-gradient-to-t
+            from-[#f7f7f5]/35
+            to-transparent
+
+            pointer-events-none
+          "
+        />
+
+      </div>
+
+
+      {/* =====================================
+    PORTRAIT SWITCHER — TOP CENTER
+====================================== */}
+
+      <div
+        className="
+    absolute
+
+    top-4
+    sm:top-5
+
+    left-1/2
+    -translate-x-1/2
+
+    z-50
+
+    flex
+    items-center
+
+    bg-white/95
+    backdrop-blur-md
+
+    border
+    border-gray-200
+
+    p-1
+
+    shadow-[0_8px_30px_rgba(0,0,0,0.025)]
+  "
       >
 
         {[
           {
-            id: 'scanline',
-            label: 'SCANLINE',
+            id: 'digital',
+            number: '01',
           },
-
           {
-            id: 'contrast',
-            label: 'CONTRAST',
+            id: 'formal',
+            number: '02',
           },
+        ].map((item) => {
 
-          {
-            id: 'invert',
-            label: 'INVERT',
-          },
+          const active =
+            portraitMode === item.id;
 
-        ].map((mode) => (
+          return (
 
-          <button
-            key={mode.id}
+            <button
+              key={item.id}
+              type="button"
 
-            type="button"
+              onMouseDown={(event) => {
+                event.stopPropagation();
+              }}
 
-            onMouseDown={(event) => {
-              event.stopPropagation();
-            }}
+              onClick={(event) => {
+                event.stopPropagation();
 
-            onClick={(event) => {
+                setPortraitMode(
+                  item.id
+                );
+              }}
 
-              event.stopPropagation();
-
-              setActiveFilter(
-                mode.id
-              );
-
-            }}
-
-            className={`
-              px-2.5
-              py-1.5
-
-              whitespace-nowrap
-
-              text-[7px]
-              sm:text-[8px]
-              lg:text-[9px]
-
-              font-mono
-
-              tracking-[0.08em]
-
-              transition-colors
-              duration-200
-
-
-              ${activeFilter ===
-                mode.id
-
-                ? `
-                      bg-black
-                      text-white
-                    `
-
-                : `
-                      bg-transparent
-                      text-gray-400
-
-                      hover:text-black
-                      hover:bg-gray-100
-                    `
+              aria-label={
+                item.id === 'digital'
+                  ? 'View digital portrait'
+                  : 'View formal portrait'
               }
-            `}
-          >
 
-            {mode.label}
+              className={`
+          min-w-[46px]
+          sm:min-w-[52px]
 
-          </button>
+          h-8
 
-        ))}
+          flex
+          items-center
+          justify-center
+
+          text-[8px]
+          sm:text-[9px]
+
+          font-mono
+          font-semibold
+
+          tracking-[0.1em]
+
+          transition-all
+          duration-300
+
+          ${active
+                  ? `
+                  bg-black
+                  text-white
+                `
+                  : `
+                  bg-transparent
+                  text-gray-400
+
+                  hover:bg-gray-100
+                  hover:text-black
+                `
+                }
+        `}
+            >
+              {item.number}
+            </button>
+
+          );
+
+        })}
 
       </div>
 
+      <style>{`
+        @keyframes formalPortraitScan {
+          0% {
+            transform: translateY(0);
+            opacity: 0;
+          }
+          8% {
+            opacity: 0.75;
+          }
+          88% {
+            opacity: 0.55;
+          }
+          100% {
+            transform: translateY(560px);
+            opacity: 0;
+          }
+        }
+
+        .formal-scan-line {
+          animation: formalPortraitScan 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @media (min-width: 640px) {
+          @keyframes formalPortraitScan {
+            0% { transform: translateY(0); opacity: 0; }
+            8% { opacity: 0.75; }
+            88% { opacity: 0.55; }
+            100% { transform: translateY(650px); opacity: 0; }
+          }
+        }
+      `}</style>
+
     </div>
+
   );
+
 }
