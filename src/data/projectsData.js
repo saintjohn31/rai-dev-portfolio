@@ -88,7 +88,7 @@ export const projects = [
             'BulSU E-Handbook — Bustos Campus',
 
         subtitle:
-            'Android Mobile Application · Proposed Student Handbook',
+            'Android Studio · Proposed Student Handbook',
 
         category:
             'MOBILE DEVELOPMENT',
@@ -115,7 +115,8 @@ export const projects = [
             'BulSU E-Handbook is a proposed Android mobile application developed as a digital companion for students of Bulacan State University — Bustos Campus. The application provides a centralized and mobile-friendly way to access important handbook information, campus policies, schedules, student services, downloadable forms, campus resources, and other useful university information. The project focuses on making essential campus references easier to access through a clean and convenient Android interface, including content designed for quick reference and offline availability.',
 
         tags: [
-            'Android',
+            'Android Studio',
+            'Java',
             'Mobile Development',
             'BulSU Bustos',
             'E-Handbook',
