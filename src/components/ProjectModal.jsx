@@ -10,7 +10,8 @@ import {
   ArrowUpRight,
   ShieldCheck,
   Layers,
-  Sparkles
+  Sparkles,
+  Download
 } from 'lucide-react';
 import { GithubIcon } from './Icons';
 
@@ -63,6 +64,33 @@ export default function ProjectModal({ project, onClose }) {
           </div>
 
           <div className="flex items-center gap-2">
+            {project.figmaUrl && (
+              <a
+                onMouseEnter={playHover}
+                onClick={playClick}
+                href={project.figmaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono tracking-wider bg-black text-white hover:bg-blue-600 transition-colors"
+              >
+                <span>OPEN FIGMA</span>
+                <ArrowUpRight size={13} />
+              </a>
+            )}
+
+            {project.downloadUrl && (
+              <a
+                onMouseEnter={playHover}
+                onClick={playClick}
+                href={project.downloadUrl}
+                download={project.downloadName || 'application.apk'}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono tracking-wider bg-black text-white hover:bg-blue-600 transition-colors"
+              >
+                <span>DOWNLOAD APK</span>
+                <Download size={13} />
+              </a>
+            )}
+
             {project.liveUrl && (
               <a
                 onMouseEnter={playHover}
@@ -101,11 +129,11 @@ export default function ProjectModal({ project, onClose }) {
                 setActiveTab('preview');
               }}
               className={`px-3 py-1.5 font-semibold transition-all border ${activeTab === 'preview'
-                  ? 'bg-black text-white border-black shadow-sm'
-                  : 'bg-white text-gray-500 border-gray-200 hover:text-black'
+                ? 'bg-black text-white border-black shadow-sm'
+                : 'bg-white text-gray-500 border-gray-200 hover:text-black'
                 }`}
             >
-              LIVE LANDING PAGE
+              {project.figmaUrl ? 'DESIGN PREVIEW' : project.downloadUrl ? 'APP PREVIEW' : 'LIVE LANDING PAGE'}
             </button>
 
             <button
@@ -115,8 +143,8 @@ export default function ProjectModal({ project, onClose }) {
                 setActiveTab('details');
               }}
               className={`px-3 py-1.5 font-semibold transition-all border ${activeTab === 'details'
-                  ? 'bg-black text-white border-black shadow-sm'
-                  : 'bg-white text-gray-500 border-gray-200 hover:text-black'
+                ? 'bg-black text-white border-black shadow-sm'
+                : 'bg-white text-gray-500 border-gray-200 hover:text-black'
                 }`}
             >
               SPECIFICATIONS & STACK
@@ -136,8 +164,8 @@ export default function ProjectModal({ project, onClose }) {
                 }}
                 title="Desktop View (Full Width)"
                 className={`flex items-center gap-1 px-2.5 py-1 transition-colors ${viewportMode === 'desktop'
-                    ? 'bg-black text-white font-bold'
-                    : 'text-gray-400 hover:text-black'
+                  ? 'bg-black text-white font-bold'
+                  : 'text-gray-400 hover:text-black'
                   }`}
               >
                 <Monitor size={12} />
@@ -152,8 +180,8 @@ export default function ProjectModal({ project, onClose }) {
                 }}
                 title="Tablet View (768px)"
                 className={`flex items-center gap-1 px-2.5 py-1 transition-colors ${viewportMode === 'tablet'
-                    ? 'bg-black text-white font-bold'
-                    : 'text-gray-400 hover:text-black'
+                  ? 'bg-black text-white font-bold'
+                  : 'text-gray-400 hover:text-black'
                   }`}
               >
                 <Tablet size={12} />
@@ -168,8 +196,8 @@ export default function ProjectModal({ project, onClose }) {
                 }}
                 title="Mobile View (390px)"
                 className={`flex items-center gap-1 px-2.5 py-1 transition-colors ${viewportMode === 'mobile'
-                    ? 'bg-black text-white font-bold'
-                    : 'text-gray-400 hover:text-black'
+                  ? 'bg-black text-white font-bold'
+                  : 'text-gray-400 hover:text-black'
                   }`}
               >
                 <Smartphone size={12} />
@@ -235,6 +263,97 @@ export default function ProjectModal({ project, onClose }) {
                     />
                   </div>
                 </div>
+              ) : project.figmaUrl ? (
+                <div className="w-full max-w-3xl bg-white border border-gray-300 shadow-xl overflow-hidden">
+                  <div className="px-4 py-2.5 bg-gray-100 border-b border-gray-200 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Layers size={14} className="text-gray-500 shrink-0" />
+                      <span className="text-[10px] sm:text-xs font-mono text-gray-600 truncate">
+                        FIGMA · MOBILE UI/UX DESIGN
+                      </span>
+                    </div>
+
+                    <span className="text-[9px] font-mono tracking-wider text-blue-600 shrink-0">
+                      DESIGN
+                    </span>
+                  </div>
+
+                  <div className="bg-[#f7f7f5] p-3 sm:p-5 flex justify-center">
+                    <img
+                      src={project.image}
+                      alt={`${project.title} Figma design preview`}
+                      className="w-full max-h-[600px] h-auto object-contain border border-gray-200 bg-white"
+                    />
+                  </div>
+
+                  <div className="p-5 sm:p-6 border-t border-gray-200 bg-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                      <p className="text-[10px] font-mono tracking-[0.16em] text-gray-400 mb-1">
+                        FIGMA PROJECT
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Open the complete design in Figma or view the project specifications and design details.
+                      </p>
+                    </div>
+
+                    <a
+                      onMouseEnter={playHover}
+                      onClick={playClick}
+                      href={project.figmaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 inline-flex items-center justify-center gap-2 bg-black text-white hover:bg-blue-600 transition-colors px-5 py-3 text-[10px] font-mono tracking-[0.1em]"
+                    >
+                      <ArrowUpRight size={14} />
+                      VIEW FIGMA DESIGN
+                    </a>
+                  </div>
+                </div>
+              ) : project.downloadUrl ? (
+                <div className="w-full max-w-3xl bg-white border border-gray-300 shadow-xl overflow-hidden">
+                  <div className="px-4 py-2.5 bg-gray-100 border-b border-gray-200 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Smartphone size={14} className="text-gray-500 shrink-0" />
+                      <span className="text-[10px] sm:text-xs font-mono text-gray-600 truncate">
+                        ANDROID APPLICATION · {project.downloadName || 'APK'}
+                      </span>
+                    </div>
+
+                    <span className="text-[9px] font-mono tracking-wider text-blue-600 shrink-0">
+                      APK
+                    </span>
+                  </div>
+
+                  <div className="bg-[#f7f7f5] p-3 sm:p-5">
+                    <img
+                      src={project.image}
+                      alt={`${project.title} mobile application preview`}
+                      className="w-full h-auto object-contain border border-gray-200 bg-white"
+                    />
+                  </div>
+
+                  <div className="p-5 sm:p-6 border-t border-gray-200 bg-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                      <p className="text-[10px] font-mono tracking-[0.16em] text-gray-400 mb-1">
+                        ANDROID PACKAGE
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Download the APK to install and test this Android application on a compatible device.
+                      </p>
+                    </div>
+
+                    <a
+                      onMouseEnter={playHover}
+                      onClick={playClick}
+                      href={project.downloadUrl}
+                      download={project.downloadName || 'application.apk'}
+                      className="shrink-0 inline-flex items-center justify-center gap-2 bg-black text-white hover:bg-blue-600 transition-colors px-5 py-3 text-[10px] font-mono tracking-[0.1em]"
+                    >
+                      <Download size={14} />
+                      DOWNLOAD APK
+                    </a>
+                  </div>
+                </div>
               ) : (
                 <div className="p-12 text-center text-gray-500 font-mono text-xs">
                   No live preview URL available for this project.
@@ -243,7 +362,40 @@ export default function ProjectModal({ project, onClose }) {
 
               {/* Bottom Quick Help Note */}
               <div className="mt-3 flex items-center justify-between w-full max-w-xl text-[10px] font-mono text-gray-500 px-2">
-                <span>⚡ Interactive iframe — scroll and interact directly</span>
+                <span>
+                  {project.figmaUrl
+                    ? 'Figma UI/UX design preview — open the complete design in Figma'
+                    : project.downloadUrl
+                      ? 'Android application preview — APK available for download'
+                      : '⚡ Interactive iframe — scroll and interact directly'}
+                </span>
+                {project.figmaUrl && (
+                  <a
+                    onMouseEnter={playHover}
+                    onClick={playClick}
+                    href={project.figmaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-black underline flex items-center gap-1"
+                  >
+                    <span>Open complete Figma design</span>
+                    <ArrowUpRight size={10} />
+                  </a>
+                )}
+
+                {project.downloadUrl && (
+                  <a
+                    onMouseEnter={playHover}
+                    onClick={playClick}
+                    href={project.downloadUrl}
+                    download={project.downloadName || 'application.apk'}
+                    className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-mono tracking-wider bg-black text-white hover:bg-blue-600 transition-all duration-300"
+                  >
+                    <span>DOWNLOAD ANDROID APK</span>
+                    <Download size={14} />
+                  </a>
+                )}
+
                 {project.liveUrl && (
                   <a
                     onMouseEnter={playHover}
@@ -308,6 +460,20 @@ export default function ProjectModal({ project, onClose }) {
 
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-gray-200">
+                {project.figmaUrl && (
+                  <a
+                    onMouseEnter={playHover}
+                    onClick={playClick}
+                    href={project.figmaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-mono tracking-wider bg-black text-white hover:bg-blue-600 transition-all duration-300"
+                  >
+                    <span>OPEN FIGMA DESIGN</span>
+                    <ArrowUpRight size={14} />
+                  </a>
+                )}
+
                 {project.liveUrl && (
                   <a
                     onMouseEnter={playHover}
@@ -321,16 +487,19 @@ export default function ProjectModal({ project, onClose }) {
                   </a>
                 )}
 
-                <button
-                  onMouseEnter={playHover}
-                  onClick={() => {
-                    alert(`Source code repository available upon request: ${project.title}`);
-                  }}
-                  className="flex items-center gap-2 px-6 py-3.5 text-xs font-mono tracking-wider border border-gray-300 hover:bg-gray-100 text-black transition-all"
-                >
-                  <GithubIcon className="w-4 h-4" />
-                  <span>REPOSITORY</span>
-                </button>
+                {project.repoUrl && (
+                  <a
+                    onMouseEnter={playHover}
+                    onClick={playClick}
+                    href={project.repoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-6 py-3.5 text-xs font-mono tracking-wider border border-gray-300 hover:bg-gray-100 text-black transition-all"
+                  >
+                    <GithubIcon className="w-4 h-4" />
+                    <span>REPOSITORY</span>
+                  </a>
+                )}
               </div>
             </div>
           )}

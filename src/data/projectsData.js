@@ -2,14 +2,17 @@ import {
     Globe,
     Gamepad2,
     Library,
+    Smartphone,
+    Palette,
 } from 'lucide-react';
 
 import astroclashPreview from '../images/astroclash-preview.jpg';
+import handbookPreview from '../images/handbook-preview.png';
+import gomsPreview from '../images/goms-preview.jpg';
 import libraryPreview from '../images/edp-preview.jpg';
 import masPreview from '../images/mas-preview.png';
 import soamcPreview from '../images/soamc-preview.jpg';
 import stayscapePreview from '../images/stayscape-preview.png';
-
 
 export const projects = [
 
@@ -35,6 +38,9 @@ export const projects = [
             'https://astroclash-mu.vercel.app/',
 
         repoUrl:
+            null,
+
+        downloadUrl:
             null,
 
         image:
@@ -70,13 +76,145 @@ export const projects = [
 
 
     /* =========================================
-       02 — LIBRARY MANAGEMENT SYSTEM
+       02 — BULSU E-HANDBOOK
     ========================================= */
 
     {
         id: 2,
 
         number: '02',
+
+        title:
+            'BulSU E-Handbook — Bustos Campus',
+
+        subtitle:
+            'Android Mobile Application · Proposed Student Handbook',
+
+        category:
+            'MOBILE DEVELOPMENT',
+
+        liveUrl:
+            null,
+
+        repoUrl:
+            null,
+
+        downloadUrl:
+            'https://github.com/saintjohn31/rai-dev-portfolio/releases/download/bulsu-handbook-v1.0/bulsuEHandBook.apk',
+
+        downloadName:
+            'BulSU-E-Handbook.apk',
+
+        image:
+            handbookPreview,
+
+        description:
+            'A proposed Android e-handbook for Bulacan State University — Bustos Campus, designed to give students quick access to campus policies, schedules, services, downloadable forms, and essential university resources.',
+
+        fullDescription:
+            'BulSU E-Handbook is a proposed Android mobile application developed as a digital companion for students of Bulacan State University — Bustos Campus. The application provides a centralized and mobile-friendly way to access important handbook information, campus policies, schedules, student services, downloadable forms, campus resources, and other useful university information. The project focuses on making essential campus references easier to access through a clean and convenient Android interface, including content designed for quick reference and offline availability.',
+
+        tags: [
+            'Android',
+            'Mobile Development',
+            'BulSU Bustos',
+            'E-Handbook',
+            'APK',
+            'Student Resources',
+            'Offline Content',
+        ],
+
+        features: [
+            'Digital student handbook for BulSU Bustos Campus',
+            'Campus policies and handbook information',
+            'Student schedule and academic references',
+            'Downloadable forms and campus resources',
+            'Campus map and contact directory',
+            'Quick-access navigation for essential information',
+            'Offline-ready handbook content',
+            'Installable Android APK',
+        ],
+
+        icon:
+            Smartphone,
+    },
+
+
+    /* =========================================
+   03 — GOMS OUTPUT
+========================================= */
+
+    {
+        id: 3,
+
+        number: '03',
+
+        title:
+            'GOMS Output — School Mobile Application',
+
+        subtitle:
+            'Figma · Mobile Application UI/UX Design',
+
+        category:
+            'UI / UX DESIGN',
+
+        liveUrl:
+            null,
+
+        figmaUrl:
+            'https://www.figma.com/design/7lsKIkL2odBRDNEWjBuPTv/GOMS-Output?node-id=1-205&t=J9JsKyJQPIIbmUo5-0',
+
+        repoUrl:
+            null,
+
+        downloadUrl:
+            null,
+
+        image:
+            gomsPreview,
+
+        // Dedicated positioning for the project-card thumbnail
+        imagePosition:
+            'center 55%',
+
+        description:
+            'A school mobile application UI/UX project designed in Figma, featuring a clean and modern interface with onboarding, sign-in, account creation, and user-focused mobile navigation.',
+
+        fullDescription:
+            'GOMS Output is a school mobile application UI/UX design project created in Figma. The project focuses on designing a clean, organized, and user-friendly mobile interface while applying principles of visual hierarchy, spacing, typography, consistency, and intuitive navigation. The design includes an onboarding experience, sign-in and account creation interfaces, and other mobile application screens developed as part of an academic project.',
+
+        tags: [
+            'Figma',
+            'UI / UX Design',
+            'Mobile Application',
+            'School Project',
+            'Prototyping',
+            'Interface Design',
+        ],
+
+        features: [
+            'School mobile application UI/UX project',
+            'Mobile-first interface design',
+            'Clean onboarding experience',
+            'Sign-in and account creation interfaces',
+            'User-centered visual hierarchy',
+            'Consistent spacing and typography',
+            'Figma-based interface prototyping',
+        ],
+
+        icon:
+            Palette,
+    },
+
+
+    /* =========================================
+       04 — LIBRARY MANAGEMENT SYSTEM
+    ========================================= */
+
+    {
+        id: 4,
+
+        number: '04',
 
         title:
             'Library Management System',
@@ -92,6 +230,9 @@ export const projects = [
 
         repoUrl:
             'https://github.com/Luckyyy-spd/LibraryManagementSystem',
+
+        downloadUrl:
+            null,
 
         image:
             libraryPreview,
@@ -125,13 +266,13 @@ export const projects = [
 
 
     /* =========================================
-       03 — MAS-SNP
+       05 — MAS-SNP
     ========================================= */
 
     {
-        id: 3,
+        id: 5,
 
-        number: '03',
+        number: '05',
 
         title:
             'Ministry of Altar Servers — Sto. Niño Parish (MAS-SNP)',
@@ -146,6 +287,9 @@ export const projects = [
             'https://mas-snp.vercel.app/',
 
         repoUrl:
+            null,
+
+        downloadUrl:
             null,
 
         image:
@@ -179,13 +323,13 @@ export const projects = [
 
 
     /* =========================================
-       04 — SOAMC
+       06 — SOAMC
     ========================================= */
 
     {
-        id: 4,
+        id: 6,
 
-        number: '04',
+        number: '06',
 
         title:
             'SOAMC — Cadet Registration & Monitoring System',
@@ -200,6 +344,9 @@ export const projects = [
             'https://soamc.vercel.app/',
 
         repoUrl:
+            null,
+
+        downloadUrl:
             null,
 
         image:
@@ -236,13 +383,13 @@ export const projects = [
 
 
     /* =========================================
-       05 — STAYSCAPE
+       07 — STAYSCAPE
     ========================================= */
 
     {
-        id: 5,
+        id: 7,
 
-        number: '05',
+        number: '07',
 
         title:
             'StayScape — Vacation Rental & Hotel Booking Platform',
@@ -257,6 +404,9 @@ export const projects = [
             'https://webp-d5d0e.web.app/',
 
         repoUrl:
+            null,
+
+        downloadUrl:
             null,
 
         image:

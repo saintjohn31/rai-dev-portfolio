@@ -4,6 +4,8 @@ import {
   Globe,
   ArrowUpRight,
   Maximize2,
+  Smartphone,
+  Download,
 } from 'lucide-react';
 
 import ProjectModal from './ProjectModal';
@@ -32,6 +34,20 @@ export default function Projects() {
 
     // Projects with a live website/game
     if (project.liveUrl) {
+      playOpen();
+      setSelectedProject(project);
+      return;
+    }
+
+    // Figma / UI-UX design project
+    if (project.figmaUrl) {
+      playOpen();
+      setSelectedProject(project);
+      return;
+    }
+
+    // Downloadable Android application
+    if (project.downloadUrl) {
       playOpen();
       setSelectedProject(project);
       return;
@@ -70,6 +86,14 @@ export default function Projects() {
       );
     }
 
+    if (project.downloadUrl) {
+      return 'ANDROID APK · DOWNLOADABLE';
+    }
+
+    if (project.figmaUrl) {
+      return 'FIGMA · INTERACTIVE DESIGN';
+    }
+
     return 'PROJECT PREVIEW';
 
   };
@@ -83,6 +107,14 @@ export default function Projects() {
 
     if (project.category === 'GAME DEVELOPMENT') {
       return 'PLAY GAME';
+    }
+
+    if (project.downloadUrl) {
+      return 'DOWNLOAD APK';
+    }
+
+    if (project.figmaUrl) {
+      return 'VIEW FIGMA DESIGN';
     }
 
     return 'VISIT WEBSITE';
@@ -210,8 +242,8 @@ export default function Projects() {
               "
             >
               Selected projects across web development,
-              game development, desktop applications,
-              academic work, and community-based systems.
+              mobile development, UI/UX design, game development,
+              desktop applications, academic work, and community-based systems.
             </p>
 
           </div>
@@ -509,6 +541,30 @@ export default function Projects() {
                           "
                         />
 
+                      ) : project.figmaUrl ? (
+
+                        <span
+                          className="
+                            text-[9px]
+                            font-bold
+                            font-mono
+                            text-gray-500
+                            shrink-0
+                          "
+                        >
+                          F
+                        </span>
+
+                      ) : project.downloadUrl ? (
+
+                        <Smartphone
+                          size={10}
+                          className="
+                            text-gray-400
+                            shrink-0
+                          "
+                        />
+
                       ) : (
 
                         <GithubIcon
@@ -546,7 +602,11 @@ export default function Projects() {
                       title={
                         project.liveUrl
                           ? 'View Project'
-                          : 'View Repository'
+                          : project.figmaUrl
+                            ? 'View Figma Design'
+                            : project.downloadUrl
+                              ? 'View Mobile App'
+                              : 'View Repository'
                       }
                     >
 
@@ -586,24 +646,21 @@ export default function Projects() {
 
                     <img
                       src={project.image}
-
-                      alt={`${project.title} project preview`}
-
-                      loading="lazy"
-
+                      alt={`${project.title} preview`}
                       className="
-                        w-full
-                        h-full
+                                w-full
+                                h-full
+                                object-cover
 
-                        object-cover
-                        object-top
+                                transition-transform
+                                duration-700
 
-                        transition-transform
-                        duration-700
-                        ease-out
-
-                        group-hover/preview:scale-[1.025]
-                      "
+                                group-hover:scale-[1.02]
+  "
+                      style={{
+                        objectPosition:
+                          project.imagePosition || 'center center',
+                      }}
                     />
 
 
@@ -660,7 +717,15 @@ export default function Projects() {
                         "
                       >
 
-                        {project.repoUrl && !project.liveUrl ? (
+                        {project.figmaUrl ? (
+
+                          <Maximize2 size={13} />
+
+                        ) : project.downloadUrl ? (
+
+                          <Smartphone size={13} />
+
+                        ) : project.repoUrl && !project.liveUrl ? (
 
                           <GithubIcon
                             className="
@@ -676,11 +741,15 @@ export default function Projects() {
                         )}
 
 
-                        {project.repoUrl && !project.liveUrl
-                          ? 'VIEW REPOSITORY'
-                          : project.category === 'GAME DEVELOPMENT'
-                            ? 'VIEW GAME'
-                            : 'VIEW PROJECT'
+                        {project.figmaUrl
+                          ? 'VIEW DESIGN'
+                          : project.downloadUrl
+                            ? 'VIEW MOBILE APP'
+                            : project.repoUrl && !project.liveUrl
+                              ? 'VIEW REPOSITORY'
+                              : project.category === 'GAME DEVELOPMENT'
+                                ? 'VIEW GAME'
+                                : 'VIEW PROJECT'
                         }
 
                       </span>
@@ -967,6 +1036,202 @@ export default function Projects() {
                     </>
 
                   )}
+
+
+
+                  {/* ===============================
+                      FIGMA / UI-UX DESIGN PROJECT
+                  ================================ */}
+
+                  {!project.liveUrl &&
+                    project.figmaUrl && (
+
+                      <>
+
+                        <a
+                          onMouseEnter={playHover}
+                          onClick={playClick}
+                          href={project.figmaUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="
+                            group/button
+                            inline-flex
+                            items-center
+                            justify-center
+                            gap-2
+                            min-h-[44px]
+                            bg-black
+                            text-white
+                            px-5
+                            py-3
+                            text-[9px]
+                            sm:text-[10px]
+                            font-mono
+                            tracking-[0.1em]
+                            transition-all
+                            duration-300
+                            hover:bg-blue-600
+                          "
+                        >
+                          <ArrowUpRight size={13} />
+
+                          <span>
+                            VIEW FIGMA DESIGN
+                          </span>
+                        </a>
+
+                        <button
+                          onMouseEnter={playHover}
+                          type="button"
+                          onClick={() => {
+                            playOpen();
+                            setSelectedProject(project);
+                          }}
+                          className="
+                            group/button
+                            inline-flex
+                            items-center
+                            justify-center
+                            gap-2
+                            min-h-[44px]
+                            border
+                            border-gray-300
+                            bg-white
+                            text-black
+                            px-4
+                            py-3
+                            text-[9px]
+                            sm:text-[10px]
+                            font-mono
+                            tracking-[0.08em]
+                            transition-all
+                            duration-300
+                            hover:bg-gray-100
+                            hover:border-gray-400
+                          "
+                          title="Open UI/UX design details"
+                        >
+                          <Maximize2 size={13} />
+
+                          <span>
+                            DESIGN DETAILS
+                          </span>
+                        </button>
+
+                      </>
+
+                    )}
+
+
+                  {/* ===============================
+                      DOWNLOADABLE ANDROID APK
+                  ================================ */}
+
+                  {!project.liveUrl &&
+                    project.downloadUrl && (
+
+                      <>
+
+                        <a
+                          onMouseEnter={playHover}
+                          onClick={playClick}
+                          href={project.downloadUrl}
+                          download={project.downloadName || 'application.apk'}
+                          className="
+                            group/button
+
+                            inline-flex
+                            items-center
+                            justify-center
+
+                            gap-2
+
+                            min-h-[44px]
+
+                            bg-black
+                            text-white
+
+                            px-5
+                            py-3
+
+                            text-[9px]
+                            sm:text-[10px]
+
+                            font-mono
+                            tracking-[0.1em]
+
+                            transition-all
+                            duration-300
+
+                            hover:bg-blue-600
+                          "
+                        >
+
+                          <Download size={13} />
+
+                          <span>
+                            DOWNLOAD APK
+                          </span>
+
+                        </a>
+
+
+                        <button
+                          onMouseEnter={playHover}
+                          type="button"
+
+                          onClick={() => {
+                            playOpen();
+                            setSelectedProject(project);
+                          }}
+
+                          className="
+                            group/button
+
+                            inline-flex
+                            items-center
+                            justify-center
+
+                            gap-2
+
+                            min-h-[44px]
+
+                            border
+                            border-gray-300
+
+                            bg-white
+                            text-black
+
+                            px-4
+                            py-3
+
+                            text-[9px]
+                            sm:text-[10px]
+
+                            font-mono
+                            tracking-[0.08em]
+
+                            transition-all
+                            duration-300
+
+                            hover:bg-gray-100
+                            hover:border-gray-400
+                          "
+                          title="Open Android application details"
+                        >
+
+                          <Smartphone size={13} />
+
+                          <span>
+                            APP DETAILS
+                          </span>
+
+                        </button>
+
+                      </>
+
+                    )}
 
 
                   {/* ===============================
