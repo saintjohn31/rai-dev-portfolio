@@ -25,6 +25,7 @@ const COMMANDS = {
         { command: 'whoami', description: 'Current developer identity' },
         { command: 'date', description: 'Show local date & time' },
         { command: 'clear', description: 'Clear terminal' },
+        { command: 'cls', description: 'Clear terminal' },
         { command: 'exit', description: 'Close terminal' },
     ],
 };
@@ -190,9 +191,16 @@ export default function Terminal() {
             content: rawCommand,
         };
 
-        /* CLEAR */
-        if (command === 'clear') {
+        /* ===================================================
+           CLEAR / CLS
+        ==================================================== */
+        if (
+            command === 'clear' ||
+            command === 'cls'
+        ) {
             setLines([]);
+            setInput('');
+            setHistoryIndex(-1);
             return;
         }
 
