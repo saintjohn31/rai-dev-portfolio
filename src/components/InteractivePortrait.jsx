@@ -7,6 +7,7 @@ import {
 
 import profilePic from '../images/2bg.png';
 import formalPic from '../images/1bg.png';
+import childhoodPic from '../images/3bg.png';
 
 import {
   playClick,
@@ -88,9 +89,9 @@ export default function InteractivePortrait() {
 
       const clamped =
         Math.max(
-          5,
+          2,
           Math.min(
-            95,
+            98,
             percentage
           )
         );
@@ -153,10 +154,7 @@ export default function InteractivePortrait() {
     });
 
 
-    if (
-      portraitMode === 'digital' &&
-      isDragging
-    ) {
+    if (isDragging) {
 
       updateSlider(
         event.clientX
@@ -174,7 +172,6 @@ export default function InteractivePortrait() {
   const handleTouchMove = (event) => {
 
     if (
-      portraitMode !== 'digital' ||
       !event.touches ||
       event.touches.length === 0
     ) {
@@ -186,6 +183,23 @@ export default function InteractivePortrait() {
     );
 
   };
+
+
+  /* =========================================
+     RESET SLIDER PER PORTRAIT
+  ========================================= */
+
+  useEffect(() => {
+
+    if (portraitMode === 'formal') {
+      setSliderPosition(2);
+    }
+
+    if (portraitMode === 'digital') {
+      setSliderPosition(95);
+    }
+
+  }, [portraitMode]);
 
 
   /* =========================================
@@ -1193,23 +1207,9 @@ export default function InteractivePortrait() {
             flex
             items-center
 
-            gap-3
-
             pointer-events-none
           "
         >
-
-          <span
-            className="
-              block
-
-              w-5
-              h-px
-
-              bg-black
-            "
-          />
-
           <span
             className="
               text-[8px]
@@ -1301,45 +1301,6 @@ export default function InteractivePortrait() {
 
 
         {/* =================================
-            BLUE ACCENT
-        ================================== */}
-
-        <div
-          className="
-            absolute
-
-            left-5
-            sm:left-6
-
-            top-[72px]
-
-            z-20
-
-            pointer-events-none
-          "
-        >
-
-          <div
-            className={`
-              w-px
-
-              bg-black
-
-              transition-all
-              duration-700
-              ease-out
-
-              ${isHovered
-                ? 'h-14'
-                : 'h-7'
-              }
-            `}
-          />
-
-        </div>
-
-
-        {/* =================================
             FORMAL IMAGE
         ================================== */}
 
@@ -1422,6 +1383,190 @@ export default function InteractivePortrait() {
             }}
           />
 
+        </div>
+
+
+
+        {/* =================================
+            CHILDHOOD REVEAL
+            DEFAULT = FORMAL 1BG.PNG
+            DRAG RIGHT = REVEAL 3BG.PNG
+        ================================== */}
+
+        <div
+          className="
+            absolute
+            inset-0
+            z-[8]
+            overflow-hidden
+            pointer-events-none
+          "
+          style={{
+            clipPath: `
+              polygon(
+                0 0,
+                ${sliderPosition}% 0,
+                ${sliderPosition}% 100%,
+                0 100%
+              )
+            `,
+          }}
+        >
+          <div
+            className="
+              absolute
+              inset-0
+              bg-[#f7f7f5]
+            "
+          >
+            <div
+              className="
+                absolute
+                inset-0
+                pointer-events-none
+                opacity-[0.035]
+              "
+              style={{
+                backgroundImage: `
+                  linear-gradient(
+                    to right,
+                    #000 1px,
+                    transparent 1px
+                  ),
+                  linear-gradient(
+                    to bottom,
+                    #000 1px,
+                    transparent 1px
+                  )
+                `,
+                backgroundSize: '32px 32px',
+              }}
+            />
+          </div>
+
+          <div
+            className="
+              absolute
+              inset-0
+              flex
+              items-end
+              justify-center
+              [perspective:1200px]
+            "
+          >
+            <img
+              src={childhoodPic}
+              alt="John Railey Pael childhood graduation portrait"
+              draggable="false"
+              className="
+                absolute
+                bottom-0
+                left-1/2
+                w-auto
+                h-[94%]
+                sm:h-[95%]
+                lg:h-[96%]
+                max-w-none
+                object-contain
+                object-bottom
+                select-none
+                pointer-events-none
+                transition-transform
+                duration-500
+                ease-out
+                drop-shadow-[0_20px_35px_rgba(0,0,0,0.04)]
+              "
+              style={{
+                transform: `
+                  translateX(
+                    calc(
+                      -50% +
+                      ${imageMoveX}px
+                    )
+                  )
+                  translateY(
+                    ${imageMoveY}px
+                  )
+                  rotateX(
+                    ${rotateX}deg
+                  )
+                  rotateY(
+                    ${rotateY}deg
+                  )
+                  scale(
+                    ${isHovered ? 1.008 : 1}
+                  )
+                `,
+              }}
+            />
+          </div>
+        </div>
+
+
+        {/* =================================
+            FORMAL REVEAL SLIDER
+        ================================== */}
+
+        <div
+          className="
+            absolute
+            top-0
+            bottom-0
+            z-30
+            flex
+            items-center
+            justify-center
+            cursor-ew-resize
+          "
+          style={{
+            left: `${sliderPosition}%`,
+          }}
+          onMouseDown={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            setIsDragging(true);
+          }}
+          onTouchStart={(event) => {
+            event.stopPropagation();
+            setIsDragging(true);
+          }}
+        >
+          <div
+            className="
+              absolute
+              top-0
+              bottom-0
+              w-px
+              bg-black
+              shadow-[0_0_6px_rgba(0,0,0,0.18)]
+            "
+          />
+
+          <div
+            className="
+              relative
+              w-6
+              h-12
+              bg-[#f7f7f5]
+              border
+              border-gray-300
+              rounded-r-full
+              shadow-sm
+              flex
+              items-center
+              justify-center
+              transition-transform
+              duration-200
+              hover:scale-105
+              active:scale-95
+            "
+          >
+            <div className="flex flex-col items-center gap-1">
+              <span className="w-1 h-1 rounded-full bg-gray-400" />
+              <span className="w-1 h-1 rounded-full bg-gray-400" />
+              <span className="w-1 h-1 rounded-full bg-gray-400" />
+            </div>
+          </div>
         </div>
 
 
