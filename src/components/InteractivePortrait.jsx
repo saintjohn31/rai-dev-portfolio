@@ -33,8 +33,14 @@ export default function InteractivePortrait() {
      DIGITAL MODE
   ========================================= */
 
-  const [sliderPosition, setSliderPosition] =
-    useState(95);
+  const [sliderPositions, setSliderPositions] =
+    useState({
+      digital: 95,
+      formal: 2,
+    });
+
+  const sliderPosition =
+    sliderPositions[portraitMode];
 
   const [isDragging, setIsDragging] =
     useState(false);
@@ -96,10 +102,13 @@ export default function InteractivePortrait() {
           )
         );
 
-      setSliderPosition(clamped);
+      setSliderPositions((current) => ({
+        ...current,
+        [portraitMode]: clamped,
+      }));
 
     },
-    []
+    [portraitMode]
   );
 
 
@@ -183,23 +192,6 @@ export default function InteractivePortrait() {
     );
 
   };
-
-
-  /* =========================================
-     RESET SLIDER PER PORTRAIT
-  ========================================= */
-
-  useEffect(() => {
-
-    if (portraitMode === 'formal') {
-      setSliderPosition(2);
-    }
-
-    if (portraitMode === 'digital') {
-      setSliderPosition(95);
-    }
-
-  }, [portraitMode]);
 
 
   /* =========================================
@@ -1416,33 +1408,25 @@ export default function InteractivePortrait() {
             className="
               absolute
               inset-0
-              bg-[#f7f7f5]
+              pointer-events-none
             "
-          >
-            <div
-              className="
-                absolute
-                inset-0
-                pointer-events-none
-                opacity-[0.035]
-              "
-              style={{
-                backgroundImage: `
-                  linear-gradient(
-                    to right,
-                    #000 1px,
-                    transparent 1px
-                  ),
-                  linear-gradient(
-                    to bottom,
-                    #000 1px,
-                    transparent 1px
-                  )
-                `,
-                backgroundSize: '32px 32px',
-              }}
-            />
-          </div>
+            style={{
+              backgroundColor: '#f7f7f5',
+              backgroundImage: `
+                linear-gradient(
+                  to right,
+                  rgba(0, 0, 0, 0.045) 1px,
+                  transparent 1px
+                ),
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.045) 1px,
+                  transparent 1px
+                )
+              `,
+              backgroundSize: '32px 32px',
+            }}
+          />
 
           <div
             className="
@@ -1537,9 +1521,11 @@ export default function InteractivePortrait() {
               top-0
               bottom-0
               w-px
-              bg-black
-              shadow-[0_0_6px_rgba(0,0,0,0.18)]
             "
+            style={{
+              backgroundColor: '#ffffff',
+              boxShadow: '0 0 6px rgba(0, 0, 0, 0.12)',
+            }}
           />
 
           <div
@@ -1547,7 +1533,6 @@ export default function InteractivePortrait() {
               relative
               w-6
               h-12
-              bg-[#f7f7f5]
               border
               border-gray-300
               rounded-r-full
@@ -1560,11 +1545,14 @@ export default function InteractivePortrait() {
               hover:scale-105
               active:scale-95
             "
+            style={{
+              backgroundColor: '#ffffff',
+            }}
           >
             <div className="flex flex-col items-center gap-1">
-              <span className="w-1 h-1 rounded-full bg-gray-400" />
-              <span className="w-1 h-1 rounded-full bg-gray-400" />
-              <span className="w-1 h-1 rounded-full bg-gray-400" />
+              <span className="w-1 h-1 rounded-full" style={{ backgroundColor: '#9ca3af' }} />
+              <span className="w-1 h-1 rounded-full" style={{ backgroundColor: '#9ca3af' }} />
+              <span className="w-1 h-1 rounded-full" style={{ backgroundColor: '#9ca3af' }} />
             </div>
           </div>
         </div>
