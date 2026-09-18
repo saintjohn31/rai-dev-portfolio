@@ -42,18 +42,39 @@ export default function ProjectModal({ project, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 lg:p-6 bg-black/75 backdrop-blur-md animate-in fade-in duration-200"
+      className="
+        fixed inset-0 z-50
+        flex items-center justify-center
+        px-2 sm:px-4 lg:px-6
+        pt-[76px] sm:pt-[84px]
+        pb-2 sm:pb-4 lg:pb-6
+        bg-black/75 backdrop-blur-md
+        animate-in fade-in duration-200
+        overflow-y-auto
+      "
       onClick={() => {
         playClose();
         onClose();
       }}
     >
       <div
-        className="relative w-full max-w-5xl bg-white border border-gray-300 shadow-2xl text-left overflow-hidden flex flex-col max-h-[92vh]"
+        className="
+          relative
+          w-full
+          max-w-5xl
+          bg-white
+          border border-gray-300
+          shadow-2xl
+          text-left
+          overflow-hidden
+          flex flex-col
+          max-h-[82dvh]
+          sm:max-h-[calc(100dvh-100px)]
+        "
         onClick={(e) => e.stopPropagation()}
       >
         {/* MODAL TOP HEADER */}
-        <div className="p-4 sm:p-5 border-b border-gray-200 flex items-center justify-between bg-white shrink-0">
+        <div className="p-3 sm:p-5 border-b border-gray-200 flex items-center justify-between bg-white shrink-0">
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             <span className="text-[10px] font-mono tracking-widest uppercase bg-black text-white px-2.5 py-1 font-semibold">
               {project.category}
@@ -119,7 +140,7 @@ export default function ProjectModal({ project, onClose }) {
         </div>
 
         {/* TAB SWITCHER & VIEWPORT CONTROLS */}
-        <div className="px-4 sm:px-6 py-2.5 bg-gray-50 border-b border-gray-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="px-3 sm:px-6 py-2 sm:py-2.5 bg-gray-50 border-b border-gray-200 flex flex-wrap items-center justify-between gap-2 sm:gap-3 shrink-0">
           {/* Tabs */}
           <div className="flex items-center gap-2 text-xs font-mono">
             <button
@@ -217,7 +238,7 @@ export default function ProjectModal({ project, onClose }) {
         </div>
 
         {/* TAB CONTENT AREA */}
-        <div className="flex-1 overflow-y-auto bg-gray-100 p-3 sm:p-6 flex flex-col items-center">
+        <div className="flex-1 min-h-0 overflow-y-auto bg-gray-100 p-2 sm:p-6 flex flex-col items-center">
           {/* TAB 1: LIVE LANDING PAGE VIEWER */}
           {activeTab === 'preview' && (
             <div className="w-full flex flex-col items-center flex-1">
@@ -278,15 +299,15 @@ export default function ProjectModal({ project, onClose }) {
                     </span>
                   </div>
 
-                  <div className="bg-[#f7f7f5] p-3 sm:p-5 flex justify-center">
+                  <div className="bg-[#f7f7f5] p-2 sm:p-5 flex justify-center">
                     <img
                       src={project.image}
                       alt={`${project.title} Figma design preview`}
-                      className="w-full max-h-[600px] h-auto object-contain border border-gray-200 bg-white"
+                      className="w-full h-auto max-h-[260px] sm:max-h-[600px] object-contain border border-gray-200 bg-white"
                     />
                   </div>
 
-                  <div className="p-5 sm:p-6 border-t border-gray-200 bg-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="p-3 sm:p-6 border-t border-gray-200 bg-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                     <div>
                       <p className="text-[10px] font-mono tracking-[0.16em] text-gray-400 mb-1">
                         FIGMA PROJECT
@@ -324,15 +345,15 @@ export default function ProjectModal({ project, onClose }) {
                     </span>
                   </div>
 
-                  <div className="bg-[#f7f7f5] p-3 sm:p-5">
+                  <div className="bg-[#f7f7f5] p-2 sm:p-5">
                     <img
                       src={project.image}
                       alt={`${project.title} mobile application preview`}
-                      className="w-full h-auto object-contain border border-gray-200 bg-white"
+                      className="w-full h-auto max-h-[240px] sm:max-h-none object-contain border border-gray-200 bg-white"
                     />
                   </div>
 
-                  <div className="p-5 sm:p-6 border-t border-gray-200 bg-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="p-3 sm:p-6 border-t border-gray-200 bg-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                     <div>
                       <p className="text-[10px] font-mono tracking-[0.16em] text-gray-400 mb-1">
                         ANDROID PACKAGE
@@ -360,55 +381,6 @@ export default function ProjectModal({ project, onClose }) {
                 </div>
               )}
 
-              {/* Bottom Quick Help Note */}
-              <div className="mt-3 flex items-center justify-between w-full max-w-xl text-[10px] font-mono text-gray-500 px-2">
-                <span>
-                  {project.figmaUrl
-                    ? 'Figma UI/UX design preview — open the complete design in Figma'
-                    : project.downloadUrl
-                      ? 'Android application preview — APK available for download'
-                      : '⚡ Interactive iframe — scroll and interact directly'}
-                </span>
-                {project.figmaUrl && (
-                  <a
-                    onMouseEnter={playHover}
-                    onClick={playClick}
-                    href={project.figmaUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-black underline flex items-center gap-1"
-                  >
-                    <span>Open complete Figma design</span>
-                    <ArrowUpRight size={10} />
-                  </a>
-                )}
-
-                {project.downloadUrl && (
-                  <a
-                    onMouseEnter={playHover}
-                    onClick={playClick}
-                    href={project.downloadUrl}
-                    download={project.downloadName || 'application.apk'}
-                    className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-mono tracking-wider bg-black text-white hover:bg-blue-600 transition-all duration-300"
-                  >
-                    <span>DOWNLOAD ANDROID APK</span>
-                    <Download size={14} />
-                  </a>
-                )}
-
-                {project.liveUrl && (
-                  <a
-                    onMouseEnter={playHover}
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-black underline flex items-center gap-1"
-                  >
-                    <span>Open in full browser window</span>
-                    <ArrowUpRight size={10} />
-                  </a>
-                )}
-              </div>
             </div>
           )}
 
