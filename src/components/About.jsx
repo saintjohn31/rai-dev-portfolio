@@ -35,7 +35,7 @@ export default function About() {
     'John Railey Pael';
 
   const roleText =
-    'CREATIVE FRONT-END DEVELOPER · AI-ASSISTED DEVELOPER';
+    'FULL-STACK DEVELOPER — FRONT-END FOCUSED · AI-ASSISTED DEVELOPER';
 
 
   /* =========================================
@@ -594,7 +594,7 @@ export default function About() {
                 "
               >
 
-                Information Technology student at{' '}
+                I'm an{' '}
 
                 <span
                   className="
@@ -602,7 +602,7 @@ export default function About() {
                     font-medium
                   "
                 >
-                  Bulacan State University — Bustos Campus
+                  Information Technology student at Bulacan State University — Bustos Campus
                 </span>
 
                 , majoring in{' '}
@@ -616,7 +616,7 @@ export default function About() {
                   Web & Mobile Application Development
                 </span>
 
-                , with a focus on{' '}
+                . I'm a{' '}
 
                 <span
                   className="
@@ -624,10 +624,10 @@ export default function About() {
                     font-medium
                   "
                 >
-                  front-end development
+                  full-stack developer
                 </span>
 
-                . I combine creativity, modern web technologies, and{' '}
+                {' '}focused on the front end and an{' '}
 
                 <span
                   className="
@@ -635,12 +635,27 @@ export default function About() {
                     font-medium
                   "
                 >
-                  AI-assisted development
+                  AI-assisted developer
                 </span>
 
-                {' '}to turn ideas into clean, responsive, and interactive
-                digital experiences. I enjoy building interfaces that are
-                visually engaging, intuitive, and thoughtfully crafted.
+                {' '}who loves making things{' '}
+
+                <span
+                  className="
+                    text-black
+                    font-medium
+                  "
+                >
+                  interactive
+                </span>
+
+                .
+
+                <br />
+                <br />
+
+                I enjoy turning ideas into modern web and mobile experiences
+                that are simple, responsive, and actually useful.
 
               </p>
 
