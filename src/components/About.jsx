@@ -17,7 +17,7 @@ import {
   playClick,
   playHover,
 } from '../utils/sound';
-import cvFile from '../PAEL-JOHN-RAILEY-CV.Pdf';
+import cvFile from '../PAEL-JOHN-RAILEY-CV.pdf';
 
 
 export default function About() {
