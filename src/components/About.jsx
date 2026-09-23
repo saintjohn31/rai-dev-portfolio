@@ -17,6 +17,7 @@ import {
   playClick,
   playHover,
 } from '../utils/sound';
+import cvFile from '../PAEL-JOHN-RAILEY-CV.Pdf';
 
 
 export default function About() {
@@ -795,6 +796,44 @@ export default function About() {
                   "
                 >
                   CONTACT
+                </a>
+
+                {/* CV */}
+
+                <a
+                  href={cvFile}
+                  download="PAEL-JOHN-RAILEY-CV.pdf"
+                  onClick={playClick}
+                  onMouseEnter={playHover}
+                  className="
+    inline-flex
+    items-center
+    justify-center
+
+    border
+    border-gray-300
+
+    bg-white
+    text-black
+
+    px-6
+    py-3.5
+
+    text-[10px]
+    sm:text-xs
+
+    font-mono
+
+    tracking-[0.1em]
+
+    transition-colors
+    duration-300
+
+    hover:border-black
+    hover:bg-gray-50
+  "
+                >
+                  CV
                 </a>
 
               </div>
